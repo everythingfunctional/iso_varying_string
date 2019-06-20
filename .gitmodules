@@ -1,0 +1,3 @@
+[submodule "vegetables"]
+	path = vegetables
+	url = https://gitlab.com/everythingfunctional/vegetables.git

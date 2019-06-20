@@ -1,0 +1,5 @@
+_shake/*
+.stack-work/*
+build/*
+tests_build/*
+vegetable-juicer.cabal

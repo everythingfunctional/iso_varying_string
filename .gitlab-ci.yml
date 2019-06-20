@@ -1,0 +1,8 @@
+image: registry.gitlab.com/everythingfunctional/fortranshaker
+
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+
+test:
+  script:
+    - ./Shakefile.hs tests
