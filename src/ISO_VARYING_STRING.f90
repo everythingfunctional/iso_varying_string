@@ -12,8 +12,14 @@ module ISO_VARYING_STRING
         module procedure assignStringToCharacter
     end interface
 
+    interface CHAR ! Sec. 3.4.3
+        module procedure stringToChar
+        module procedure stringToCharWithLength
+    end interface
+
     public :: &
-            assignment(=)
+            assignment(=), &
+            CHAR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -56,4 +62,25 @@ contains
             end do
         end if
     end subroutine assignStringToCharacter
+
+    pure function stringToChar(string) result(chars)
+        ! Sec. 3.4.3
+        type(VARYING_STRING), intent(in) :: string
+        character(len=size(string%characters)) :: chars
+
+        if (allocated(string%characters)) then
+            chars = string
+        end if
+    end function stringToChar
+
+    pure function stringToCharWithLength(string, length) result(chars)
+        ! Sec. 3.4.3
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: length
+        character(len=length) :: chars
+
+        if (allocated(string%characters)) then
+            chars = string
+        end if
+    end function stringToCharWithLength
 end module ISO_VARYING_STRING

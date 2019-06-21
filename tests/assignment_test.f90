@@ -29,8 +29,8 @@ contains
     end function test_assignment
 
     pure function checkAssignCharacterToString(string) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=)
-        use Vegetables_m, only: Result_t, fail, succeed
+        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use Vegetables_m, only: Result_t, assertEquals, fail
 
         class(*), intent(in) :: string
         type(Result_t) :: result_
@@ -40,7 +40,9 @@ contains
         select type (string)
         type is (character(len=*))
             assigned = string
-            result_ = succeed( &
+            result_ = assertEquals( &
+                    string, &
+                    char(assigned), &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
         class default
@@ -49,8 +51,8 @@ contains
     end function checkAssignCharacterToString
 
     pure function checkAssignStringToString(string) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=)
-        use Vegetables_m, only: Result_t, fail, succeed
+        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use Vegetables_m, only: Result_t, assertEquals, fail, succeed
 
         class(*), intent(in) :: string
         type(Result_t) :: result_
@@ -62,7 +64,9 @@ contains
         type is (character(len=*))
             first = string
             second = first
-            result_ = succeed( &
+            result_ = assertEquals( &
+                    string, &
+                    char(second), &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
         class default
