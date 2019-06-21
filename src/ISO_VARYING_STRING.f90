@@ -18,6 +18,12 @@ module ISO_VARYING_STRING
         module procedure concatCharacterAndString
     end interface
 
+    interface operator(==) ! Sec. 3.3.3
+        module procedure string_EQ_String
+        module procedure character_EQ_String
+        module procedure string_EQ_Character
+    end interface
+
     interface CHAR ! Sec. 3.4.3
         module procedure stringToChar
         module procedure stringToCharWithLength
@@ -26,6 +32,7 @@ module ISO_VARYING_STRING
     public :: &
             assignment(=), &
             operator(//), &
+            operator(==), &
             CHAR, &
             VAR_STR
 contains
@@ -97,6 +104,33 @@ contains
 
         concatenated = lhs // char(rhs)
     end function concatCharacterAndString
+
+    elemental function string_EQ_String(lhs, rhs) result(equals)
+        ! Sec. 3.3.3
+        type(VARYING_STRING), intent(in) :: lhs
+        type(VARYING_STRING), intent(in) :: rhs
+        logical :: equals
+
+        equals = char(lhs) == char(rhs)
+    end function string_EQ_String
+
+    elemental function character_EQ_String(lhs, rhs) result(equals)
+        ! Sec. 3.3.3
+        character(len=*), intent(in) :: lhs
+        type(VARYING_STRING), intent(in) :: rhs
+        logical :: equals
+
+        equals = lhs == char(rhs)
+    end function character_EQ_String
+
+    elemental function string_EQ_Character(lhs, rhs) result(equals)
+        ! Sec. 3.3.3
+        type(VARYING_STRING), intent(in) :: lhs
+        character(len=*), intent(in) :: rhs
+        logical :: equals
+
+        equals = char(lhs) == rhs
+    end function string_EQ_Character
 
     pure function stringToChar(string) result(chars)
         ! Sec. 3.4.3
