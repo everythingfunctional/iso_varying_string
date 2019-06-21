@@ -12,6 +12,12 @@ module ISO_VARYING_STRING
         module procedure assignStringToCharacter
     end interface
 
+    interface operator(//) ! Sec. 3.3.2
+        module procedure concatStrings
+        module procedure concatStringAndCharacter
+        module procedure concatCharacterAndString
+    end interface
+
     interface CHAR ! Sec. 3.4.3
         module procedure stringToChar
         module procedure stringToCharWithLength
@@ -19,6 +25,7 @@ module ISO_VARYING_STRING
 
     public :: &
             assignment(=), &
+            operator(//), &
             CHAR, &
             VAR_STR
 contains
@@ -63,6 +70,33 @@ contains
             end do
         end if
     end subroutine assignStringToCharacter
+
+    elemental function concatStrings(lhs, rhs) result(concatenated)
+        ! Sec. 3.3.2
+        type(VARYING_STRING), intent(in) :: lhs
+        type(VARYING_STRING), intent(in) :: rhs
+        type(VARYING_STRING) :: concatenated
+
+        concatenated = char(lhs) // char(rhs)
+    end function concatStrings
+
+    elemental function concatStringAndCharacter(lhs, rhs) result(concatenated)
+        ! Sec. 3.3.2
+        type(VARYING_STRING), intent(in) :: lhs
+        character(len=*), intent(in) :: rhs
+        type(VARYING_STRING) :: concatenated
+
+        concatenated = char(lhs) // rhs
+    end function concatStringAndCharacter
+
+    elemental function concatCharacterAndString(lhs, rhs) result(concatenated)
+        ! Sec. 3.3.2
+        character(len=*), intent(in) :: lhs
+        type(VARYING_STRING), intent(in) :: rhs
+        type(VARYING_STRING) :: concatenated
+
+        concatenated = lhs // char(rhs)
+    end function concatCharacterAndString
 
     pure function stringToChar(string) result(chars)
         ! Sec. 3.4.3
