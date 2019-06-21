@@ -1,10 +1,10 @@
-module not_equal_test
+module less_than_test
     implicit none
     private
 
-    public :: test_not_equals
+    public :: test_less_than
 contains
-    function test_not_equals() result(tests)
+    function test_less_than() result(tests)
         use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
         use Vegetables_m, only: TestItem_t, describe, it
 
@@ -15,23 +15,23 @@ contains
         individual_tests(1) = it( &
                 "two strings", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkStringNotEqualString)
+                checkStringLessThanString)
         individual_tests(2) = it( &
                 "a character and a string", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkCharacterNotEqualString)
+                checkCharacterLessThanString)
         individual_tests(3) = it( &
                 "a string and a character", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkStringNotEqualCharacter)
+                checkStringLessThanCharacter)
         tests = describe( &
-                "operator(/=) (Sec. 3.3.3) functions the same as for two characters for", &
+                "operator(<) (Sec. 3.3.3) functions the same as for two characters for", &
                 individual_tests)
-    end function test_not_equals
+    end function test_less_than
 
-    pure function checkStringNotEqualString(strings) result(result_)
+    pure function checkStringLessThanString(strings) result(result_)
         use custom_generator, only: StringPair_t
-        use ISO_VARYING_STRING, only: operator(/=), char
+        use ISO_VARYING_STRING, only: operator(<), char
         use Vegetables_m, only: Result_t, assertThat, fail
 
         class(*), intent(in) :: strings
@@ -40,16 +40,16 @@ contains
         select type (strings)
         type is (StringPair_t)
             result_ = assertThat( &
-                    char(strings%first) /= char(strings%second) &
-                    .eqv. strings%first /= strings%second)
+                    char(strings%first) < char(strings%second) &
+                    .eqv. strings%first < strings%second)
         class default
             result_ = fail("Expected to get a StringPair_t")
         end select
-    end function checkStringNotEqualString
+    end function checkStringLessThanString
 
-    pure function checkCharacterNotEqualString(strings) result(result_)
+    pure function checkCharacterLessThanString(strings) result(result_)
         use custom_generator, only: StringPair_t
-        use ISO_VARYING_STRING, only: operator(/=), char
+        use ISO_VARYING_STRING, only: operator(<), char
         use Vegetables_m, only: Result_t, assertThat, fail
 
         class(*), intent(in) :: strings
@@ -58,16 +58,16 @@ contains
         select type (strings)
         type is (StringPair_t)
             result_ = assertThat( &
-                    char(strings%first) /= char(strings%second) &
-                    .eqv. char(strings%first) /= strings%second)
+                    char(strings%first) < char(strings%second) &
+                    .eqv. char(strings%first) < strings%second)
         class default
             result_ = fail("Expected to get a StringPair_t")
         end select
-    end function checkCharacterNotEqualString
+    end function checkCharacterLessThanString
 
-    pure function checkStringNotEqualCharacter(strings) result(result_)
+    pure function checkStringLessThanCharacter(strings) result(result_)
         use custom_generator, only: StringPair_t
-        use ISO_VARYING_STRING, only: operator(/=), char
+        use ISO_VARYING_STRING, only: operator(<), char
         use Vegetables_m, only: Result_t, assertThat, fail
 
         class(*), intent(in) :: strings
@@ -76,10 +76,10 @@ contains
         select type (strings)
         type is (StringPair_t)
             result_ = assertThat( &
-                    char(strings%first) /= char(strings%second) &
-                    .eqv. strings%first /= char(strings%second))
+                    char(strings%first) < char(strings%second) &
+                    .eqv. strings%first < char(strings%second))
         class default
             result_ = fail("Expected to get a StringPair_t")
         end select
-    end function checkStringNotEqualCharacter
-end module not_equal_test
+    end function checkStringLessThanCharacter
+end module less_than_test
