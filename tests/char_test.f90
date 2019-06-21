@@ -31,20 +31,17 @@ contains
     end function test_char
 
     pure function checkCharWithoutLength(example) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEquals, fail
 
         class(*), intent(in) :: example
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-
         select type (example)
         type is (character(len=*))
-            string = example
             result_ = assertEquals( &
                     example, &
-                    char(string), &
+                    char(var_str(example)), &
                     "If length is absent, the result is a copy of the" &
                     // " characters in the argument string")
         class default
@@ -53,61 +50,49 @@ contains
     end function checkCharWithoutLength
 
     pure function checkCharWithShorterLength() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-
-        string = "EXAMPLE"
         result_ = assertEquals( &
                 "EXAM", &
-                char(string, 4), &
+                char(var_str("EXAMPLE"), 4), &
                 "If string is longer than length, result is truncated on the right.")
     end function checkCharWithShorterLength
 
     pure function checkCharWithLongerLength() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-
-        string = "EXAMPLE"
         result_ = assertEquals( &
                 "EXAMPLE   ", &
-                char(string, 10), &
+                char(var_str("EXAMPLE"), 10), &
                 "If string is shorter than length, the result is padded on the" &
                 // " right with blanks.")
     end function checkCharWithLongerLength
 
     pure function checkCharWithZeroLength() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEmpty
 
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-
-        string = "EXAMPLE"
         result_ = assertEmpty( &
-                char(string, 0), &
+                char(var_str("EXAMPLE"), 0), &
                 "If length is less than one, the result is of zero length.")
     end function checkCharWithZeroLength
 
     pure function checkCharWithNegativeLength() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEmpty
 
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-
-        string = "EXAMPLE"
         result_ = assertEmpty( &
-                char(string, -1), &
+                char(var_str("EXAMPLE"), -1), &
                 "If length is less than one, the result is of zero length.")
     end function checkCharWithNegativeLength
 end module char_test

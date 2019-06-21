@@ -51,22 +51,20 @@ contains
     end function checkAssignCharacterToString
 
     pure function checkAssignStringToString(string) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
+        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, var_str
         use Vegetables_m, only: Result_t, assertEquals, fail, succeed
 
         class(*), intent(in) :: string
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: first
-        type(VARYING_STRING) :: second
+        type(VARYING_STRING) :: assigned
 
         select type (string)
         type is (character(len=*))
-            first = string
-            second = first
+            assigned = var_str(string)
             result_ = assertEquals( &
                     string, &
-                    char(second), &
+                    char(assigned), &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
         class default
@@ -75,16 +73,14 @@ contains
     end function checkAssignStringToString
 
     pure function checkAssignToShorterCharacter() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=)
+        use ISO_VARYING_STRING, only: assignment(=), var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
         character(len=4) :: assigned
 
-        string = "EXAMPLE"
-        assigned = string
+        assigned = var_str("EXAMPLE")
         result_ = assertEquals( &
                 "EXAM", &
                 assigned, &
@@ -93,16 +89,14 @@ contains
     end function checkAssignToShorterCharacter
 
     pure function checkAssignToLongerCharacter() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=)
+        use ISO_VARYING_STRING, only: assignment(=), var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
         character(len=10) :: assigned
 
-        string = "EXAMPLE"
-        assigned = string
+        assigned = var_str("EXAMPLE")
         result_ = assertEquals( &
                 "EXAMPLE   ", &
                 assigned, &

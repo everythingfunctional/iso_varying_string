@@ -19,7 +19,8 @@ module ISO_VARYING_STRING
 
     public :: &
             assignment(=), &
-            CHAR
+            CHAR, &
+            VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -83,4 +84,12 @@ contains
             chars = string
         end if
     end function stringToCharWithLength
+
+    elemental function VAR_STR(char)
+        ! Sec. 3.5.1
+        character(len=*), intent(in) :: char
+        type(VARYING_STRING) :: VAR_STR
+
+        VAR_STR = char
+    end function VAR_STR
 end module ISO_VARYING_STRING
