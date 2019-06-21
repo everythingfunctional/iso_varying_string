@@ -25,7 +25,7 @@ contains
                 ASCII_STRING_PAIR_GENERATOR, &
                 checkConcatCharacterAndString)
         tests = describe( &
-                "operator(//) (Sec. 3.3.2) functions the same as for two characters for", &
+                "Sec. 3.3.2: operator(//) functions the same as for two characters for", &
                 individual_tests)
     end function test_concat
 

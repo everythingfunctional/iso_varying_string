@@ -27,7 +27,7 @@ contains
         individual_tests(5) = it( &
                 "gives a zero length character for negative length", &
                 checkCharWithNegativeLength)
-        tests = describe("CHAR (Sec. 3.4.3)", individual_tests)
+        tests = describe("Sec. 3.4.3: CHAR", individual_tests)
     end function test_char
 
     pure function checkCharWithoutLength(example) result(result_)

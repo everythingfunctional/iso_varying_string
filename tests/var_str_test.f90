@@ -16,7 +16,7 @@ contains
                 // " equivalent varying-length string value.", &
                 ASCII_STRING_GENERATOR, &
                 checkVarStr)
-        tests = describe("VAR_STR (Sec. 3.5.1)", individual_tests)
+        tests = describe("Sec. 3.5.1: VAR_STR", individual_tests)
     end function test_var_str
 
     pure function checkVarStr(string) result(result_)

@@ -25,7 +25,7 @@ contains
         individual_tests(4) = it( &
                 "can assign a string to a longer character", &
                 checkAssignToLongerCharacter)
-        tests = describe("assignment (Sec. 3.3.1)", individual_tests)
+        tests = describe("Sec. 3.3.1: assignment", individual_tests)
     end function test_assignment
 
     pure function checkAssignCharacterToString(string) result(result_)
