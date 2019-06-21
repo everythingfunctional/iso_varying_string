@@ -54,6 +54,10 @@ module ISO_VARYING_STRING
         module procedure string_GE_Character
     end interface
 
+    interface ADJUSTL ! Sec. 3.4.1
+        module procedure stringADJUSTL
+    end interface
+
     interface CHAR ! Sec. 3.4.3
         module procedure stringToChar
         module procedure stringToCharWithLength
@@ -68,6 +72,7 @@ module ISO_VARYING_STRING
             operator(<=), &
             operator(>), &
             operator(>=), &
+            ADJUSTL, &
             CHAR, &
             VAR_STR
 contains
@@ -301,6 +306,14 @@ contains
 
         equals = char(lhs) >= rhs
     end function string_GE_Character
+
+    elemental function stringADJUSTL(string) result(adjusted)
+        ! Sec. 3.4.1
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING) :: adjusted
+
+        adjusted = adjustl(char(string))
+    end function stringADJUSTL
 
     pure function stringToChar(string) result(chars)
         ! Sec. 3.4.3
