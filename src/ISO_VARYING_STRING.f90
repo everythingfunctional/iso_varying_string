@@ -42,6 +42,12 @@ module ISO_VARYING_STRING
         module procedure string_LE_Character
     end interface
 
+    interface operator(>) ! Sec. 3.3.3
+        module procedure string_GT_String
+        module procedure character_GT_String
+        module procedure string_GT_Character
+    end interface
+
     interface CHAR ! Sec. 3.4.3
         module procedure stringToChar
         module procedure stringToCharWithLength
@@ -54,6 +60,7 @@ module ISO_VARYING_STRING
             operator(/=), &
             operator(<), &
             operator(<=), &
+            operator(>), &
             CHAR, &
             VAR_STR
 contains
@@ -233,6 +240,33 @@ contains
 
         equals = char(lhs) <= rhs
     end function string_LE_Character
+
+    elemental function string_GT_String(lhs, rhs) result(equals)
+        ! Sec. 3.3.3
+        type(VARYING_STRING), intent(in) :: lhs
+        type(VARYING_STRING), intent(in) :: rhs
+        logical :: equals
+
+        equals = char(lhs) > char(rhs)
+    end function string_GT_String
+
+    elemental function character_GT_String(lhs, rhs) result(equals)
+        ! Sec. 3.3.3
+        character(len=*), intent(in) :: lhs
+        type(VARYING_STRING), intent(in) :: rhs
+        logical :: equals
+
+        equals = lhs > char(rhs)
+    end function character_GT_String
+
+    elemental function string_GT_Character(lhs, rhs) result(equals)
+        ! Sec. 3.3.3
+        type(VARYING_STRING), intent(in) :: lhs
+        character(len=*), intent(in) :: rhs
+        logical :: equals
+
+        equals = char(lhs) > rhs
+    end function string_GT_Character
 
     pure function stringToChar(string) result(chars)
         ! Sec. 3.4.3
