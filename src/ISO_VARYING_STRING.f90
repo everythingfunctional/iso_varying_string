@@ -75,6 +75,12 @@ module ISO_VARYING_STRING
         module procedure stringICHAR
     end interface
 
+    interface INDEX ! Sec. 3.4.6
+        module procedure stringIndexString
+        module procedure stringIndexCharacter
+        module procedure CharacterIndexString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -89,6 +95,7 @@ module ISO_VARYING_STRING
             CHAR, &
             IACHAR, &
             ICHAR, &
+            INDEX, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -374,6 +381,36 @@ contains
 
         stringICHAR = ichar(char(c))
     end function stringICHAR
+
+    elemental function stringIndexString(string, substring, back) result(position)
+        ! Sec. 3.4.6
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: substring
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = index(char(string), char(substring), back)
+    end function stringIndexString
+
+    elemental function stringIndexCharacter(string, substring, back) result(position)
+        ! Sec. 3.4.6
+        type(VARYING_STRING), intent(in) :: string
+        character(len=*), intent(in) :: substring
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = index(char(string), substring, back)
+    end function stringIndexCharacter
+
+    elemental function characterIndexString(string, substring, back) result(position)
+        ! Sec. 3.4.6
+        character(len=*), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: substring
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = index(string, char(substring), back)
+    end function characterIndexString
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
