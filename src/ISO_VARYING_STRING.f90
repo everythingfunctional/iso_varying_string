@@ -67,6 +67,10 @@ module ISO_VARYING_STRING
         module procedure stringToCharWithLength
     end interface
 
+    interface IACHAR ! Sec. 3.4.4
+        module procedure stringIACHAR
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -79,6 +83,7 @@ module ISO_VARYING_STRING
             ADJUSTL, &
             ADJUSTR, &
             CHAR, &
+            IACHAR, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -348,6 +353,14 @@ contains
             chars = string
         end if
     end function stringToCharWithLength
+
+    elemental function stringIACHAR(c)
+        ! Sec. 3.4.4
+        type(VARYING_STRING), intent(in) :: c
+        integer :: stringIACHAR
+
+        stringIACHAR = iachar(char(c))
+    end function stringIACHAR
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1

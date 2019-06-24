@@ -5,11 +5,18 @@ module custom_generator
     implicit none
     private
 
+    type, public, extends(Generator_t) :: AsciiCharacterGenerator_t
+    contains
+        private
+        procedure, public :: generate => generateCharacter
+        procedure, public, nopass :: shrink => shrinkCharacter
+    end type AsciiCharacterGenerator_t
+
     type, public, extends(Generator_t) :: AsciiStringPairGenerator_t
     contains
         private
-        procedure, public :: generate
-        procedure, public, nopass :: shrink
+        procedure, public :: generate => generateStringPair
+        procedure, public, nopass :: shrink => shrinkStringPair
     end type AsciiStringPairGenerator_t
 
     type, public :: StringPair_t
@@ -17,10 +24,24 @@ module custom_generator
         type(VARYING_STRING) :: second
     end type StringPair_t
 
+    type(AsciiCharacterGenerator_t), public, parameter :: &
+            ASCII_CHARACTER_GENERATOR = AsciiCharacterGenerator_t()
     type(AsciiStringPairGenerator_t), public, parameter ::  &
             ASCII_STRING_PAIR_GENERATOR = AsciiStringPairGenerator_t()
 contains
-    function generate(self) result(generated_value)
+    function generateCharacter(self) result(generated_value)
+        use Vegetables_m, only: Generated_t, Generated, getRandomAsciiCharacter
+
+        class(AsciiCharacterGenerator_t), intent(in) :: self
+        type(Generated_t) :: generated_value
+
+        associate(a => self)
+        end associate
+
+        generated_value = Generated(getRandomAsciiCharacter())
+    end function generateCharacter
+
+    function generateStringPair(self) result(generated_value)
         use ISO_VARYING_STRING, only: assignment(=)
         use Vegetables_m, only: Generated_t, Generated, getRandomAsciiString
 
@@ -35,9 +56,21 @@ contains
         pair%first = getRandomAsciiString()
         pair%second = getRandomAsciiString()
         generated_value = Generated(pair)
-    end function generate
+    end function generateStringPair
 
-    pure function shrink(value_) result(shrunk)
+    pure function shrinkCharacter(value_) result(shrunk)
+        use Vegetables_m, only: ShrinkResult_t, SimplestValue
+
+        class(*), intent(in) :: value_
+        class(ShrinkResult_t), allocatable :: shrunk
+
+        select type (value_)
+        type is (character(len=*))
+            allocate(shrunk, source = SimplestValue(value_))
+        end select
+    end function shrinkCharacter
+
+    pure function shrinkStringPair(value_) result(shrunk)
         use ISO_VARYING_STRING, only: assignment(=), char
         use Vegetables_m, only: &
                 ShrinkResult_t, &
@@ -73,5 +106,5 @@ contains
                 end if
             end if
         end select
-    end function shrink
+    end function shrinkStringPair
 end module custom_generator
