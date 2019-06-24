@@ -81,6 +81,10 @@ module ISO_VARYING_STRING
         module procedure CharacterIndexString
     end interface
 
+    interface LEN ! Sec. 3.4.7
+        module procedure lenString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -96,6 +100,7 @@ module ISO_VARYING_STRING
             IACHAR, &
             ICHAR, &
             INDEX, &
+            LEN, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -411,6 +416,14 @@ contains
 
         position = index(string, char(substring), back)
     end function characterIndexString
+
+    elemental function lenString(string) result(length)
+        ! Sec. 3.4.7
+        type(VARYING_STRING), intent(in) :: string
+        integer :: length
+
+        length = len(char(string))
+    end function lenString
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
