@@ -89,6 +89,12 @@ module ISO_VARYING_STRING
         module procedure lenTrimString
     end interface
 
+    interface LGE ! Sec. 3.4.9
+        module procedure string_LGE_String
+        module procedure character_LGE_String
+        module procedure string_LGE_Character
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -106,6 +112,7 @@ module ISO_VARYING_STRING
             INDEX, &
             LEN, &
             LEN_TRIM, &
+            LGE, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -437,6 +444,33 @@ contains
 
         length = len_trim(char(string))
     end function lenTrimString
+
+    elemental function string_LGE_String(string_a, string_b) result(greater_than_or_equals)
+        ! Sec 3.4.9
+        type(VARYING_STRING), intent(in) :: string_a
+        type(VARYING_STRING), intent(in) :: string_b
+        logical :: greater_than_or_equals
+
+        greater_than_or_equals = lge(char(string_a), char(string_b))
+    end function string_LGE_String
+
+    elemental function character_LGE_String(string_a, string_b) result(greater_than_or_equals)
+        ! Sec 3.4.9
+        character(len=*), intent(in) :: string_a
+        type(VARYING_STRING), intent(in) :: string_b
+        logical :: greater_than_or_equals
+
+        greater_than_or_equals = lge(string_a, char(string_b))
+    end function character_LGE_String
+
+    elemental function string_LGE_Character(string_a, string_b) result(greater_than_or_equals)
+        ! Sec 3.4.9
+        type(VARYING_STRING), intent(in) :: string_a
+        character(len=*), intent(in) :: string_b
+        logical :: greater_than_or_equals
+
+        greater_than_or_equals = lge(char(string_a), string_b)
+    end function string_LGE_Character
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
