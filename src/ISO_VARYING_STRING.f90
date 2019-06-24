@@ -107,6 +107,12 @@ module ISO_VARYING_STRING
         module procedure string_LLE_Character
     end interface
 
+    interface LLT ! Sec. 3.4.12
+        module procedure string_LLT_String
+        module procedure character_LLT_String
+        module procedure string_LLT_Character
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -127,6 +133,7 @@ module ISO_VARYING_STRING
             LGE, &
             LGT, &
             LLE, &
+            LLT, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -539,6 +546,33 @@ contains
 
         less_than_or_equals = lle(char(string_a), string_b)
     end function string_LLE_Character
+
+    elemental function string_LLT_String(string_a, string_b) result(less_than)
+        ! Sec 3.4.12
+        type(VARYING_STRING), intent(in) :: string_a
+        type(VARYING_STRING), intent(in) :: string_b
+        logical :: less_than
+
+        less_than = llt(char(string_a), char(string_b))
+    end function string_LLT_String
+
+    elemental function character_LLT_String(string_a, string_b) result(less_than)
+        ! Sec 3.4.12
+        character(len=*), intent(in) :: string_a
+        type(VARYING_STRING), intent(in) :: string_b
+        logical :: less_than
+
+        less_than = llt(string_a, char(string_b))
+    end function character_LLT_String
+
+    elemental function string_LLT_Character(string_a, string_b) result(less_than)
+        ! Sec 3.4.12
+        type(VARYING_STRING), intent(in) :: string_a
+        character(len=*), intent(in) :: string_b
+        logical :: less_than
+
+        less_than = llt(char(string_a), string_b)
+    end function string_LLT_Character
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
