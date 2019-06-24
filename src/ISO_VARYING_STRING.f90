@@ -95,6 +95,12 @@ module ISO_VARYING_STRING
         module procedure string_LGE_Character
     end interface
 
+    interface LGT ! Sec. 3.4.10
+        module procedure string_LGT_String
+        module procedure character_LGT_String
+        module procedure string_LGT_Character
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -113,6 +119,7 @@ module ISO_VARYING_STRING
             LEN, &
             LEN_TRIM, &
             LGE, &
+            LGT, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -471,6 +478,33 @@ contains
 
         greater_than_or_equals = lge(char(string_a), string_b)
     end function string_LGE_Character
+
+    elemental function string_LGT_String(string_a, string_b) result(greater_than)
+        ! Sec 3.4.10
+        type(VARYING_STRING), intent(in) :: string_a
+        type(VARYING_STRING), intent(in) :: string_b
+        logical :: greater_than
+
+        greater_than = lgt(char(string_a), char(string_b))
+    end function string_LGT_String
+
+    elemental function character_LGT_String(string_a, string_b) result(greater_than)
+        ! Sec 3.4.10
+        character(len=*), intent(in) :: string_a
+        type(VARYING_STRING), intent(in) :: string_b
+        logical :: greater_than
+
+        greater_than = lgt(string_a, char(string_b))
+    end function character_LGT_String
+
+    elemental function string_LGT_Character(string_a, string_b) result(greater_than)
+        ! Sec 3.4.10
+        type(VARYING_STRING), intent(in) :: string_a
+        character(len=*), intent(in) :: string_b
+        logical :: greater_than
+
+        greater_than = lgt(char(string_a), string_b)
+    end function string_LGT_Character
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
