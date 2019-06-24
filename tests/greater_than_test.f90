@@ -31,7 +31,7 @@ contains
 
     pure function checkStringGreaterThanString(strings) result(result_)
         use custom_generator, only: StringPair_t
-        use ISO_VARYING_STRING, only: operator(>), char
+        use ISO_VARYING_STRING, only: operator(//), operator(>), char
         use Vegetables_m, only: Result_t, assertThat, fail
 
         class(*), intent(in) :: strings
@@ -41,7 +41,8 @@ contains
         type is (StringPair_t)
             result_ = assertThat( &
                     char(strings%first) > char(strings%second) &
-                    .eqv. strings%first > strings%second)
+                    .eqv. strings%first > strings%second, &
+                    char('"' // strings%first // '" > "' // strings%second // '"'))
         class default
             result_ = fail("Expected to get a StringPair_t")
         end select
@@ -49,7 +50,7 @@ contains
 
     pure function checkCharacterGreaterThanString(strings) result(result_)
         use custom_generator, only: StringPair_t
-        use ISO_VARYING_STRING, only: operator(>), char
+        use ISO_VARYING_STRING, only: operator(//), operator(>), char
         use Vegetables_m, only: Result_t, assertThat, fail
 
         class(*), intent(in) :: strings
@@ -59,7 +60,8 @@ contains
         type is (StringPair_t)
             result_ = assertThat( &
                     char(strings%first) > char(strings%second) &
-                    .eqv. char(strings%first) > strings%second)
+                    .eqv. char(strings%first) > strings%second, &
+                    char('"' // strings%first // '" > "' // strings%second // '"'))
         class default
             result_ = fail("Expected to get a StringPair_t")
         end select
@@ -67,7 +69,7 @@ contains
 
     pure function checkStringGreaterThanCharacter(strings) result(result_)
         use custom_generator, only: StringPair_t
-        use ISO_VARYING_STRING, only: operator(>), char
+        use ISO_VARYING_STRING, only: operator(//), operator(>), char
         use Vegetables_m, only: Result_t, assertThat, fail
 
         class(*), intent(in) :: strings
@@ -77,7 +79,8 @@ contains
         type is (StringPair_t)
             result_ = assertThat( &
                     char(strings%first) > char(strings%second) &
-                    .eqv. strings%first > char(strings%second))
+                    .eqv. strings%first > char(strings%second), &
+                    char('"' // strings%first // '" > "' // strings%second // '"'))
         class default
             result_ = fail("Expected to get a StringPair_t")
         end select
