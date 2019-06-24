@@ -85,6 +85,10 @@ module ISO_VARYING_STRING
         module procedure lenString
     end interface
 
+    interface LEN_TRIM ! Sec. 3.4.8
+        module procedure lenTrimString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -101,6 +105,7 @@ module ISO_VARYING_STRING
             ICHAR, &
             INDEX, &
             LEN, &
+            LEN_TRIM, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -424,6 +429,14 @@ contains
 
         length = len(char(string))
     end function lenString
+
+    elemental function lenTrimString(string) result(length)
+        ! Sec. 3.4.8
+        type(VARYING_STRING), intent(in) :: string
+        integer :: length
+
+        length = len_trim(char(string))
+    end function lenTrimString
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
