@@ -113,6 +113,10 @@ module ISO_VARYING_STRING
         module procedure string_LLT_Character
     end interface
 
+    interface REPEAT ! Sec. 3.4.13
+        module procedure stringRepeat
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -134,6 +138,7 @@ module ISO_VARYING_STRING
             LGT, &
             LLE, &
             LLT, &
+            REPEAT, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -573,6 +578,15 @@ contains
 
         less_than = llt(char(string_a), string_b)
     end function string_LLT_Character
+
+    elemental function stringRepeat(string, ncopies) result(repeated)
+        ! Sec. 3.4.13
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: ncopies
+        type(VARYING_STRING) :: repeated
+
+        repeated = repeat(char(string), ncopies)
+    end function stringRepeat
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
