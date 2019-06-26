@@ -127,6 +127,12 @@ module ISO_VARYING_STRING
         module procedure trimString
     end interface
 
+    interface VERIFY ! Sec. 3.4.16
+        module procedure stringVerifyString
+        module procedure stringVerifyCharacter
+        module procedure characterVerifyString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -151,6 +157,7 @@ module ISO_VARYING_STRING
             REPEAT, &
             SCAN, &
             TRIM, &
+            VERIFY, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -637,6 +644,36 @@ contains
 
         trimmed = trim(char(string))
     end function trimString
+
+    elemental function stringVerifyString(string, set, back) result(position)
+        ! Sec. 3.5.16
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: set
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = verify(char(string), char(set), back)
+    end function stringVerifyString
+
+    elemental function stringVerifyCharacter(string, set, back) result(position)
+        ! Sec. 3.5.16
+        type(VARYING_STRING), intent(in) :: string
+        character(len=*), intent(in) :: set
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = verify(char(string), set, back)
+    end function stringVerifyCharacter
+
+    elemental function characterVerifyString(string, set, back) result(position)
+        ! Sec. 3.5.16
+        character(len=*), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: set
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = verify(string, char(set), back)
+    end function characterVerifyString
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
