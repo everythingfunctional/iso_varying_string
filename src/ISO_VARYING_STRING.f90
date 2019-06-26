@@ -123,6 +123,10 @@ module ISO_VARYING_STRING
         module procedure characterScanString
     end interface
 
+    interface TRIM ! Sec. 3.4.15
+        module procedure trimString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -146,6 +150,7 @@ module ISO_VARYING_STRING
             LLT, &
             REPEAT, &
             SCAN, &
+            TRIM, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -624,6 +629,14 @@ contains
 
         position = scan(string, char(set), back)
     end function characterScanString
+
+    elemental function trimString(string) result(trimmed)
+        ! Sec. 3.4.15
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING) :: trimmed
+
+        trimmed = trim(char(string))
+    end function trimString
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
