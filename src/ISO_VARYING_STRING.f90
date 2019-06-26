@@ -117,6 +117,12 @@ module ISO_VARYING_STRING
         module procedure stringRepeat
     end interface
 
+    interface SCAN ! Sec. 3.4.14
+        module procedure stringScanString
+        module procedure stringScanCharacter
+        module procedure characterScanString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -139,6 +145,7 @@ module ISO_VARYING_STRING
             LLE, &
             LLT, &
             REPEAT, &
+            SCAN, &
             VAR_STR
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
@@ -587,6 +594,36 @@ contains
 
         repeated = repeat(char(string), ncopies)
     end function stringRepeat
+
+    elemental function stringScanString(string, set, back) result(position)
+        ! Sec. 3.4.14
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: set
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = scan(char(string), char(set), back)
+    end function stringScanString
+
+    elemental function stringScanCharacter(string, set, back) result(position)
+        ! Sec. 3.4.14
+        type(VARYING_STRING), intent(in) :: string
+        character(len=*), intent(in) :: set
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = scan(char(string), set, back)
+    end function stringScanCharacter
+
+    elemental function characterScanString(string, set, back) result(position)
+        ! Sec. 3.4.14
+        character(len=*), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: set
+        logical, optional, intent(in) :: back
+        integer :: position
+
+        position = scan(string, char(set), back)
+    end function characterScanString
 
     elemental function VAR_STR(char)
         ! Sec. 3.5.1
