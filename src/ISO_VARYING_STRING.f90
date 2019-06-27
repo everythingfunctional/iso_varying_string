@@ -156,6 +156,11 @@ module ISO_VARYING_STRING
         module procedure putLineCharactersWithUnit
     end interface
 
+    interface EXTRACT ! Sec. 3.7.1
+        module procedure extractCharacter
+        module procedure extractString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -184,7 +189,8 @@ module ISO_VARYING_STRING
             VAR_STR, &
             GET, &
             PUT, &
-            PUT_LINE
+            PUT_LINE, &
+            EXTRACT
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -979,4 +985,46 @@ contains
             write(unit, fmt='(A,/)', advance='NO') string
         end if
     end subroutine putLineCharactersWithUnit
+
+    elemental function extractCharacter(string, start, finish) result(extracted)
+        ! Sec. 3.7.1
+        character(len=*), intent(in) :: string
+        integer, optional, intent(in) :: start
+        integer, optional, intent(in) :: finish
+        type(VARYING_STRING) :: extracted
+
+        integer :: start_
+        integer :: finish_
+
+        if (present(start)) then
+            if (start < 1) then
+                start_ = 1
+            else
+                start_ = start
+            end if
+        else
+            start_ = 1
+        end if
+        if (present(finish)) then
+            if (finish > len(string)) then
+                finish_ = len(string)
+            else
+                finish_ = finish
+            end if
+        else
+            finish_ = len(string)
+        end if
+
+        extracted = string(start_:finish_)
+    end function extractCharacter
+
+    elemental function extractString(string, start, finish) result(extracted)
+        ! Sec. 3.7.1
+        type(VARYING_STRING), intent(in) :: string
+        integer, optional, intent(in) :: start
+        integer, optional, intent(in) :: finish
+        type(VARYING_STRING) :: extracted
+
+        extracted = extract(char(string), start, finish)
+    end function extractString
 end module ISO_VARYING_STRING
