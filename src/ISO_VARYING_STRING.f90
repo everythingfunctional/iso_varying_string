@@ -133,6 +133,29 @@ module ISO_VARYING_STRING
         module procedure characterVerifyString
     end interface
 
+    interface GET ! Sec. 3.6.1
+        module procedure getDefaultUnitToEndOfRecord
+        module procedure getWithUnitToEndOfRecord
+        module procedure getDefaultUnitToTerminatorString
+        module procedure getWithUnitToTerminatorString
+        module procedure getDefaultUnitToTerminatorCharacters
+        module procedure getWithUnitToTerminatorCharacters
+    end interface
+
+    interface PUT ! Sec. 3.6.2
+        module procedure putStringDefaultUnit
+        module procedure putStringWithUnit
+        module procedure putCharactersDefaultUnit
+        module procedure putCharactersWithUnit
+    end interface
+
+    interface PUT_LINE ! Sec. 3.6.3
+        module procedure putLineStringDefaultUnit
+        module procedure putLineStringWithUnit
+        module procedure putLineCharactersDefaultUnit
+        module procedure putLineCharactersWithUnit
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -158,7 +181,10 @@ module ISO_VARYING_STRING
             SCAN, &
             TRIM, &
             VERIFY, &
-            VAR_STR
+            VAR_STR, &
+            GET, &
+            PUT, &
+            PUT_LINE
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -682,4 +708,275 @@ contains
 
         VAR_STR = char
     end function VAR_STR
+
+    subroutine getDefaultUnitToEndOfRecord(string, maxlen, iostat)
+        ! Sec. 3.6.1
+        type(VARYING_STRING), intent(out) :: string
+        integer, optional, intent(in) :: maxlen
+        integer, optional, intent(out) :: iostat
+
+        integer, parameter :: BUFFER_SIZE = 100
+        character(len=BUFFER_SIZE) :: buffer
+        integer :: next_read_length
+        integer :: num_read
+        integer :: num_to_read
+
+        if (present(maxlen)) then
+            num_to_read = maxlen
+        else
+            num_to_read = huge(1)
+        end if
+        if (present(iostat)) then
+            do
+                if (num_to_read <= 0) exit
+                next_read_length = min(BUFFER_SIZE, num_to_read)
+                read(*, fmt='(A)', advance='NO', eor=9999, size=num_read, iostat=iostat) buffer(1:next_read_length)
+                if (iostat /= 0) return
+                string = string // buffer(1:next_read_length)
+                num_to_read = num_to_read - next_read_length
+            end do
+        else
+            do
+                if (num_to_read <= 0) exit
+                next_read_length = min(BUFFER_SIZE, num_to_read)
+                read(*, fmt='(A)', advance='NO', eor=9999, size=num_read) buffer(1:next_read_length)
+                string = string // buffer(1:next_read_length)
+                num_to_read = num_to_read - next_read_length
+            end do
+        end if
+        9999 string = string // buffer(1:num_read)
+    end subroutine getDefaultUnitToEndOfRecord
+
+    subroutine getWithUnitToEndOfRecord(unit, string, maxlen, iostat)
+        ! Sec. 3.6.1
+        integer, intent(in) :: unit
+        type(VARYING_STRING), intent(out) :: string
+        integer, optional, intent(in) :: maxlen
+        integer, optional, intent(out) :: iostat
+
+        integer, parameter :: BUFFER_SIZE = 100
+        character(len=BUFFER_SIZE) :: buffer
+        integer :: next_read_length
+        integer :: num_read
+        integer :: num_to_read
+
+        if (present(maxlen)) then
+            num_to_read = maxlen
+        else
+            num_to_read = huge(1)
+        end if
+        if (present(iostat)) then
+            do
+                if (num_to_read <= 0) exit
+                next_read_length = min(BUFFER_SIZE, num_to_read)
+                read(unit, fmt='(A)', advance='NO', eor=9999, size=num_read, iostat=iostat) buffer(1:next_read_length)
+                if (iostat /= 0) return
+                string = string // buffer(1:next_read_length)
+                num_to_read = num_to_read - next_read_length
+            end do
+        else
+            do
+                if (num_to_read <= 0) exit
+                next_read_length = min(BUFFER_SIZE, num_to_read)
+                read(unit, fmt='(A)', advance='NO', eor=9999, size=num_read) buffer(1:next_read_length)
+                string = string // buffer(1:next_read_length)
+                num_to_read = num_to_read - next_read_length
+            end do
+        end if
+        9999 string = string // buffer(1:num_read)
+    end subroutine getWithUnitToEndOfRecord
+
+    subroutine getDefaultUnitToTerminatorString(string, set, separator, maxlen, iostat)
+        ! Sec. 3.6.1
+        type(VARYING_STRING), intent(out) :: string
+        type(VARYING_STRING), intent(in) :: set ! possible terminator characters
+        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        integer, optional, intent(in) :: maxlen
+        integer, optional, intent(out) :: iostat
+
+        call get(string, char(set), separator, maxlen, iostat)
+    end subroutine getDefaultUnitToTerminatorString
+
+    subroutine getWithUnitToTerminatorString(unit, string, set, separator, maxlen, iostat)
+        ! Sec. 3.6.1
+        integer, intent(in) :: unit
+        type(VARYING_STRING), intent(out) :: string
+        type(VARYING_STRING), intent(in) :: set ! possible terminator characters
+        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        integer, optional, intent(in) :: maxlen
+        integer, optional, intent(out) :: iostat
+
+        call get(unit, string, char(set), separator, maxlen, iostat)
+    end subroutine getWithUnitToTerminatorString
+
+    subroutine getDefaultUnitToTerminatorCharacters(string, set, separator, maxlen, iostat)
+        ! Sec. 3.6.1
+        type(VARYING_STRING), intent(out) :: string
+        character(len=*), intent(in) :: set ! possible terminator characters
+        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        integer, optional, intent(in) :: maxlen
+        integer, optional, intent(out) :: iostat
+
+        character(len=1) :: buffer
+        integer :: num_to_read
+
+        if (present(maxlen)) then
+            num_to_read = maxlen
+        else
+            num_to_read = huge(1)
+        end if
+        if (present(iostat)) then
+            do
+                if (num_to_read <= 0) exit
+                read(*, fmt='(A)', advance='NO', eor=9999, iostat=iostat) buffer
+                if (iostat /= 0) return
+                if (index(set, buffer) /= 0) then
+                    if (present(separator)) separator = buffer
+                    return
+                end if
+                string = string // buffer
+                num_to_read = num_to_read - 1
+            end do
+        else
+            do
+                if (num_to_read <= 0) exit
+                read(*, fmt='(A)', advance='NO', eor=9999) buffer
+                if (index(set, buffer) /= 0) then
+                    if (present(separator)) separator = buffer
+                    return
+                end if
+                string = string // buffer
+                num_to_read = num_to_read - 1
+            end do
+        end if
+        9999 continue
+    end subroutine getDefaultUnitToTerminatorCharacters
+
+    subroutine getWithUnitToTerminatorCharacters(unit, string, set, separator, maxlen, iostat)
+        ! Sec. 3.6.1
+        integer, intent(in) :: unit
+        type(VARYING_STRING), intent(out) :: string
+        character(len=*), intent(in) :: set ! possible terminator characters
+        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        integer, optional, intent(in) :: maxlen
+        integer, optional, intent(out) :: iostat
+
+        character(len=1) :: buffer
+        integer :: num_to_read
+
+        if (present(maxlen)) then
+            num_to_read = maxlen
+        else
+            num_to_read = huge(1)
+        end if
+        if (present(iostat)) then
+            do
+                if (num_to_read <= 0) exit
+                read(unit, fmt='(A)', advance='NO', eor=9999, iostat=iostat) buffer
+                if (iostat /= 0) return
+                if (index(set, buffer) /= 0) then
+                    if (present(separator)) separator = buffer
+                    return
+                end if
+                string = string // buffer
+                num_to_read = num_to_read - 1
+            end do
+        else
+            do
+                if (num_to_read <= 0) exit
+                read(unit, fmt='(A)', advance='NO', eor=9999) buffer
+                if (index(set, buffer) /= 0) then
+                    if (present(separator)) separator = buffer
+                    return
+                end if
+                string = string // buffer
+                num_to_read = num_to_read - 1
+            end do
+        end if
+        9999 continue
+    end subroutine getWithUnitToTerminatorCharacters
+
+    subroutine putStringDefaultUnit(string, iostat)
+        ! Sec. 3.6.2
+        type(VARYING_STRING), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        call put(char(string), iostat)
+    end subroutine putStringDefaultUnit
+
+    subroutine putStringWithUnit(unit, string, iostat)
+        ! Sec. 3.6.2
+        integer, intent(in) :: unit
+        type(VARYING_STRING), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        call put(unit, char(string), iostat)
+    end subroutine putStringWithUnit
+
+    subroutine putCharactersDefaultUnit(string, iostat)
+        ! Sec. 3.6.2
+        character(len=*), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        if (present(iostat)) then
+            write(*, fmt='(A)', advance='NO', iostat=iostat) string
+        else
+            write(*, fmt='(A)', advance='NO') string
+        end if
+    end subroutine putCharactersDefaultUnit
+
+    subroutine putCharactersWithUnit(unit, string, iostat)
+        ! Sec. 3.6.2
+        integer, intent(in) :: unit
+        character(len=*), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        if (present(iostat)) then
+            write(unit, fmt='(A)', advance='NO', iostat=iostat) string
+        else
+            write(unit, fmt='(A)', advance='NO') string
+        end if
+    end subroutine putCharactersWithUnit
+
+    subroutine putLineStringDefaultUnit(string, iostat)
+        ! Sec. 3.6.3
+        type(VARYING_STRING), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        call put_line(char(string), iostat)
+    end subroutine putLineStringDefaultUnit
+
+    subroutine putLineStringWithUnit(unit, string, iostat)
+        ! Sec. 3.6.3
+        integer, intent(in) :: unit
+        type(VARYING_STRING), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        call put_line(unit, char(string), iostat)
+    end subroutine putLineStringWithUnit
+
+    subroutine putLineCharactersDefaultUnit(string, iostat)
+        ! Sec. 3.6.3
+        character(len=*), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        if (present(iostat)) then
+            write(*, fmt='(A,/)', advance='NO', iostat=iostat) string
+        else
+            write(*, fmt='(A,/)', advance='NO') string
+        end if
+    end subroutine putLineCharactersDefaultUnit
+
+    subroutine putLineCharactersWithUnit(unit, string, iostat)
+        ! Sec. 3.6.3
+        integer, intent(in) :: unit
+        character(len=*), intent(in) :: string
+        integer, optional, intent(out) :: iostat
+
+        if (present(iostat)) then
+            write(unit, fmt='(A,/)', advance='NO', iostat=iostat) string
+        else
+            write(unit, fmt='(A,/)', advance='NO') string
+        end if
+    end subroutine putLineCharactersWithUnit
 end module ISO_VARYING_STRING
