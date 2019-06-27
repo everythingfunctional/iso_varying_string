@@ -161,6 +161,13 @@ module ISO_VARYING_STRING
         module procedure extractString
     end interface
 
+    interface INSERT ! Sec. 3.7.2
+        module procedure insertCharacterIntoCharacter
+        module procedure insertCharacterIntoString
+        module procedure insertStringIntoCharacter
+        module procedure insertStringIntoString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -190,7 +197,8 @@ module ISO_VARYING_STRING
             GET, &
             PUT, &
             PUT_LINE, &
-            EXTRACT
+            EXTRACT, &
+            INSERT
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -1027,4 +1035,61 @@ contains
 
         extracted = extract(char(string), start, finish)
     end function extractString
+
+    elemental function insertCharacterIntoCharacter(string, start, substring) result(inserted)
+        ! Sec. 3.7.2
+        character(len=*), intent(in) :: string
+        integer, intent(in) :: start
+        character(len=*), intent(in) :: substring
+        type(VARYING_STRING) :: inserted
+
+        type(VARYING_STRING) :: beginning
+        type(VARYING_STRING) :: middle
+        type(VARYING_STRING) :: end_
+
+        if (start <= 1) then
+            beginning = substring
+            middle = string
+            end_ = ""
+        else if (start > len(string)) then
+            beginning = string
+            middle = substring
+            end_ = ""
+        else
+            beginning = string(1:start-1)
+            middle = substring
+            end_ = string(start:)
+        end if
+        inserted = beginning // middle // end_
+    end function insertCharacterIntoCharacter
+
+    elemental function insertCharacterIntoString(string, start, substring) result(inserted)
+        ! Sec. 3.7.2
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: start
+        character(len=*), intent(in) :: substring
+        type(VARYING_STRING) :: inserted
+
+        inserted = insert(char(string), start, substring)
+    end function insertCharacterIntoString
+
+    elemental function insertStringIntoCharacter(string ,start, substring) result(inserted)
+        ! Sec. 3.7.2
+        character(len=*), intent(in) :: string
+        integer, intent(in) :: start
+        type(VARYING_STRING), intent(in) :: substring
+        type(VARYING_STRING) :: inserted
+
+        inserted = insert(string, start, char(substring))
+    end function insertStringIntoCharacter
+
+    elemental function insertStringIntoString(string ,start, substring) result(inserted)
+        ! Sec. 3.7.2
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: start
+        type(VARYING_STRING), intent(in) :: substring
+        type(VARYING_STRING) :: inserted
+
+        inserted = insert(char(string), start, char(substring))
+    end function insertStringIntoString
 end module ISO_VARYING_STRING
