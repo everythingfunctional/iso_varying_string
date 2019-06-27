@@ -1005,20 +1005,12 @@ contains
         integer :: finish_
 
         if (present(start)) then
-            if (start < 1) then
-                start_ = 1
-            else
-                start_ = start
-            end if
+            start_ = max(1, start)
         else
             start_ = 1
         end if
         if (present(finish)) then
-            if (finish > len(string)) then
-                finish_ = len(string)
-            else
-                finish_ = finish
-            end if
+            finish_ = min(len(string), finish)
         else
             finish_ = len(string)
         end if
