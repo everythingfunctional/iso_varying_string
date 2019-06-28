@@ -173,6 +173,10 @@ module ISO_VARYING_STRING
         module procedure removeString
     end interface
 
+    interface REPLACE ! Sec. 3.7.4
+        module procedure replaceCharacterWithCharacterStart
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -204,7 +208,8 @@ module ISO_VARYING_STRING
             PUT_LINE, &
             EXTRACT, &
             INSERT, &
-            REMOVE
+            REMOVE, &
+            REPLACE
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -1132,4 +1137,17 @@ contains
 
         removed = remove(char(string), start, finish)
     end function removeString
+
+    elemental function replaceCharacterWithCharacterStart(string, start, substring) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        integer, intent(in) :: start
+        character(len=*), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        integer :: start_
+
+        start_ = max(1, start)
+        replaced = insert(remove(string, start_, start_ + len(substring) - 1), start_, substring)
+    end function replaceCharacterWithCharacterStart
 end module ISO_VARYING_STRING
