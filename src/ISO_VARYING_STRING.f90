@@ -168,6 +168,11 @@ module ISO_VARYING_STRING
         module procedure insertStringIntoString
     end interface
 
+    interface REMOVE ! Sec. 3.7.3
+        module procedure removeCharacter
+        module procedure removeString
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -198,7 +203,8 @@ module ISO_VARYING_STRING
             PUT, &
             PUT_LINE, &
             EXTRACT, &
-            INSERT
+            INSERT, &
+            REMOVE
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -1084,4 +1090,46 @@ contains
 
         inserted = insert(char(string), start, char(substring))
     end function insertStringIntoString
+
+    elemental function removeCharacter(string, start, finish) result(removed)
+        ! Sec. 3.7.3
+        character(len=*), intent(in) :: string
+        integer, optional, intent(in) :: start
+        integer, optional, intent(in) :: finish
+        type(VARYING_STRING) :: removed
+
+        integer :: start_
+        integer :: finish_
+        type(VARYING_STRING) :: beginning
+        type(VARYING_STRING) :: end_
+
+        if (present(start)) then
+            start_ = start
+        else
+            start_ = 1
+        end if
+        if (present(finish)) then
+            finish_ = finish
+        else
+            finish_ = len(string)
+        end if
+
+        if (start_ > finish_) then
+            removed = string
+        else
+            beginning = string(1:start_ - 1)
+            end_ = string(finish_ + 1:len(string))
+            removed = beginning // end_
+        end if
+    end function removeCharacter
+
+    elemental function removeString(string, start, finish) result(removed)
+        ! Sec. 3.7.3
+        type(VARYING_STRING), intent(in) :: string
+        integer, optional, intent(in) :: start
+        integer, optional, intent(in) :: finish
+        type(VARYING_STRING) :: removed
+
+        removed = remove(char(string), start, finish)
+    end function removeString
 end module ISO_VARYING_STRING
