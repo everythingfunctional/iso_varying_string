@@ -179,6 +179,9 @@ module ISO_VARYING_STRING
         module procedure replaceCharacterWithStringStart
         module procedure replaceStringWithStringStart
         module procedure replaceCharacterWithCharacterRange
+        module procedure replaceStringWithCharacterRange
+        module procedure replaceCharacterWithStringRange
+        module procedure replaceStringWithStringRange
     end interface
 
     public :: &
@@ -1208,4 +1211,40 @@ contains
         ending = string(max(finish+1, start) : )
         replaced = beginning // substring // ending
     end function replaceCharacterWithCharacterRange
+
+    elemental function replaceStringWithCharacterRange( &
+            string, start, finish, substring) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: start
+        integer, intent(in) :: finish
+        character(len=*), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), start, finish, substring)
+    end function replaceStringWithCharacterRange
+
+    elemental function replaceCharacterWithStringRange( &
+            string, start, finish, substring) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        integer, intent(in) :: start
+        integer, intent(in) :: finish
+        type(VARYING_STRING), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(string, start, finish, char(substring))
+    end function replaceCharacterWithStringRange
+
+    elemental function replaceStringWithStringRange( &
+            string, start, finish, substring) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: start
+        integer, intent(in) :: finish
+        type(VARYING_STRING), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), start, finish, char(substring))
+    end function replaceStringWithStringRange
 end module ISO_VARYING_STRING
