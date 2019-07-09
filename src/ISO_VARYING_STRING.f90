@@ -178,6 +178,7 @@ module ISO_VARYING_STRING
         module procedure replaceStringWithCharacterStart
         module procedure replaceCharacterWithStringStart
         module procedure replaceStringWithStringStart
+        module procedure replaceCharacterWithCharacterRange
     end interface
 
     public :: &
@@ -1190,4 +1191,21 @@ contains
 
         replaced = replace(char(string), start, char(substring))
     end function replaceStringWithStringStart
+
+    elemental function replaceCharacterWithCharacterRange( &
+            string, start, finish, substring) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        integer, intent(in) :: start
+        integer, intent(in) :: finish
+        character(len=*), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        type(VARYING_STRING) :: beginning
+        type(VARYING_STRING) :: ending
+
+        beginning = string(1 : start-1)
+        ending = string(max(finish+1, start) : )
+        replaced = beginning // substring // ending
+    end function replaceCharacterWithCharacterRange
 end module ISO_VARYING_STRING
