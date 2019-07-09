@@ -175,6 +175,9 @@ module ISO_VARYING_STRING
 
     interface REPLACE ! Sec. 3.7.4
         module procedure replaceCharacterWithCharacterStart
+        module procedure replaceStringWithCharacterStart
+        module procedure replaceCharacterWithStringStart
+        module procedure replaceStringWithStringStart
     end interface
 
     public :: &
@@ -1138,7 +1141,8 @@ contains
         removed = remove(char(string), start, finish)
     end function removeString
 
-    elemental function replaceCharacterWithCharacterStart(string, start, substring) result(replaced)
+    elemental function replaceCharacterWithCharacterStart( &
+                string, start, substring) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
@@ -1148,6 +1152,42 @@ contains
         integer :: start_
 
         start_ = max(1, start)
-        replaced = insert(remove(string, start_, start_ + len(substring) - 1), start_, substring)
+        replaced = insert( &
+                remove(string, start_, start_ + len(substring) - 1), &
+                start_, &
+                substring)
     end function replaceCharacterWithCharacterStart
+
+    elemental function replaceStringWithCharacterStart( &
+            string, start, substring) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: start
+        character(len=*), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), start, substring)
+    end function replaceStringWithCharacterStart
+
+    elemental function replaceCharacterWithStringStart( &
+            string, start, substring) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        integer, intent(in) :: start
+        type(VARYING_STRING), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(string, start, char(substring))
+    end function replaceCharacterWithStringStart
+
+    elemental function replaceStringWithStringStart( &
+            string, start, substring) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        integer, intent(in) :: start
+        type(VARYING_STRING), intent(in) :: substring
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), start, char(substring))
+    end function replaceStringWithStringStart
 end module ISO_VARYING_STRING
