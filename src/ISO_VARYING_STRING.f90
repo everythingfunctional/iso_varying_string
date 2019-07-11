@@ -182,6 +182,7 @@ module ISO_VARYING_STRING
         module procedure replaceStringWithCharacterRange
         module procedure replaceCharacterWithStringRange
         module procedure replaceStringWithStringRange
+        module procedure replaceTargetCharacterWithCharacterInCharacter
     end interface
 
     public :: &
@@ -1247,4 +1248,61 @@ contains
 
         replaced = replace(char(string), start, finish, char(substring))
     end function replaceStringWithStringRange
+
+    elemental function replaceTargetCharacterWithCharacterInCharacter( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        character(len=*), intent(in) :: target
+        character(len=*), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        logical :: back_
+        logical :: every_
+
+        if (present(back)) then
+            back_ = back
+        else
+            back_ = .false.
+        end if
+
+        if (present(every)) then
+            every_ = every
+        else
+            every_ = .false.
+        end if
+
+        replaced = recursiveReplace(string)
+    contains
+        pure recursive function recursiveReplace(string_) result(replaced_)
+            character(len=*), intent(in) :: string_
+            type(VARYING_STRING) :: replaced_
+
+            integer :: position
+
+            position = index(string_, target, back_)
+            if (position /= 0) then
+                if (every_) then
+                    if (back_) then
+                        replaced_ = &
+                                recursiveReplace(string_(1:position-1)) &
+                                // substring &
+                                // string_(position+len(target):)
+                    else
+                        replaced_ = &
+                                string_(1:position-1) &
+                                // substring &
+                                // recursiveReplace(string_(position+len(target):))
+                    end if
+                else
+                    replaced_ = replace( &
+                            string_, position, position+len(target)-1, substring)
+                end if
+            else
+                replaced_ = string_
+            end if
+        end function recursiveReplace
+    end function replaceTargetCharacterWithCharacterInCharacter
 end module ISO_VARYING_STRING
