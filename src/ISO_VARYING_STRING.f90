@@ -192,6 +192,10 @@ module ISO_VARYING_STRING
         module procedure replaceTargetStringWithStringInString
     end interface
 
+    interface SPLIT ! Sec. 3.7.5
+        module procedure splitCharacter
+    end interface
+
     public :: &
             assignment(=), &
             operator(//), &
@@ -224,7 +228,8 @@ module ISO_VARYING_STRING
             EXTRACT, &
             INSERT, &
             REMOVE, &
-            REPLACE
+            REPLACE, &
+            SPLIT
 contains
     elemental subroutine assignCharacterToString(lhs, rhs)
         ! Sec. 3.3.1
@@ -1403,4 +1408,58 @@ contains
 
         replaced = replace(char(string), char(target), char(substring), every, back)
     end function replaceTargetStringWithStringInString
+
+    elemental subroutine splitCharacter(string, word, set, separator, back)
+        ! Sec. 3.7.5
+        type(VARYING_STRING), intent(inout) :: string
+        type(VARYING_STRING), intent(out) :: word
+        character(len=*), intent(in) :: set
+        type(VARYING_STRING), optional, intent(out) :: separator
+        logical, optional, intent(in) :: back
+
+        logical :: backwards
+        integer :: i
+        integer :: string_length
+        character(len=1), allocatable :: temp(:)
+
+        string_length = len(string)
+        if (present(back)) then
+            backwards = back
+        else
+            backwards = .false.
+        end if
+        if (backwards) then
+            do i = string_length, 1, -1
+                if (index(set, string%characters(i)) /= 0) exit
+            end do
+            if (i < 1) then
+                word = string
+                string = ""
+                if (present(separator)) separator = ""
+            else
+                allocate(word%characters, source = string%characters(i+1:))
+                allocate(temp, source = string%characters(:i-1))
+                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
+                deallocate(string%characters)
+                allocate(string%characters, source = temp)
+                deallocate(temp)
+            end if
+        else
+            do i = 1, string_length
+                if (index(set, string%characters(i)) /= 0) exit
+            end do
+            if (i > string_length) then
+                word = string
+                string = ""
+                if (present(separator)) separator = ""
+            else
+                allocate(word%characters, source = string%characters(1:i-1))
+                allocate(temp, source = string%characters(i+1:))
+                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
+                deallocate(string%characters)
+                allocate(string%characters, source = temp)
+                deallocate(temp)
+            end if
+        end if
+    end subroutine splitCharacter
 end module ISO_VARYING_STRING
