@@ -183,6 +183,13 @@ module ISO_VARYING_STRING
         module procedure replaceCharacterWithStringRange
         module procedure replaceStringWithStringRange
         module procedure replaceTargetCharacterWithCharacterInCharacter
+        module procedure replaceTargetCharacterWithCharacterInString
+        module procedure replaceTargetCharacterWithStringInCharacter
+        module procedure replaceTargetCharacterWithStringInString
+        module procedure replaceTargetStringWithCharacterInCharacter
+        module procedure replaceTargetStringWithCharacterInString
+        module procedure replaceTargetStringWithStringInCharacter
+        module procedure replaceTargetStringWithStringInString
     end interface
 
     public :: &
@@ -1305,4 +1312,95 @@ contains
             end if
         end function recursiveReplace
     end function replaceTargetCharacterWithCharacterInCharacter
+
+    elemental function replaceTargetCharacterWithCharacterInString( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        character(len=*), intent(in) :: target
+        character(len=*), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), target, substring, every, back)
+    end function replaceTargetCharacterWithCharacterInString
+
+    elemental function replaceTargetCharacterWithStringInCharacter( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        character(len=*), intent(in) :: target
+        type(VARYING_STRING), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(string, target, char(substring), every, back)
+    end function replaceTargetCharacterWithStringInCharacter
+
+    elemental function replaceTargetCharacterWithStringInString( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        character(len=*), intent(in) :: target
+        type(VARYING_STRING), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), target, char(substring), every, back)
+    end function replaceTargetCharacterWithStringInString
+
+    elemental function replaceTargetStringWithCharacterInCharacter( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: target
+        character(len=*), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(string, char(target), substring, every, back)
+    end function replaceTargetStringWithCharacterInCharacter
+
+    elemental function replaceTargetStringWithCharacterInString( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: target
+        character(len=*), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), char(target), substring, every, back)
+    end function replaceTargetStringWithCharacterInString
+
+    elemental function replaceTargetStringWithStringInCharacter( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        character(len=*), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: target
+        type(VARYING_STRING), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(string, char(target), char(substring), every, back)
+    end function replaceTargetStringWithStringInCharacter
+
+    elemental function replaceTargetStringWithStringInString( &
+            string, target, substring, every, back) result(replaced)
+        ! Sec. 3.7.4
+        type(VARYING_STRING), intent(in) :: string
+        type(VARYING_STRING), intent(in) :: target
+        type(VARYING_STRING), intent(in) :: substring
+        logical, optional, intent(in) :: every
+        logical, optional, intent(in) :: back
+        type(VARYING_STRING) :: replaced
+
+        replaced = replace(char(string), char(target), char(substring), every, back)
+    end function replaceTargetStringWithStringInString
 end module ISO_VARYING_STRING
