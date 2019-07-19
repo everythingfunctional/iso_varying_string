@@ -194,6 +194,7 @@ module ISO_VARYING_STRING
 
     interface SPLIT ! Sec. 3.7.5
         module procedure splitCharacter
+        module procedure splitString
     end interface
 
     public :: &
@@ -1462,4 +1463,15 @@ contains
             end if
         end if
     end subroutine splitCharacter
+
+    elemental subroutine splitString(string, word, set, separator, back)
+        ! Sec. 3.7.5
+        type(VARYING_STRING), intent(inout) :: string
+        type(VARYING_STRING), intent(out) :: word
+        type(VARYING_STRING), intent(in) :: set
+        type(VARYING_STRING), optional, intent(out) :: separator
+        logical, optional, intent(in) :: back
+
+        call split(string, word, char(set), separator, back)
+    end subroutine splitString
 end module ISO_VARYING_STRING

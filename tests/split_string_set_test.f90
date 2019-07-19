@@ -1,4 +1,4 @@
-module split_test
+module split_string_set_test
     implicit none
     private
 
@@ -120,12 +120,13 @@ contains
                 "The string is searched in the backward direction if back is true", &
                 back_separator_tests)
         tests = describe( &
-                "Sec. 3.7.5: SPLIT divides the string at the first occurence of a character that is in set (character)", &
+                "Sec. 3.7.5: SPLIT divides the string at the first occurence of a character that is in set (string)", &
                 back_tests)
     end function test_split_character
 
     pure function checkForwardNoSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
@@ -134,14 +135,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, " ,")
+        call split(string, word, var_str(" ,"))
         result_ = &
                 assertEquals("split", char(word)) &
                 .and.assertEquals(" this", char(string))
     end function checkForwardNoSeparator
 
     pure function checkForwardNoSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -150,14 +152,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "!")
+        call split(string, word, var_str("!"))
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word))
     end function checkForwardNoSeparatorNotFound
 
     pure function checkForwardNoSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -166,14 +169,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "")
+        call split(string, word, var_str(""))
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word))
     end function checkForwardNoSeparatorEmptySet
 
     pure function checkForwardWithSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
@@ -183,7 +187,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, " ,", separator)
+        call split(string, word, var_str(" ,"), separator)
         result_ = &
                 assertEquals("split", char(word)) &
                 .and.assertEquals(" this", char(string)) &
@@ -191,7 +195,8 @@ contains
     end function checkForwardWithSeparator
 
     pure function checkForwardWithSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -201,7 +206,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "!", separator)
+        call split(string, word, var_str("!"), separator)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word)) &
@@ -209,7 +214,8 @@ contains
     end function checkForwardWithSeparatorNotFound
 
     pure function checkForwardWithSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -219,7 +225,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "", separator)
+        call split(string, word, var_str(""), separator)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word)) &
@@ -227,7 +233,8 @@ contains
     end function checkForwardWithSeparatorEmptySet
 
     pure function checkNotBackwardNoSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
@@ -236,14 +243,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, " ,", back=.false.)
+        call split(string, word, var_str(" ,"), back=.false.)
         result_ = &
                 assertEquals("split", char(word)) &
                 .and.assertEquals(" this", char(string))
     end function checkNotBackwardNoSeparator
 
     pure function checkNotBackwardNoSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -252,14 +260,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "!", back=.false.)
+        call split(string, word, var_str("!"), back=.false.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word))
     end function checkNotBackwardNoSeparatorNotFound
 
     pure function checkNotBackwardNoSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -268,14 +277,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "", back=.false.)
+        call split(string, word, var_str(""), back=.false.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word))
     end function checkNotBackwardNoSeparatorEmptySet
 
     pure function checkNotBackwardWithSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
@@ -285,7 +295,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, " ,", separator, .false.)
+        call split(string, word, var_str(" ,"), separator, .false.)
         result_ = &
                 assertEquals("split", char(word)) &
                 .and.assertEquals(" this", char(string)) &
@@ -293,7 +303,8 @@ contains
     end function checkNotBackwardWithSeparator
 
     pure function checkNotBackwardWithSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -303,7 +314,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "!", separator, .false.)
+        call split(string, word, var_str("!"), separator, .false.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word)) &
@@ -311,7 +322,8 @@ contains
     end function checkNotBackwardWithSeparatorNotFound
 
     pure function checkNotBackwardWithSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -321,7 +333,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "", separator, .false.)
+        call split(string, word, var_str(""), separator, .false.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word)) &
@@ -329,7 +341,8 @@ contains
     end function checkNotBackwardWithSeparatorEmptySet
 
     pure function checkBackwardNoSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
@@ -338,14 +351,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, " ,", back=.true.)
+        call split(string, word, var_str(" ,"), back=.true.)
         result_ = &
                 assertEquals("this", char(word)) &
                 .and.assertEquals("split,", char(string))
     end function checkBackwardNoSeparator
 
     pure function checkBackwardNoSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -354,14 +368,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "!", back=.true.)
+        call split(string, word, var_str("!"), back=.true.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word))
     end function checkBackwardNoSeparatorNotFound
 
     pure function checkBackwardNoSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -370,14 +385,15 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "", back=.true.)
+        call split(string, word, var_str(""), back=.true.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word))
     end function checkBackwardNoSeparatorEmptySet
 
     pure function checkBackwardWithSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
         type(Result_t) :: result_
@@ -387,7 +403,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, " ,", separator, .true.)
+        call split(string, word, var_str(" ,"), separator, .true.)
         result_ = &
                 assertEquals("this", char(word)) &
                 .and.assertEquals("split,", char(string)) &
@@ -395,7 +411,8 @@ contains
     end function checkBackwardWithSeparator
 
     pure function checkBackwardWithSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -405,7 +422,7 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "!", separator, .true.)
+        call split(string, word, var_str("!"), separator, .true.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word)) &
@@ -413,7 +430,8 @@ contains
     end function checkBackwardWithSeparatorNotFound
 
     pure function checkBackwardWithSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+        use ISO_VARYING_STRING, only: &
+                VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
 
         type(Result_t) :: result_
@@ -423,10 +441,10 @@ contains
         type(VARYING_STRING) :: word
 
         string = "split, this"
-        call split(string, word, "", separator, .true.)
+        call split(string, word, var_str(""), separator, .true.)
         result_ = &
                 assertEmpty(char(string)) &
                 .and.assertEquals("split, this", char(word)) &
                 .and.assertEmpty(char(separator))
     end function checkBackwardWithSeparatorEmptySet
-end module split_test
+end module split_string_set_test
