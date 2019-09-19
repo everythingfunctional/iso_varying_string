@@ -5,6 +5,9 @@ module ISO_VARYING_STRING
     type, public :: VARYING_STRING ! Sec. 3.2
         private
         character(len=1), allocatable :: characters(:)
+    contains
+        private
+        final :: destructor
     end type VARYING_STRING
 
     interface assignment(=) ! Sec. 3.3.1
@@ -1474,4 +1477,10 @@ contains
 
         call split(string, word, char(set), separator, back)
     end subroutine splitString
+
+    subroutine destructor(self)
+        type(VARYING_STRING), intent(inout) :: self
+
+        if (allocated(self%characters)) deallocate(self%characters)
+    end subroutine destructor
 end module ISO_VARYING_STRING
