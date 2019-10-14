@@ -18,20 +18,21 @@ contains
         tests = describe("Sec 3.4.2: ADJUSTR", individual_tests)
     end function test_adjustr
 
-    pure function checkAdjustr(string) result(result_)
-        use ISO_VARYING_STRING, only: adjustr, char, var_str
-        use Vegetables_m, only: Result_t, assertEquals, fail
+    function checkAdjustr(string) result(result_)
+        use ISO_VARYING_STRING, only: adjustr, char
+        use Vegetables_m, only: &
+                Input_t, Result_t, StringInput_t, assertEquals, fail
 
-        class(*), intent(in) :: string
+        class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
         select type (string)
-        type is (character(len=*))
+        type is (StringInput_t)
             result_ = assertEquals( &
-                    adjustr(string), &
-                    char(adjustr(var_str(string))))
+                    adjustr(char(string%value_)), &
+                    adjustr(string%value_))
         class default
-            result_ = fail("Expected to get a character")
+            result_ = fail("Expected to get a StringInput_t")
         end select
     end function checkAdjustr
 end module adjustr_test

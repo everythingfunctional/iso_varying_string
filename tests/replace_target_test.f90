@@ -220,7 +220,7 @@ contains
                 individual_tests)
     end function test_replace_string_with_string_in_string
 
-    pure function checkReplaceCharacterWithCharacterInCharacter() result(result_)
+    function checkReplaceCharacterWithCharacterInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -234,7 +234,7 @@ contains
                         "with this")))
     end function checkReplaceCharacterWithCharacterInCharacter
 
-    pure function checkReplaceCharacterWithCharacterInCharacterBackward() result(result_)
+    function checkReplaceCharacterWithCharacterInCharacterBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -249,7 +249,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceCharacterWithCharacterInCharacterBackward
 
-    pure function checkReplaceCharacterWithCharacterInCharacterEvery() result(result_)
+    function checkReplaceCharacterWithCharacterInCharacterEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -273,7 +273,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceCharacterWithCharacterInCharacterEvery
 
-    pure function checkReplaceCharacterWithCharacterInString() result(result_)
+    function checkReplaceCharacterWithCharacterInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -287,7 +287,7 @@ contains
                         "with this")))
     end function checkReplaceCharacterWithCharacterInString
 
-    pure function checkReplaceCharacterWithCharacterInStringBackward() result(result_)
+    function checkReplaceCharacterWithCharacterInStringBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -302,7 +302,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceCharacterWithCharacterInStringBackward
 
-    pure function checkReplaceCharacterWithCharacterInStringEvery() result(result_)
+    function checkReplaceCharacterWithCharacterInStringEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -326,7 +326,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceCharacterWithCharacterInStringEvery
 
-    pure function checkReplaceCharacterWithStringInCharacter() result(result_)
+    function checkReplaceCharacterWithStringInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -340,7 +340,7 @@ contains
                         var_str("with this"))))
     end function checkReplaceCharacterWithStringInCharacter
 
-    pure function checkReplaceCharacterWithStringInCharacterBackward() result(result_)
+    function checkReplaceCharacterWithStringInCharacterBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -355,7 +355,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceCharacterWithStringInCharacterBackward
 
-    pure function checkReplaceCharacterWithStringInCharacterEvery() result(result_)
+    function checkReplaceCharacterWithStringInCharacterEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -379,7 +379,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceCharacterWithStringInCharacterEvery
 
-    pure function checkReplaceCharacterWithStringInString() result(result_)
+    function checkReplaceCharacterWithStringInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -393,7 +393,7 @@ contains
                         var_str("with this"))))
     end function checkReplaceCharacterWithStringInString
 
-    pure function checkReplaceCharacterWithStringInStringBackward() result(result_)
+    function checkReplaceCharacterWithStringInStringBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -408,7 +408,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceCharacterWithStringInStringBackward
 
-    pure function checkReplaceCharacterWithStringInStringEvery() result(result_)
+    function checkReplaceCharacterWithStringInStringEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -432,7 +432,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceCharacterWithStringInStringEvery
 
-    pure function checkReplaceStringWithCharacterInCharacter() result(result_)
+    function checkReplaceStringWithCharacterInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -446,7 +446,7 @@ contains
                         "with this")))
     end function checkReplaceStringWithCharacterInCharacter
 
-    pure function checkReplaceStringWithCharacterInCharacterBackward() result(result_)
+    function checkReplaceStringWithCharacterInCharacterBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -461,7 +461,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceStringWithCharacterInCharacterBackward
 
-    pure function checkReplaceStringWithCharacterInCharacterEvery() result(result_)
+    function checkReplaceStringWithCharacterInCharacterEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -485,7 +485,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceStringWithCharacterInCharacterEvery
 
-    pure function checkReplaceStringWithCharacterInString() result(result_)
+    function checkReplaceStringWithCharacterInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -499,7 +499,7 @@ contains
                         "with this")))
     end function checkReplaceStringWithCharacterInString
 
-    pure function checkReplaceStringWithCharacterInStringBackward() result(result_)
+    function checkReplaceStringWithCharacterInStringBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -514,7 +514,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceStringWithCharacterInStringBackward
 
-    pure function checkReplaceStringWithCharacterInStringEvery() result(result_)
+    function checkReplaceStringWithCharacterInStringEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -538,7 +538,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceStringWithCharacterInStringEvery
 
-    pure function checkReplaceStringWithStringInCharacter() result(result_)
+    function checkReplaceStringWithStringInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -552,7 +552,7 @@ contains
                         var_str("with this"))))
     end function checkReplaceStringWithStringInCharacter
 
-    pure function checkReplaceStringWithStringInCharacterBackward() result(result_)
+    function checkReplaceStringWithStringInCharacterBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -567,7 +567,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceStringWithStringInCharacterBackward
 
-    pure function checkReplaceStringWithStringInCharacterEvery() result(result_)
+    function checkReplaceStringWithStringInCharacterEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -591,7 +591,7 @@ contains
                                 back = .TRUE.)))
     end function checkReplaceStringWithStringInCharacterEvery
 
-    pure function checkReplaceStringWithStringInString() result(result_)
+    function checkReplaceStringWithStringInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -605,7 +605,7 @@ contains
                         var_str("with this"))))
     end function checkReplaceStringWithStringInString
 
-    pure function checkReplaceStringWithStringInStringBackward() result(result_)
+    function checkReplaceStringWithStringInStringBackward() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -620,7 +620,7 @@ contains
                         back = .TRUE.)))
     end function checkReplaceStringWithStringInStringBackward
 
-    pure function checkReplaceStringWithStringInStringEvery() result(result_)
+    function checkReplaceStringWithStringInStringEvery() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 

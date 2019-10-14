@@ -29,60 +29,60 @@ contains
                 individual_tests)
     end function test_less_than_equals
 
-    pure function checkStringLessThanEqualString(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkStringLessThanEqualString(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(<=), char
-        use Vegetables_m, only: Result_t, assertThat, fail
+        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertThat( &
                     char(strings%first) <= char(strings%second) &
                     .eqv. strings%first <= strings%second, &
                     char('"' // strings%first // '" <= "' // strings%second // '"'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkStringLessThanEqualString
 
-    pure function checkCharacterLessThanEqualString(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkCharacterLessThanEqualString(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(<=), char
-        use Vegetables_m, only: Result_t, assertThat, fail
+        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertThat( &
                     char(strings%first) <= char(strings%second) &
                     .eqv. char(strings%first) <= strings%second, &
                     char('"' // strings%first // '" <= "' // strings%second // '"'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkCharacterLessThanEqualString
 
-    pure function checkStringLessThanEqualCharacter(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkStringLessThanEqualCharacter(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(<=), char
-        use Vegetables_m, only: Result_t, assertThat, fail
+        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertThat( &
                     char(strings%first) <= char(strings%second) &
                     .eqv. strings%first <= char(strings%second), &
                     char('"' // strings%first // '" <= "' // strings%second // '"'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkStringLessThanEqualCharacter
 end module less_than_equal_test

@@ -29,16 +29,16 @@ contains
                 individual_tests)
     end function test_index
 
-    pure function checkIndexStrings(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkIndexStrings(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, index
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = &
                 assertEquals( &
                     index(char(strings%first), char(strings%second)), &
@@ -53,20 +53,20 @@ contains
                     index(strings%first, strings%second, .true.), &
                     char('index("' // strings%first // '", "' // strings%second // '", .true.)'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkIndexStrings
 
-    pure function checkIndexStringAndCharacter(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkIndexStringAndCharacter(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, index
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = &
                 assertEquals( &
                     index(char(strings%first), char(strings%second)), &
@@ -81,20 +81,20 @@ contains
                     index(strings%first, char(strings%second), .true.), &
                     char('index("' // strings%first // '", "' // strings%second // '", .true.)'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkIndexStringAndCharacter
 
-    pure function checkIndexCharacterAndString(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkIndexCharacterAndString(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, index
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = &
                 assertEquals( &
                     index(char(strings%first), char(strings%second)), &
@@ -109,7 +109,7 @@ contains
                     index(char(strings%first), strings%second, .true.), &
                     char('index("' // strings%first // '", "' // strings%second // '", .true.)'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkIndexCharacterAndString
 end module index_test

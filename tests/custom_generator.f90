@@ -1,9 +1,23 @@
 module custom_generator
     use ISO_VARYING_STRING, only: VARYING_STRING
-    use Vegetables_m, only: Generator_t
+    use Vegetables_m, only: Generator_t, Input_t
 
     implicit none
     private
+
+    type, public, extends(Input_t) :: CharacterInput_t
+        character(len=1) :: value_
+    end type CharacterInput_t
+
+    type, public, extends(Input_t) :: StringAndIntegerInput_t
+        type(VARYING_STRING) :: string
+        integer :: integer_
+    end type StringAndIntegerInput_t
+
+    type, public, extends(Input_t) :: StringPairInput_t
+        type(VARYING_STRING) :: first
+        type(VARYING_STRING) :: second
+    end type StringPairInput_t
 
     type, public, extends(Generator_t) :: AsciiCharacterGenerator_t
     contains
@@ -26,16 +40,6 @@ module custom_generator
         procedure, public, nopass :: shrink => shrinkStringPair
     end type AsciiStringPairGenerator_t
 
-    type, public :: StringAndInteger_t
-        type(VARYING_STRING) :: string
-        integer :: integer_
-    end type StringAndInteger_t
-
-    type, public :: StringPair_t
-        type(VARYING_STRING) :: first
-        type(VARYING_STRING) :: second
-    end type StringPair_t
-
     type(AsciiCharacterGenerator_t), public, parameter :: &
             ASCII_CHARACTER_GENERATOR = AsciiCharacterGenerator_t()
     type(AsciiStringAndIntegerGenerator_t), public, parameter :: &
@@ -49,10 +53,14 @@ contains
         class(AsciiCharacterGenerator_t), intent(in) :: self
         type(Generated_t) :: generated_value
 
+        type(CharacterInput_t)  :: the_input
+
         associate(a => self)
         end associate
 
-        generated_value = Generated(getRandomAsciiCharacter())
+        the_input%value_ = getRandomAsciiCharacter()
+
+        generated_value = Generated(the_input)
     end function generateCharacter
 
     function generateStringAndInteger(self) result(generated_value)
@@ -63,7 +71,7 @@ contains
         class(AsciiStringAndIntegerGenerator_t), intent(in) :: self
         type(Generated_t) :: generated_value
 
-        type(StringAndInteger_t) :: pair
+        type(StringAndIntegerInput_t) :: pair
 
         associate(a => self)
         end associate
@@ -80,7 +88,7 @@ contains
         class(AsciiStringPairGenerator_t), intent(in) :: self
         type(Generated_t) :: generated_value
 
-        type(StringPair_t) :: pair
+        type(StringPairInput_t) :: pair
 
         associate(a => self)
         end associate
@@ -90,89 +98,88 @@ contains
         generated_value = Generated(pair)
     end function generateStringPair
 
-    pure function shrinkCharacter(value_) result(shrunk)
-        use Vegetables_m, only: ShrinkResult_t, SimplestValue
+    function shrinkCharacter(input) result(shrunk)
+        use Vegetables_m, only: Input_t, ShrinkResult_t, SimplestValue
 
-        class(*), intent(in) :: value_
-        class(ShrinkResult_t), allocatable :: shrunk
+        class(Input_t), intent(in) :: input
+        type(ShrinkResult_t) :: shrunk
 
-        select type (value_)
-        type is (character(len=*))
-            allocate(shrunk, source = SimplestValue(value_))
-        end select
+        shrunk = SimplestValue(input)
     end function shrinkCharacter
 
-    pure function shrinkStringAndInteger(value_) result(shrunk)
+    function shrinkStringAndInteger(input) result(shrunk)
         use ISO_VARYING_STRING, only: assignment(=), char, len
         use Vegetables_m, only: &
+                Input_t, &
                 ShrinkResult_t, &
                 ShrunkValue, &
                 SimplestValue
 
-        class(*), intent(in) :: value_
-        class(ShrinkResult_t), allocatable :: shrunk
+        class(Input_t), intent(in) :: input
+        type(ShrinkResult_t) :: shrunk
 
-        type(StringAndInteger_t) :: shrunk_value
+        type(StringAndIntegerInput_t) :: shrunk_value
 
-        select type (value_)
-        type is (StringAndInteger_t)
-            if (value_%integer_ == 0) then
-                if (len(value_%string) <= 1) then
+        select type (input)
+        type is (StringAndIntegerInput_t)
+            if (input%integer_ == 0) then
+                if (len(input%string) <= 1) then
                     shrunk_value%integer_ = 0
                     shrunk_value%string = ""
-                    allocate(shrunk, source = SimplestValue(shrunk_value))
+                    shrunk = SimplestValue(shrunk_value)
                 else
                     shrunk_value%integer_ = 0
-                    shrunk_value%string = char(value_%string, len(value_%string) - 1)
-                    allocate(shrunk, source = ShrunkValue(shrunk_value))
+                    shrunk_value%string = char(input%string, len(input%string) - 1)
+                    shrunk = ShrunkValue(shrunk_value)
                 end if
             else
-                if (len(value_%string) <= 1) then
-                    shrunk_value%integer_ = value_%integer_ / 2
+                if (len(input%string) <= 1) then
+                    shrunk_value%integer_ = input%integer_ / 2
                     shrunk_value%string = ""
-                    allocate(shrunk, source = ShrunkValue(shrunk_value))
+                    shrunk = ShrunkValue(shrunk_value)
                 else
-                    shrunk_value%integer_ = value_%integer_ / 2
-                    shrunk_value%string = char(value_%string, len(value_%string) - 1)
-                    allocate(shrunk, source = ShrunkValue(shrunk_value))
+                    shrunk_value%integer_ = input%integer_ / 2
+                    shrunk_value%string = char(input%string, len(input%string) - 1)
+                    shrunk = ShrunkValue(shrunk_value)
                 end if
             end if
         end select
     end function shrinkStringAndInteger
 
-    pure function shrinkStringPair(value_) result(shrunk)
+    function shrinkStringPair(input) result(shrunk)
         use ISO_VARYING_STRING, only: assignment(=), char, len
         use Vegetables_m, only: &
+                Input_t, &
                 ShrinkResult_t, &
                 ShrunkValue, &
                 SimplestValue
 
-        class(*), intent(in) :: value_
-        class(ShrinkResult_t), allocatable :: shrunk
+        class(Input_t), intent(in) :: input
+        type(ShrinkResult_t) :: shrunk
 
-        type(StringPair_t) :: shrunk_value
+        type(StringPairInput_t) :: shrunk_value
 
-        select type (value_)
-        type is (StringPair_t)
-            if (len(value_%first) <= 1) then
-                if (len(value_%second) <= 1) then
+        select type (input)
+        type is (StringPairInput_t)
+            if (len(input%first) <= 1) then
+                if (len(input%second) <= 1) then
                     shrunk_value%first = ""
                     shrunk_value%second = ""
-                    allocate(shrunk, source = SimplestValue(shrunk_value))
+                    shrunk = SimplestValue(shrunk_value)
                 else
                     shrunk_value%first = ""
-                    shrunk_value%second = char(value_%second, len(value_%second) - 1)
-                    allocate(shrunk, source = ShrunkValue(shrunk_value))
+                    shrunk_value%second = char(input%second, len(input%second) - 1)
+                    shrunk = ShrunkValue(shrunk_value)
                 end if
             else
-                if (len(value_%second) <= 1) then
-                    shrunk_value%first = char(value_%first, len(value_%first) - 1)
+                if (len(input%second) <= 1) then
+                    shrunk_value%first = char(input%first, len(input%first) - 1)
                     shrunk_value%second = ""
-                    allocate(shrunk, source = ShrunkValue(shrunk_value))
+                    shrunk = ShrunkValue(shrunk_value)
                 else
-                    shrunk_value%first = char(value_%first, len(value_%first) - 1)
-                    shrunk_value%second = char(value_%second, len(value_%second) - 1)
-                    allocate(shrunk, source = ShrunkValue(shrunk_value))
+                    shrunk_value%first = char(input%first, len(input%first) - 1)
+                    shrunk_value%second = char(input%second, len(input%second) - 1)
+                    shrunk = ShrunkValue(shrunk_value)
                 end if
             end if
         end select

@@ -29,60 +29,60 @@ contains
                 individual_tests)
     end function test_lle
 
-    pure function checkStringLGEString(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkStringLGEString(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, lle
-        use Vegetables_m, only: Result_t, assertThat, fail
+        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertThat( &
                     lle(char(strings%first), char(strings%second)) &
                     .eqv. lle(strings%first, strings%second), &
                     char('lle("' // strings%first // '", "' // strings%second // '")'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkStringLGEString
 
-    pure function checkCharacterLGEString(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkCharacterLGEString(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, lle
-        use Vegetables_m, only: Result_t, assertThat, fail
+        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertThat( &
                     lle(char(strings%first), char(strings%second)) &
                     .eqv. lle(char(strings%first), strings%second), &
                     char('lle("' // strings%first // '", "' // strings%second // '")'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkCharacterLGEString
 
-    pure function checkStringLGECharacter(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkStringLGECharacter(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, lle
-        use Vegetables_m, only: Result_t, assertThat, fail
+        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertThat( &
                     lle(char(strings%first), char(strings%second)) &
                     .eqv. lle(strings%first, char(strings%second)), &
                     char('lle("' // strings%first // '", "' // strings%second // '")'))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkStringLGECharacter
 end module lle_test

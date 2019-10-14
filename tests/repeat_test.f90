@@ -20,21 +20,21 @@ contains
                 "Sec. 3.4.13: REPEAT", individual_tests)
     end function test_repeat
 
-    pure function checkRepeat(example) result(result_)
-        use custom_generator, only: StringAndInteger_t
+    function checkRepeat(example) result(result_)
+        use custom_generator, only: StringAndIntegerInput_t
         use ISO_VARYING_STRING, only: char, repeat
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: example
+        class(Input_t), intent(in) :: example
         type(Result_t) :: result_
 
         select type (example)
-        type is (StringAndInteger_t)
+        type is (StringAndIntegerInput_t)
             result_ = assertEquals( &
                     repeat(char(example%string), example%integer_), &
                     char(repeat(example%string, example%integer_)))
         class default
-            result_ = fail("Expected to get a StringAndInteger_t")
+            result_ = fail("Expected to get a StringAndIntegerInput_t")
         end select
     end function checkRepeat
 end module repeat_test

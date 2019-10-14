@@ -19,21 +19,22 @@ contains
         tests = describe("Sec. 3.5.1: VAR_STR", individual_tests)
     end function test_var_str
 
-    pure function checkVarStr(string) result(result_)
+    function checkVarStr(string) result(result_)
         use ISO_VARYING_STRING, only: char, var_str
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: &
+                Input_t, Result_t, StringInput_t, assertEquals, fail
 
-        class(*), intent(in) :: string
+        class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
         select type (string)
-        type is (character(len=*))
+        type is (StringInput_t)
             result_ = assertEquals( &
-                    string, &
-                    char(var_str(string)), &
+                    string%value_, &
+                    var_str(char(string%value_)), &
                     "The result value is the same string of characters as the argument.")
         class default
-            result_ = fail("Expected to get a character")
+            result_ = fail("Expected to get a StringInput_t")
         end select
     end function checkVarStr
 end module var_str_test

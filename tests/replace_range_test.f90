@@ -124,7 +124,7 @@ contains
                 individual_tests)
     end function test_replace_string_in_string_range
 
-    pure function checkReplaceCharacterInCharacter() result(result_)
+    function checkReplaceCharacterInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -135,7 +135,7 @@ contains
                 char(replace("THAT IS CRAZY", 6, 7, "WAS")))
     end function checkReplaceCharacterInCharacter
 
-    pure function checkReplaceCharacterInCharacterStartLTOne() result(result_)
+    function checkReplaceCharacterInCharacterStartLTOne() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -146,7 +146,7 @@ contains
                 char(replace("THAT IS CRAZY", -1, 7, "WAS")))
     end function checkReplaceCharacterInCharacterStartLTOne
 
-    pure function checkReplaceCharacterInCharacterStartGTEnd() result(result_)
+    function checkReplaceCharacterInCharacterStartGTEnd() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -157,7 +157,7 @@ contains
                 char(replace("THAT IS CRAZY", 6, 15, "WAS")))
     end function checkReplaceCharacterInCharacterStartGTEnd
 
-    pure function checkReplaceCharacterInCharacterStartGTFinish() result(result_)
+    function checkReplaceCharacterInCharacterStartGTFinish() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -168,7 +168,7 @@ contains
                 char(replace("THAT IS CRAZY", 6, 1, "WAS")))
     end function checkReplaceCharacterInCharacterStartGTFinish
 
-    pure function checkReplaceCharacterInString() result(result_)
+    function checkReplaceCharacterInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -179,7 +179,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), 6, 7, "WAS")))
     end function checkReplaceCharacterInString
 
-    pure function checkReplaceCharacterInStringStartLTOne() result(result_)
+    function checkReplaceCharacterInStringStartLTOne() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -190,7 +190,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), -1, 7, "WAS")))
     end function checkReplaceCharacterInStringStartLTOne
 
-    pure function checkReplaceCharacterInStringStartGTEnd() result(result_)
+    function checkReplaceCharacterInStringStartGTEnd() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -201,7 +201,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), 6, 15, "WAS")))
     end function checkReplaceCharacterInStringStartGTEnd
 
-    pure function checkReplaceCharacterInStringStartGTFinish() result(result_)
+    function checkReplaceCharacterInStringStartGTFinish() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -212,7 +212,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), 6, 1, "WAS")))
     end function checkReplaceCharacterInStringStartGTFinish
 
-    pure function checkReplaceStringInCharacter() result(result_)
+    function checkReplaceStringInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -223,7 +223,7 @@ contains
                 char(replace("THAT IS CRAZY", 6, 7, var_str("WAS"))))
     end function checkReplaceStringInCharacter
 
-    pure function checkReplaceStringInCharacterStartLTOne() result(result_)
+    function checkReplaceStringInCharacterStartLTOne() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -234,7 +234,7 @@ contains
                 char(replace("THAT IS CRAZY", -1, 7, var_str("WAS"))))
     end function checkReplaceStringInCharacterStartLTOne
 
-    pure function checkReplaceStringInCharacterStartGTEnd() result(result_)
+    function checkReplaceStringInCharacterStartGTEnd() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -245,7 +245,7 @@ contains
                 char(replace("THAT IS CRAZY", 6, 15, var_str("WAS"))))
     end function checkReplaceStringInCharacterStartGTEnd
 
-    pure function checkReplaceStringInCharacterStartGTFinish() result(result_)
+    function checkReplaceStringInCharacterStartGTFinish() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -256,7 +256,7 @@ contains
                 char(replace("THAT IS CRAZY", 6, 1, var_str("WAS"))))
     end function checkReplaceStringInCharacterStartGTFinish
 
-    pure function checkReplaceStringInString() result(result_)
+    function checkReplaceStringInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -267,7 +267,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), 6, 7, var_str("WAS"))))
     end function checkReplaceStringInString
 
-    pure function checkReplaceStringInStringStartLTOne() result(result_)
+    function checkReplaceStringInStringStartLTOne() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -278,7 +278,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), -1, 7, var_str("WAS"))))
     end function checkReplaceStringInStringStartLTOne
 
-    pure function checkReplaceStringInStringStartGTEnd() result(result_)
+    function checkReplaceStringInStringStartGTEnd() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -289,7 +289,7 @@ contains
                 char(replace(var_str("THAT IS CRAZY"), 6, 15, var_str("WAS"))))
     end function checkReplaceStringInStringStartGTEnd
 
-    pure function checkReplaceStringInStringStartGTFinish() result(result_)
+    function checkReplaceStringInStringStartGTFinish() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 

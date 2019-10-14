@@ -28,51 +28,53 @@ contains
         tests = describe("Sec. 3.3.1: assignment", individual_tests)
     end function test_assignment
 
-    pure function checkAssignCharacterToString(string) result(result_)
+    function checkAssignCharacterToString(string) result(result_)
         use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: &
+                Input_t, Result_t, StringInput_t, assertEquals, fail
 
-        class(*), intent(in) :: string
+        class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: assigned
 
         select type (string)
-        type is (character(len=*))
-            assigned = string
+        type is (StringInput_t)
+            assigned = char(string%value_)
             result_ = assertEquals( &
-                    string, &
-                    char(assigned), &
+                    string%value_, &
+                    assigned, &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
         class default
-            result_ = fail("Expected to get a character")
+            result_ = fail("Expected to get a StringInput_t")
         end select
     end function checkAssignCharacterToString
 
-    pure function checkAssignStringToString(string) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, var_str
-        use Vegetables_m, only: Result_t, assertEquals, fail, succeed
+    function checkAssignStringToString(string) result(result_)
+        use ISO_VARYING_STRING, only: VARYING_STRING
+        use Vegetables_m, only: &
+                Input_t, Result_t, StringInput_t, assertEquals, fail, succeed
 
-        class(*), intent(in) :: string
+        class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: assigned
 
         select type (string)
-        type is (character(len=*))
-            assigned = var_str(string)
+        type is (StringInput_t)
+            assigned = string%value_
             result_ = assertEquals( &
-                    string, &
-                    char(assigned), &
+                    string%value_, &
+                    assigned, &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
         class default
-            result_ = fail("Expected to get a character")
+            result_ = fail("Expected to get a StringInput_t")
         end select
     end function checkAssignStringToString
 
-    pure function checkAssignToShorterCharacter() result(result_)
+    function checkAssignToShorterCharacter() result(result_)
         use ISO_VARYING_STRING, only: assignment(=), var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -88,7 +90,7 @@ contains
                 // " the character variable, only the left-most characters are assigned.")
     end function checkAssignToShorterCharacter
 
-    pure function checkAssignToLongerCharacter() result(result_)
+    function checkAssignToLongerCharacter() result(result_)
         use ISO_VARYING_STRING, only: assignment(=), var_str
         use Vegetables_m, only: Result_t, assertEquals
 

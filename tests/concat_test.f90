@@ -29,57 +29,57 @@ contains
                 individual_tests)
     end function test_concat
 
-    pure function checkConcatStrings(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkConcatStrings(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertEquals( &
                     char(strings%first) // char(strings%second), &
                     char(strings%first // strings%second))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkConcatStrings
 
-    pure function checkConcatStringAndCharacter(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkConcatStringAndCharacter(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertEquals( &
                     char(strings%first) // char(strings%second), &
                     char(strings%first // char(strings%second)))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkConcatStringAndCharacter
 
-    pure function checkConcatCharacterAndString(strings) result(result_)
-        use custom_generator, only: StringPair_t
+    function checkConcatCharacterAndString(strings) result(result_)
+        use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
 
-        class(*), intent(in) :: strings
+        class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
         select type (strings)
-        type is (StringPair_t)
+        type is (StringPairInput_t)
             result_ = assertEquals( &
                     char(strings%first) // char(strings%second), &
                     char(char(strings%first) // strings%second))
         class default
-            result_ = fail("Expected to get a StringPair_t")
+            result_ = fail("Expected to get a StringPairInput_t")
         end select
     end function checkConcatCharacterAndString
 end module concat_test

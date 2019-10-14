@@ -18,21 +18,22 @@ contains
         tests = describe("Sec 3.4.8: LEN_TRIM", individual_tests)
     end function test_len_trim
 
-    pure function checkAdjustl(string) result(result_)
-        use ISO_VARYING_STRING, only: len_trim, var_str
-        use Vegetables_m, only: Result_t, assertEquals, fail
+    function checkAdjustl(string) result(result_)
+        use ISO_VARYING_STRING, only: char, len_trim
+        use Vegetables_m, only: &
+                Input_t, Result_t, StringInput_t, assertEquals, fail
 
-        class(*), intent(in) :: string
+        class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
         select type (string)
-        type is (character(len=*))
+        type is (StringInput_t)
             result_ = assertEquals( &
-                    int(len_trim(string)), &
-                    len_trim(var_str(string)), &
-                    string)
+                    len_trim(char(string%value_)), &
+                    len_trim(string%value_), &
+                    string%value_)
         class default
-            result_ = fail("Expected to get a character")
+            result_ = fail("Expected to get a StringInput_t")
         end select
     end function checkAdjustl
 end module len_trim_test

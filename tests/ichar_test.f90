@@ -19,18 +19,23 @@ contains
         tests = describe("Sec. 3.4.5: ICHAR", individual_tests)
     end function test_ichar
 
-    pure function checkIchar(char_) result(result_)
+    function checkIchar(char_) result(result_)
+        use custom_generator, only: CharacterInput_t
         use ISO_VARYING_STRING, only: ichar, var_str
-        use Vegetables_m, only: Result_t, assertEquals, fail
+        use Vegetables_m, only: &
+                Input_t, Result_t, StringInput_t, assertEquals, fail
 
-        class(*), intent(in) :: char_
+        class(Input_t), intent(in) :: char_
         type(Result_t) :: result_
 
         select type (char_)
-        type is (character(len=*))
-            result_ = assertEquals(ichar(char_), ichar(var_str(char_)), char_)
+        type is (CharacterInput_t)
+            result_ = assertEquals( &
+                    ichar(char_%value_), &
+                    ichar(var_str(char_%value_)), &
+                    char_%value_)
         class default
-            result_ = fail("Expected to get a character.")
+            result_ = fail("Expected to get a CharacterInput_t.")
         end select
     end function checkIchar
 end module ichar_test

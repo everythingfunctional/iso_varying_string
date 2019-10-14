@@ -62,7 +62,7 @@ contains
         tests = describe("Sec. 3.7.1 EXTRACT string", individual_tests)
     end function test_extract_string
 
-    pure function checkExtractCharacter() result(result_)
+    function checkExtractCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, extract
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -73,7 +73,7 @@ contains
         result_ = assertEquals(example(2:4), char(extract(example, 2, 4)))
     end function checkExtractCharacter
 
-    pure function checkExtractCharacterWithoutStart() result(result_)
+    function checkExtractCharacterWithoutStart() result(result_)
         use ISO_VARYING_STRING, only: char, extract
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -84,7 +84,7 @@ contains
         result_ = assertEquals(example(1:4), char(extract(example, finish = 4)))
     end function checkExtractCharacterWithoutStart
 
-    pure function checkExtractCharacterWithStartLTOne() result(result_)
+    function checkExtractCharacterWithStartLTOne() result(result_)
         use ISO_VARYING_STRING, only: char, extract
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -95,7 +95,7 @@ contains
         result_ = assertEquals(example(1:4), char(extract(example, -1, 4)))
     end function checkExtractCharacterWithStartLTOne
 
-    pure function checkExtractCharacterWithoutFinish() result(result_)
+    function checkExtractCharacterWithoutFinish() result(result_)
         use ISO_VARYING_STRING, only: char, extract
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -106,7 +106,7 @@ contains
         result_ = assertEquals(example(2:), char(extract(example, 2)))
     end function checkExtractCharacterWithoutFinish
 
-    pure function checkExtractCharacterWithFinishGTLenString() result(result_)
+    function checkExtractCharacterWithFinishGTLenString() result(result_)
         use ISO_VARYING_STRING, only: char, extract
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -117,7 +117,7 @@ contains
         result_ = assertEquals(example(2:), char(extract(example, 2, len(example) + 1)))
     end function checkExtractCharacterWithFinishGTLenString
 
-    pure function checkExtractCharacterZeroLength() result(result_)
+    function checkExtractCharacterZeroLength() result(result_)
         use ISO_VARYING_STRING, only: char, extract
         use Vegetables_m, only: Result_t, assertEmpty
 
@@ -128,7 +128,7 @@ contains
         result_ = assertEmpty(char(extract(example, 10, -2)))
     end function checkExtractCharacterZeroLength
 
-    pure function checkExtractString() result(result_)
+    function checkExtractString() result(result_)
         use ISO_VARYING_STRING, only: char, extract, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -139,7 +139,7 @@ contains
         result_ = assertEquals(example(2:4), char(extract(var_str(example), 2, 4)))
     end function checkExtractString
 
-    pure function checkExtractStringWithoutStart() result(result_)
+    function checkExtractStringWithoutStart() result(result_)
         use ISO_VARYING_STRING, only: char, extract, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -150,7 +150,7 @@ contains
         result_ = assertEquals(example(1:4), char(extract(var_str(example), finish = 4)))
     end function checkExtractStringWithoutStart
 
-    pure function checkExtractStringWithStartLTOne() result(result_)
+    function checkExtractStringWithStartLTOne() result(result_)
         use ISO_VARYING_STRING, only: char, extract, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -161,7 +161,7 @@ contains
         result_ = assertEquals(example(1:4), char(extract(var_str(example), -1, 4)))
     end function checkExtractStringWithStartLTOne
 
-    pure function checkExtractStringWithoutFinish() result(result_)
+    function checkExtractStringWithoutFinish() result(result_)
         use ISO_VARYING_STRING, only: char, extract, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -172,7 +172,7 @@ contains
         result_ = assertEquals(example(2:), char(extract(var_str(example), 2)))
     end function checkExtractStringWithoutFinish
 
-    pure function checkExtractStringWithFinishGTLenString() result(result_)
+    function checkExtractStringWithFinishGTLenString() result(result_)
         use ISO_VARYING_STRING, only: char, extract, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -183,7 +183,7 @@ contains
         result_ = assertEquals(example(2:), char(extract(var_str(example), 2, len(example) + 1)))
     end function checkExtractStringWithFinishGTLenString
 
-    pure function checkExtractStringZeroLength() result(result_)
+    function checkExtractStringZeroLength() result(result_)
         use ISO_VARYING_STRING, only: char, extract, var_str
         use Vegetables_m, only: Result_t, assertEmpty
 
