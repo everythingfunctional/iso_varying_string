@@ -1478,7 +1478,7 @@ contains
         call split(string, word, char(set), separator, back)
     end subroutine splitString
 
-    subroutine destructor(self)
+    pure subroutine destructor(self)
         type(VARYING_STRING), intent(inout) :: self
 
         if (allocated(self%characters)) deallocate(self%characters)
