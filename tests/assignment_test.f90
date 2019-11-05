@@ -29,7 +29,7 @@ contains
         tests = describe("Sec. 3.3.1: assignment", individual_tests)
     end function test_assignment
 
-    function checkAssignCharacterToString(string) result(result_)
+    pure function checkAssignCharacterToString(string) result(result_)
         use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail
@@ -52,7 +52,7 @@ contains
         end select
     end function checkAssignCharacterToString
 
-    function checkAssignStringToString(string) result(result_)
+    pure function checkAssignStringToString(string) result(result_)
         use ISO_VARYING_STRING, only: VARYING_STRING
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail, succeed
@@ -75,7 +75,7 @@ contains
         end select
     end function checkAssignStringToString
 
-    function checkAssignToShorterCharacter() result(result_)
+    pure function checkAssignToShorterCharacter() result(result_)
         use ISO_VARYING_STRING, only: assignment(=), var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -91,7 +91,7 @@ contains
                 // " the character variable, only the left-most characters are assigned.")
     end function checkAssignToShorterCharacter
 
-    function checkAssignToLongerCharacter() result(result_)
+    pure function checkAssignToLongerCharacter() result(result_)
         use ISO_VARYING_STRING, only: assignment(=), var_str
         use Vegetables_m, only: Result_t, assertEquals
 

@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_equals
 
-    function checkStringEqualString(strings) result(result_)
+    pure function checkStringEqualString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(==), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -48,7 +48,7 @@ contains
         end select
     end function checkStringEqualString
 
-    function checkCharacterEqualString(strings) result(result_)
+    pure function checkCharacterEqualString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(==), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -67,7 +67,7 @@ contains
         end select
     end function checkCharacterEqualString
 
-    function checkStringEqualCharacter(strings) result(result_)
+    pure function checkStringEqualCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(==), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail

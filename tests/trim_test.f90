@@ -19,7 +19,7 @@ contains
         tests = Describe("Sec 3.4.15: TRIM", individual_tests)
     end function test_trim
 
-    function checkTrim(string) result(result_)
+    pure function checkTrim(string) result(result_)
         use ISO_VARYING_STRING, only: char, trim, var_str
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail

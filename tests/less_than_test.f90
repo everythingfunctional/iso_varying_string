@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_less_than
 
-    function checkStringLessThanString(strings) result(result_)
+    pure function checkStringLessThanString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(<), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -48,7 +48,7 @@ contains
         end select
     end function checkStringLessThanString
 
-    function checkCharacterLessThanString(strings) result(result_)
+    pure function checkCharacterLessThanString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(<), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -67,7 +67,7 @@ contains
         end select
     end function checkCharacterLessThanString
 
-    function checkStringLessThanCharacter(strings) result(result_)
+    pure function checkStringLessThanCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(<), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail

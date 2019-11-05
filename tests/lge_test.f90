@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_lge
 
-    function checkStringLGEString(strings) result(result_)
+    pure function checkStringLGEString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, lge
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -48,7 +48,7 @@ contains
         end select
     end function checkStringLGEString
 
-    function checkCharacterLGEString(strings) result(result_)
+    pure function checkCharacterLGEString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, lge
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -67,7 +67,7 @@ contains
         end select
     end function checkCharacterLGEString
 
-    function checkStringLGECharacter(strings) result(result_)
+    pure function checkStringLGECharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, lge
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail

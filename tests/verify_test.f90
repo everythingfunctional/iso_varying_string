@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_verify
 
-    function checkVerifyStrings(strings) result(result_)
+    pure function checkVerifyStrings(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, verify
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -57,7 +57,7 @@ contains
         end select
     end function checkVerifyStrings
 
-    function checkVerifyStringAndCharacter(strings) result(result_)
+    pure function checkVerifyStringAndCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, verify
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -85,7 +85,7 @@ contains
         end select
     end function checkVerifyStringAndCharacter
 
-    function checkVerifyCharacterAndString(strings) result(result_)
+    pure function checkVerifyCharacterAndString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, verify
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail

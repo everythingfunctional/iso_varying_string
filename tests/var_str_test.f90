@@ -20,7 +20,7 @@ contains
         tests = describe("Sec. 3.5.1: VAR_STR", individual_tests)
     end function test_var_str
 
-    function checkVarStr(string) result(result_)
+    pure function checkVarStr(string) result(result_)
         use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail

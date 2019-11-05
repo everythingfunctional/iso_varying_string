@@ -19,7 +19,7 @@ contains
         tests = describe("Sec 3.4.8: LEN_TRIM", individual_tests)
     end function test_len_trim
 
-    function checkAdjustl(string) result(result_)
+    pure function checkAdjustl(string) result(result_)
         use ISO_VARYING_STRING, only: char, len_trim
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail

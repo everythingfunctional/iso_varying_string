@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_scan
 
-    function checkScanStrings(strings) result(result_)
+    pure function checkScanStrings(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, scan
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -57,7 +57,7 @@ contains
         end select
     end function checkScanStrings
 
-    function checkScanStringAndCharacter(strings) result(result_)
+    pure function checkScanStringAndCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, scan
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -85,7 +85,7 @@ contains
         end select
     end function checkScanStringAndCharacter
 
-    function checkScanCharacterAndString(strings) result(result_)
+    pure function checkScanCharacterAndString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, scan
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail

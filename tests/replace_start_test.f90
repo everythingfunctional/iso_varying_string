@@ -108,7 +108,7 @@ contains
         tests = describe("Sec. 3.7.4: REPLACE in string with string at start", individual_tests)
     end function test_replace_string_in_string_start
 
-    function checkReplaceCharacterInCharacter() result(result_)
+    pure function checkReplaceCharacterInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -117,7 +117,7 @@ contains
         result_ = assertEquals("SOMETHRING", char(replace("SOMESTRING", 5, "TH")))
     end function checkReplaceCharacterInCharacter
 
-    function checkReplaceCharacterInCharacterAfter() result(result_)
+    pure function checkReplaceCharacterInCharacterAfter() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -126,7 +126,7 @@ contains
         result_ = assertEquals("SOMETHINGELSE", char(replace("SOMETHING", 10, "ELSE")))
     end function checkReplaceCharacterInCharacterAfter
 
-    function checkReplaceCharacterInCharacterBefore() result(result_)
+    pure function checkReplaceCharacterInCharacterBefore() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -135,7 +135,7 @@ contains
         result_ = assertEquals("ELSETHING", char(replace("SOMETHING", -1, "ELSE")))
     end function checkReplaceCharacterInCharacterBefore
 
-    function checkReplaceCharacterInCharacterOverrun() result(result_)
+    pure function checkReplaceCharacterInCharacterOverrun() result(result_)
         use ISO_VARYING_STRING, only: char, replace
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -144,7 +144,7 @@ contains
         result_ = assertEquals("OVERRUN", char(replace("OVERT", 5, "RUN")))
     end function checkReplaceCharacterInCharacterOverrun
 
-    function checkReplaceCharacterInString() result(result_)
+    pure function checkReplaceCharacterInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -153,7 +153,7 @@ contains
         result_ = assertEquals("SOMETHRING", char(replace(var_str("SOMESTRING"), 5, "TH")))
     end function checkReplaceCharacterInString
 
-    function checkReplaceCharacterInStringAfter() result(result_)
+    pure function checkReplaceCharacterInStringAfter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -162,7 +162,7 @@ contains
         result_ = assertEquals("SOMETHINGELSE", char(replace(var_str("SOMETHING"), 10, "ELSE")))
     end function checkReplaceCharacterInStringAfter
 
-    function checkReplaceCharacterInStringBefore() result(result_)
+    pure function checkReplaceCharacterInStringBefore() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -171,7 +171,7 @@ contains
         result_ = assertEquals("ELSETHING", char(replace(var_str("SOMETHING"), -1, "ELSE")))
     end function checkReplaceCharacterInStringBefore
 
-    function checkReplaceCharacterInStringOverrun() result(result_)
+    pure function checkReplaceCharacterInStringOverrun() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -180,7 +180,7 @@ contains
         result_ = assertEquals("OVERRUN", char(replace(var_str("OVERT"), 5, "RUN")))
     end function checkReplaceCharacterInStringOverrun
 
-    function checkReplaceStringInCharacter() result(result_)
+    pure function checkReplaceStringInCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -189,7 +189,7 @@ contains
         result_ = assertEquals("SOMETHRING", char(replace("SOMESTRING", 5, var_str("TH"))))
     end function checkReplaceStringInCharacter
 
-    function checkReplaceStringInCharacterAfter() result(result_)
+    pure function checkReplaceStringInCharacterAfter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -198,7 +198,7 @@ contains
         result_ = assertEquals("SOMETHINGELSE", char(replace("SOMETHING", 10, var_str("ELSE"))))
     end function checkReplaceStringInCharacterAfter
 
-    function checkReplaceStringInCharacterBefore() result(result_)
+    pure function checkReplaceStringInCharacterBefore() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -207,7 +207,7 @@ contains
         result_ = assertEquals("ELSETHING", char(replace("SOMETHING", -1, var_str("ELSE"))))
     end function checkReplaceStringInCharacterBefore
 
-    function checkReplaceStringInCharacterOverrun() result(result_)
+    pure function checkReplaceStringInCharacterOverrun() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -216,7 +216,7 @@ contains
         result_ = assertEquals("OVERRUN", char(replace("OVERT", 5, var_str("RUN"))))
     end function checkReplaceStringInCharacterOverrun
 
-    function checkReplaceStringInString() result(result_)
+    pure function checkReplaceStringInString() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -225,7 +225,7 @@ contains
         result_ = assertEquals("SOMETHRING", char(replace(var_str("SOMESTRING"), 5, var_str("TH"))))
     end function checkReplaceStringInString
 
-    function checkReplaceStringInStringAfter() result(result_)
+    pure function checkReplaceStringInStringAfter() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -234,7 +234,7 @@ contains
         result_ = assertEquals("SOMETHINGELSE", char(replace(var_str("SOMETHING"), 10, var_str("ELSE"))))
     end function checkReplaceStringInStringAfter
 
-    function checkReplaceStringInStringBefore() result(result_)
+    pure function checkReplaceStringInStringBefore() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -243,7 +243,7 @@ contains
         result_ = assertEquals("ELSETHING", char(replace(var_str("SOMETHING"), -1, var_str("ELSE"))))
     end function checkReplaceStringInStringBefore
 
-    function checkReplaceStringInStringOverrun() result(result_)
+    pure function checkReplaceStringInStringOverrun() result(result_)
         use ISO_VARYING_STRING, only: char, replace, var_str
         use Vegetables_m, only: Result_t, assertEquals
 

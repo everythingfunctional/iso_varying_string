@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_concat
 
-    function checkConcatStrings(strings) result(result_)
+    pure function checkConcatStrings(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -47,7 +47,7 @@ contains
         end select
     end function checkConcatStrings
 
-    function checkConcatStringAndCharacter(strings) result(result_)
+    pure function checkConcatStringAndCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -65,7 +65,7 @@ contains
         end select
     end function checkConcatStringAndCharacter
 
-    function checkConcatCharacterAndString(strings) result(result_)
+    pure function checkConcatCharacterAndString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail

@@ -19,7 +19,7 @@ contains
         tests = describe("Sec 3.4.2: ADJUSTR", individual_tests)
     end function test_adjustr
 
-    function checkAdjustr(string) result(result_)
+    pure function checkAdjustr(string) result(result_)
         use ISO_VARYING_STRING, only: adjustr, char
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail

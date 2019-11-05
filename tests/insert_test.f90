@@ -96,7 +96,7 @@ contains
         tests = describe("Sec. 3.7.2: INSERT string into string", individual_tests)
     end function test_insert_string_into_string
 
-    function checkInsertCharacterIntoCharacter() result(result_)
+    pure function checkInsertCharacterIntoCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, insert
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -110,7 +110,7 @@ contains
         result_ = assertEquals(expected, char(insert(string, start, substring)))
     end function checkInsertCharacterIntoCharacter
 
-    function checkInsertCharacterIntoCharacterAtEnd() result(result_)
+    pure function checkInsertCharacterIntoCharacterAtEnd() result(result_)
         use ISO_VARYING_STRING, only: char, insert
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -124,7 +124,7 @@ contains
         result_ = assertEquals(expected, char(insert(string, start, substring)))
     end function checkInsertCharacterIntoCharacterAtEnd
 
-    function checkInsertCharacterIntoCharacterAtBeginning() result(result_)
+    pure function checkInsertCharacterIntoCharacterAtBeginning() result(result_)
         use ISO_VARYING_STRING, only: char, insert
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -138,7 +138,7 @@ contains
         result_ = assertEquals(expected, char(insert(string, start, substring)))
     end function checkInsertCharacterIntoCharacterAtBeginning
 
-    function checkInsertCharacterIntoString() result(result_)
+    pure function checkInsertCharacterIntoString() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -152,7 +152,7 @@ contains
         result_ = assertEquals(expected, char(insert(var_str(string), start, substring)))
     end function checkInsertCharacterIntoString
 
-    function checkInsertCharacterIntoStringAtEnd() result(result_)
+    pure function checkInsertCharacterIntoStringAtEnd() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -166,7 +166,7 @@ contains
         result_ = assertEquals(expected, char(insert(var_str(string), start, substring)))
     end function checkInsertCharacterIntoStringAtEnd
 
-    function checkInsertCharacterIntoStringAtBeginning() result(result_)
+    pure function checkInsertCharacterIntoStringAtBeginning() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -180,7 +180,7 @@ contains
         result_ = assertEquals(expected, char(insert(var_str(string), start, substring)))
     end function checkInsertCharacterIntoStringAtBeginning
 
-    function checkInsertStringIntoCharacter() result(result_)
+    pure function checkInsertStringIntoCharacter() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -194,7 +194,7 @@ contains
         result_ = assertEquals(expected, char(insert(string, start, var_str(substring))))
     end function checkInsertStringIntoCharacter
 
-    function checkInsertStringIntoCharacterAtEnd() result(result_)
+    pure function checkInsertStringIntoCharacterAtEnd() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -208,7 +208,7 @@ contains
         result_ = assertEquals(expected, char(insert(string, start, var_str(substring))))
     end function checkInsertStringIntoCharacterAtEnd
 
-    function checkInsertStringIntoCharacterAtBeginning() result(result_)
+    pure function checkInsertStringIntoCharacterAtBeginning() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -222,7 +222,7 @@ contains
         result_ = assertEquals(expected, char(insert(string, start, var_str(substring))))
     end function checkInsertStringIntoCharacterAtBeginning
 
-    function checkInsertStringIntoString() result(result_)
+    pure function checkInsertStringIntoString() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -236,7 +236,7 @@ contains
         result_ = assertEquals(expected, char(insert(var_str(string), start, var_str(substring))))
     end function checkInsertStringIntoString
 
-    function checkInsertStringIntoStringAtEnd() result(result_)
+    pure function checkInsertStringIntoStringAtEnd() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -250,7 +250,7 @@ contains
         result_ = assertEquals(expected, char(insert(var_str(string), start, var_str(substring))))
     end function checkInsertStringIntoStringAtEnd
 
-    function checkInsertStringIntoStringAtBeginning() result(result_)
+    pure function checkInsertStringIntoStringAtBeginning() result(result_)
         use ISO_VARYING_STRING, only: char, insert, var_str
         use Vegetables_m, only: Result_t, assertEquals
 

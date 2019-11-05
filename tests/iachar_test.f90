@@ -19,7 +19,7 @@ contains
         tests = describe("Sec. 3.4.4: IACHAR", individual_tests)
     end function test_iachar
 
-    function checkIachar(char_) result(result_)
+    pure function checkIachar(char_) result(result_)
         use custom_generator, only: CharacterInput_t
         use ISO_VARYING_STRING, only: iachar, var_str
         use Vegetables_m, only: &

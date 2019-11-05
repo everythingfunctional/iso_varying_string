@@ -20,7 +20,7 @@ contains
                 "Sec. 3.4.13: REPEAT", individual_tests)
     end function test_repeat
 
-    function checkRepeat(example) result(result_)
+    pure function checkRepeat(example) result(result_)
         use custom_generator, only: StringAndIntegerInput_t
         use ISO_VARYING_STRING, only: char, repeat
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail

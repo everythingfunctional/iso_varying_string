@@ -19,7 +19,7 @@ contains
         tests = describe("Sec. 3.4.5: ICHAR", individual_tests)
     end function test_ichar
 
-    function checkIchar(char_) result(result_)
+    pure function checkIchar(char_) result(result_)
         use custom_generator, only: CharacterInput_t
         use ISO_VARYING_STRING, only: ichar, var_str
         use Vegetables_m, only: &

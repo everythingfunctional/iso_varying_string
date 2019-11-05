@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_greater_than
 
-    function checkStringGreaterThanString(strings) result(result_)
+    pure function checkStringGreaterThanString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(>), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -48,7 +48,7 @@ contains
         end select
     end function checkStringGreaterThanString
 
-    function checkCharacterGreaterThanString(strings) result(result_)
+    pure function checkCharacterGreaterThanString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(>), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail
@@ -67,7 +67,7 @@ contains
         end select
     end function checkCharacterGreaterThanString
 
-    function checkStringGreaterThanCharacter(strings) result(result_)
+    pure function checkStringGreaterThanCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), operator(>), char
         use Vegetables_m, only: Input_t, Result_t, assertThat, fail

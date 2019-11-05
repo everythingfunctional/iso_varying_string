@@ -125,7 +125,7 @@ contains
                 back_tests)
     end function test_split_character
 
-    function checkForwardNoSeparator() result(result_)
+    pure function checkForwardNoSeparator() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
@@ -142,7 +142,7 @@ contains
                 .and.assertEquals(" this", char(string))
     end function checkForwardNoSeparator
 
-    function checkForwardNoSeparatorNotFound() result(result_)
+    pure function checkForwardNoSeparatorNotFound() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -159,7 +159,7 @@ contains
                 .and.assertEquals("split, this", char(word))
     end function checkForwardNoSeparatorNotFound
 
-    function checkForwardNoSeparatorEmptySet() result(result_)
+    pure function checkForwardNoSeparatorEmptySet() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -176,7 +176,7 @@ contains
                 .and.assertEquals("split, this", char(word))
     end function checkForwardNoSeparatorEmptySet
 
-    function checkForwardWithSeparator() result(result_)
+    pure function checkForwardWithSeparator() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
@@ -195,7 +195,7 @@ contains
                 .and.assertEquals(",", char(separator))
     end function checkForwardWithSeparator
 
-    function checkForwardWithSeparatorNotFound() result(result_)
+    pure function checkForwardWithSeparatorNotFound() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -214,7 +214,7 @@ contains
                 .and.assertEmpty(char(separator))
     end function checkForwardWithSeparatorNotFound
 
-    function checkForwardWithSeparatorEmptySet() result(result_)
+    pure function checkForwardWithSeparatorEmptySet() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -233,7 +233,7 @@ contains
                 .and.assertEmpty(char(separator))
     end function checkForwardWithSeparatorEmptySet
 
-    function checkNotBackwardNoSeparator() result(result_)
+    pure function checkNotBackwardNoSeparator() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
@@ -250,7 +250,7 @@ contains
                 .and.assertEquals(" this", char(string))
     end function checkNotBackwardNoSeparator
 
-    function checkNotBackwardNoSeparatorNotFound() result(result_)
+    pure function checkNotBackwardNoSeparatorNotFound() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -267,7 +267,7 @@ contains
                 .and.assertEquals("split, this", char(word))
     end function checkNotBackwardNoSeparatorNotFound
 
-    function checkNotBackwardNoSeparatorEmptySet() result(result_)
+    pure function checkNotBackwardNoSeparatorEmptySet() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -284,7 +284,7 @@ contains
                 .and.assertEquals("split, this", char(word))
     end function checkNotBackwardNoSeparatorEmptySet
 
-    function checkNotBackwardWithSeparator() result(result_)
+    pure function checkNotBackwardWithSeparator() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
@@ -303,7 +303,7 @@ contains
                 .and.assertEquals(",", char(separator))
     end function checkNotBackwardWithSeparator
 
-    function checkNotBackwardWithSeparatorNotFound() result(result_)
+    pure function checkNotBackwardWithSeparatorNotFound() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -322,7 +322,7 @@ contains
                 .and.assertEmpty(char(separator))
     end function checkNotBackwardWithSeparatorNotFound
 
-    function checkNotBackwardWithSeparatorEmptySet() result(result_)
+    pure function checkNotBackwardWithSeparatorEmptySet() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -341,7 +341,7 @@ contains
                 .and.assertEmpty(char(separator))
     end function checkNotBackwardWithSeparatorEmptySet
 
-    function checkBackwardNoSeparator() result(result_)
+    pure function checkBackwardNoSeparator() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
@@ -358,7 +358,7 @@ contains
                 .and.assertEquals("split,", char(string))
     end function checkBackwardNoSeparator
 
-    function checkBackwardNoSeparatorNotFound() result(result_)
+    pure function checkBackwardNoSeparatorNotFound() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -375,7 +375,7 @@ contains
                 .and.assertEquals("split, this", char(word))
     end function checkBackwardNoSeparatorNotFound
 
-    function checkBackwardNoSeparatorEmptySet() result(result_)
+    pure function checkBackwardNoSeparatorEmptySet() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -392,7 +392,7 @@ contains
                 .and.assertEquals("split, this", char(word))
     end function checkBackwardNoSeparatorEmptySet
 
-    function checkBackwardWithSeparator() result(result_)
+    pure function checkBackwardWithSeparator() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEquals
@@ -411,7 +411,7 @@ contains
                 .and.assertEquals(" ", char(separator))
     end function checkBackwardWithSeparator
 
-    function checkBackwardWithSeparatorNotFound() result(result_)
+    pure function checkBackwardWithSeparatorNotFound() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals
@@ -430,7 +430,7 @@ contains
                 .and.assertEmpty(char(separator))
     end function checkBackwardWithSeparatorNotFound
 
-    function checkBackwardWithSeparatorEmptySet() result(result_)
+    pure function checkBackwardWithSeparatorEmptySet() result(result_)
         use ISO_VARYING_STRING, only: &
                 VARYING_STRING, assignment(=), char, split, var_str
         use Vegetables_m, only: Result_t, assertEmpty, assertEquals

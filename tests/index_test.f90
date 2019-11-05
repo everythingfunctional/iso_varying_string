@@ -29,7 +29,7 @@ contains
                 individual_tests)
     end function test_index
 
-    function checkIndexStrings(strings) result(result_)
+    pure function checkIndexStrings(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, index
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -57,7 +57,7 @@ contains
         end select
     end function checkIndexStrings
 
-    function checkIndexStringAndCharacter(strings) result(result_)
+    pure function checkIndexStringAndCharacter(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, index
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
@@ -85,7 +85,7 @@ contains
         end select
     end function checkIndexStringAndCharacter
 
-    function checkIndexCharacterAndString(strings) result(result_)
+    pure function checkIndexCharacterAndString(strings) result(result_)
         use custom_generator, only: StringPairInput_t
         use ISO_VARYING_STRING, only: operator(//), char, index
         use Vegetables_m, only: Input_t, Result_t, assertEquals, fail

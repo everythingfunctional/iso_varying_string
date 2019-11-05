@@ -99,7 +99,7 @@ contains
         generated_value = Generated(pair)
     end function generateStringPair
 
-    function shrinkCharacter(input) result(shrunk)
+    pure function shrinkCharacter(input) result(shrunk)
         use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: Input_t, ShrinkResult_t, SimplestValue
 
@@ -109,7 +109,7 @@ contains
         shrunk = SimplestValue(input)
     end function shrinkCharacter
 
-    function shrinkStringAndInteger(input) result(shrunk)
+    pure function shrinkStringAndInteger(input) result(shrunk)
         use ISO_VARYING_STRING, only: assignment(=), char, len
         use Vegetables_m, only: &
                 Input_t, &
@@ -148,7 +148,7 @@ contains
         end select
     end function shrinkStringAndInteger
 
-    function shrinkStringPair(input) result(shrunk)
+    pure function shrinkStringPair(input) result(shrunk)
         use ISO_VARYING_STRING, only: assignment(=), char, len
         use Vegetables_m, only: &
                 Input_t, &

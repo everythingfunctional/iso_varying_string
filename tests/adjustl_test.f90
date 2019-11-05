@@ -19,7 +19,7 @@ contains
         tests = describe("Sec 3.4.1: ADJUSTL", individual_tests)
     end function test_adjustl
 
-    function checkAdjustl(string) result(result_)
+    pure function checkAdjustl(string) result(result_)
         use ISO_VARYING_STRING, only: adjustl, char, var_str
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail

@@ -31,7 +31,7 @@ contains
         tests = describe("Sec. 3.4.3: CHAR", individual_tests)
     end function test_char
 
-    function checkCharWithoutLength(example) result(result_)
+    pure function checkCharWithoutLength(example) result(result_)
         use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: &
                 Input_t, Result_t, StringInput_t, assertEquals, fail
@@ -51,7 +51,7 @@ contains
         end select
     end function checkCharWithoutLength
 
-    function checkCharWithShorterLength() result(result_)
+    pure function checkCharWithShorterLength() result(result_)
         use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -63,7 +63,7 @@ contains
                 "If string is longer than length, result is truncated on the right.")
     end function checkCharWithShorterLength
 
-    function checkCharWithLongerLength() result(result_)
+    pure function checkCharWithLongerLength() result(result_)
         use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEquals
 
@@ -76,7 +76,7 @@ contains
                 // " right with blanks.")
     end function checkCharWithLongerLength
 
-    function checkCharWithZeroLength() result(result_)
+    pure function checkCharWithZeroLength() result(result_)
         use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEmpty
 
@@ -87,7 +87,7 @@ contains
                 "If length is less than one, the result is of zero length.")
     end function checkCharWithZeroLength
 
-    function checkCharWithNegativeLength() result(result_)
+    pure function checkCharWithNegativeLength() result(result_)
         use ISO_VARYING_STRING, only: char, var_str
         use Vegetables_m, only: Result_t, assertEmpty
 
