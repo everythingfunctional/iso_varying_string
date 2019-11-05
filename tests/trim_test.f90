@@ -5,6 +5,7 @@ module trim_test
     public :: test_trim
 contains
     function test_trim() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, Describe, It, ASCII_STRING_GENERATOR
 
         type(TestItem_t) :: tests

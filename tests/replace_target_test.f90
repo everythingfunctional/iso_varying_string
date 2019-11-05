@@ -13,6 +13,7 @@ module replace_target_test
             test_replace_string_with_string_in_string
 contains
     function test_replace_character_with_character_in_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -39,6 +40,7 @@ contains
     end function test_replace_character_with_character_in_character
 
     function test_replace_character_with_character_in_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -65,6 +67,7 @@ contains
     end function test_replace_character_with_character_in_string
 
     function test_replace_character_with_string_in_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -91,6 +94,7 @@ contains
     end function test_replace_character_with_string_in_character
 
     function test_replace_character_with_string_in_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -117,6 +121,7 @@ contains
     end function test_replace_character_with_string_in_string
 
     function test_replace_string_with_character_in_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -143,6 +148,7 @@ contains
     end function test_replace_string_with_character_in_character
 
     function test_replace_string_with_character_in_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -169,6 +175,7 @@ contains
     end function test_replace_string_with_character_in_string
 
     function test_replace_string_with_string_in_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -195,6 +202,7 @@ contains
     end function test_replace_string_with_string_in_character
 
     function test_replace_string_with_string_in_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests

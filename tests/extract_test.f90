@@ -5,6 +5,7 @@ module extract_test
     public :: test_extract_character, test_extract_string
 contains
     function test_extract_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -34,6 +35,7 @@ contains
     end function test_extract_character
 
     function test_extract_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests

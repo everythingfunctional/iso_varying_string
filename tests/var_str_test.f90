@@ -5,6 +5,7 @@ module var_str_test
     public :: test_var_str
 contains
     function test_var_str() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it, ASCII_STRING_GENERATOR
 
         type(TestItem_t) :: tests

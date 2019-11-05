@@ -48,6 +48,7 @@ module custom_generator
             ASCII_STRING_PAIR_GENERATOR = AsciiStringPairGenerator_t()
 contains
     function generateCharacter(self) result(generated_value)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: Generated_t, Generated, getRandomAsciiCharacter
 
         class(AsciiCharacterGenerator_t), intent(in) :: self
@@ -99,6 +100,7 @@ contains
     end function generateStringPair
 
     function shrinkCharacter(input) result(shrunk)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: Input_t, ShrinkResult_t, SimplestValue
 
         class(Input_t), intent(in) :: input

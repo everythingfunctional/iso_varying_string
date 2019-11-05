@@ -9,6 +9,7 @@ module replace_range_test
             test_replace_string_in_string_range
 contains
     function test_replace_character_in_character_range() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -38,6 +39,7 @@ contains
     end function test_replace_character_in_character_range
 
     function test_replace_character_in_string_range() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -67,6 +69,7 @@ contains
     end function test_replace_character_in_string_range
 
     function test_replace_string_in_character_range() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -96,6 +99,7 @@ contains
     end function test_replace_string_in_character_range
 
     function test_replace_string_in_string_range() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests

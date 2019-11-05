@@ -5,6 +5,7 @@ module split_character_set_test
     public :: test_split_character
 contains
     function test_split_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests

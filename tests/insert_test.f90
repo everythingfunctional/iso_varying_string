@@ -9,6 +9,7 @@ module insert_test
             test_insert_string_into_string
 contains
     function test_insert_character_into_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -30,6 +31,7 @@ contains
     end function test_insert_character_into_character
 
     function test_insert_character_into_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -51,6 +53,7 @@ contains
     end function test_insert_character_into_string
 
     function test_insert_string_into_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -72,6 +75,7 @@ contains
     end function test_insert_string_into_character
 
     function test_insert_string_into_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests

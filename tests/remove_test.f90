@@ -5,6 +5,7 @@ module remove_test
     public :: test_remove_character, test_remove_string
 contains
     function test_remove_character() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -34,6 +35,7 @@ contains
     end function test_remove_character
 
     function test_remove_string() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests

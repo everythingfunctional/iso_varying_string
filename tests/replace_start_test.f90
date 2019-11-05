@@ -9,6 +9,7 @@ module replace_start_test
             test_replace_string_in_string_start
 contains
     function test_replace_character_in_character_start() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -33,6 +34,7 @@ contains
     end function test_replace_character_in_character_start
 
     function test_replace_character_in_string_start() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -57,6 +59,7 @@ contains
     end function test_replace_character_in_string_start
 
     function test_replace_string_in_character_start() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
@@ -81,6 +84,7 @@ contains
     end function test_replace_string_in_character_start
 
     function test_replace_string_in_string_start() result(tests)
+        use ISO_VARYING_STRING ! To make the compiler happy
         use Vegetables_m, only: TestItem_t, describe, it
 
         type(TestItem_t) :: tests
