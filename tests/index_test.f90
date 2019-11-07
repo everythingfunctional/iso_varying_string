@@ -1,13 +1,21 @@
 module index_test
+    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
+    use ISO_VARYING_STRING, only: operator(//), char, index
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_index
 contains
     function test_index() result(tests)
-        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -30,10 +38,6 @@ contains
     end function test_index
 
     pure function checkIndexStrings(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, index
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -58,10 +62,6 @@ contains
     end function checkIndexStrings
 
     pure function checkIndexStringAndCharacter(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, index
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -86,10 +86,6 @@ contains
     end function checkIndexStringAndCharacter
 
     pure function checkIndexCharacterAndString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, index
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 

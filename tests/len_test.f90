@@ -1,13 +1,22 @@
 module len_test
+    use ISO_VARYING_STRING, only: char, len
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            StringInput_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it, &
+            ASCII_STRING_GENERATOR
+
     implicit none
     private
 
     public :: test_len
 contains
     function test_len() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it, ASCII_STRING_GENERATOR
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(1)
@@ -15,15 +24,11 @@ contains
         individual_tests = it( &
                 "works the same for characters and strings", &
                 ASCII_STRING_GENERATOR, &
-                checkAdjustl)
+                checkLen)
         tests = describe("Sec 3.4.7: LEN", individual_tests)
     end function test_len
 
-    pure function checkAdjustl(string) result(result_)
-        use ISO_VARYING_STRING, only: char, len
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail
-
+    pure function checkLen(string) result(result_)
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
@@ -36,5 +41,5 @@ contains
         class default
             result_ = fail("Expected to get a StringInput_t")
         end select
-    end function checkAdjustl
+    end function checkLen
 end module len_test

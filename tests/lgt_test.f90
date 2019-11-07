@@ -1,13 +1,21 @@
 module lgt_test
+    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
+    use ISO_VARYING_STRING, only: operator(//), char, lgt
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertThat, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_lgt
 contains
     function test_lgt() result(tests)
-        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -30,10 +38,6 @@ contains
     end function test_lgt
 
     pure function checkStringLGEString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, lgt
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -49,10 +53,6 @@ contains
     end function checkStringLGEString
 
     pure function checkCharacterLGEString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, lgt
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -68,10 +68,6 @@ contains
     end function checkCharacterLGEString
 
     pure function checkStringLGECharacter(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, lgt
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 

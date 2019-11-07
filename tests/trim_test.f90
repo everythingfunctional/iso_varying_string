@@ -1,13 +1,22 @@
 module trim_test
+    use ISO_VARYING_STRING, only: char, trim, var_str
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            StringInput_t, &
+            TestItem_t, &
+            assertEquals, &
+            Describe, &
+            fail, &
+            It, &
+            ASCII_STRING_GENERATOR
+
     implicit none
     private
 
     public :: test_trim
 contains
     function test_trim() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, Describe, It, ASCII_STRING_GENERATOR
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(1)
@@ -20,10 +29,6 @@ contains
     end function test_trim
 
     pure function checkTrim(string) result(result_)
-        use ISO_VARYING_STRING, only: char, trim, var_str
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail
-
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 

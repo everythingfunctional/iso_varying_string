@@ -1,13 +1,14 @@
 module remove_test
+    use ISO_VARYING_STRING, only: char, remove, var_str
+    use Vegetables_m, only: &
+            Result_t, TestItem_t, assertEquals, describe, it
+
     implicit none
     private
 
     public :: test_remove_character, test_remove_string
 contains
     function test_remove_character() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(6)
@@ -35,9 +36,6 @@ contains
     end function test_remove_character
 
     function test_remove_string() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(6)
@@ -65,108 +63,72 @@ contains
     end function test_remove_string
 
     pure function checkRemoveCharacter() result(result_)
-        use ISO_VARYING_STRING, only: char, remove
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("EPLE", char(remove("EXAMPLE", 2, 4)))
     end function checkRemoveCharacter
 
     pure function checkRemoveCharacterWithoutStart() result(result_)
-        use ISO_VARYING_STRING, only: char, remove
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("PLE", char(remove("EXAMPLE", finish = 4)))
     end function checkRemoveCharacterWithoutStart
 
     pure function checkRemoveCharacterWithStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, remove
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("PLE", char(remove("EXAMPLE", -1, 4)))
     end function checkRemoveCharacterWithStartLTOne
 
     pure function checkRemoveCharacterWithoutFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, remove
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("E", char(remove("EXAMPLE", 2)))
     end function checkRemoveCharacterWithoutFinish
 
     pure function checkRemoveCharacterWithFinishGTLenString() result(result_)
-        use ISO_VARYING_STRING, only: char, remove
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("E", char(remove("EXAMPLE", 2, 8)))
     end function checkRemoveCharacterWithFinishGTLenString
 
     pure function checkRemoveCharacterZeroLength() result(result_)
-        use ISO_VARYING_STRING, only: char, remove
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("EXAMPLE", char(remove("EXAMPLE", 10, -2)))
     end function checkRemoveCharacterZeroLength
 
     pure function checkRemoveString() result(result_)
-        use ISO_VARYING_STRING, only: char, remove, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("EPLE", char(remove(var_str("EXAMPLE"), 2, 4)))
     end function checkRemoveString
 
     pure function checkRemoveStringWithoutStart() result(result_)
-        use ISO_VARYING_STRING, only: char, remove, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("PLE", char(remove(var_str("EXAMPLE"), finish = 4)))
     end function checkRemoveStringWithoutStart
 
     pure function checkRemoveStringWithStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, remove, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("PLE", char(remove(var_str("EXAMPLE"), -1, 4)))
     end function checkRemoveStringWithStartLTOne
 
     pure function checkRemoveStringWithoutFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, remove, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("E", char(remove(var_str("EXAMPLE"), 2)))
     end function checkRemoveStringWithoutFinish
 
     pure function checkRemoveStringWithFinishGTLenString() result(result_)
-        use ISO_VARYING_STRING, only: char, remove, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("E", char(remove(var_str("EXAMPLE"), 2, 8)))
     end function checkRemoveStringWithFinishGTLenString
 
     pure function checkRemoveStringZeroLength() result(result_)
-        use ISO_VARYING_STRING, only: char, remove, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals("EXAMPLE", char(remove(var_str("EXAMPLE"), 10, -2)))

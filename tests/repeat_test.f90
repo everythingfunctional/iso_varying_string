@@ -1,13 +1,16 @@
 module repeat_test
+    use custom_generator, only: &
+            StringAndIntegerInput_t, ASCII_STRING_AND_INTEGER_GENERATOR
+    use ISO_VARYING_STRING, only: char, repeat
+    use Vegetables_m, only: &
+            Input_t, Result_t, TestItem_t, assertEquals, describe, fail, it
+
     implicit none
     private
 
     public :: test_repeat
 contains
     function test_repeat() result(tests)
-        use custom_generator, only: ASCII_STRING_AND_INTEGER_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(1)
@@ -21,10 +24,6 @@ contains
     end function test_repeat
 
     pure function checkRepeat(example) result(result_)
-        use custom_generator, only: StringAndIntegerInput_t
-        use ISO_VARYING_STRING, only: char, repeat
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: example
         type(Result_t) :: result_
 

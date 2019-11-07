@@ -1,13 +1,21 @@
 module not_equal_test
+    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
+    use ISO_VARYING_STRING, only: operator(//), operator(/=), char
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertThat, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_not_equals
 contains
     function test_not_equals() result(tests)
-        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -30,10 +38,6 @@ contains
     end function test_not_equals
 
     pure function checkStringNotEqualString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), operator(/=), char
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -49,10 +53,6 @@ contains
     end function checkStringNotEqualString
 
     pure function checkCharacterNotEqualString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), operator(/=), char
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -68,10 +68,6 @@ contains
     end function checkCharacterNotEqualString
 
     pure function checkStringNotEqualCharacter(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), operator(/=), char
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 

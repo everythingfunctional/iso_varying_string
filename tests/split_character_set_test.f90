@@ -1,13 +1,14 @@
 module split_character_set_test
+    use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
+    use Vegetables_m, only: &
+            Result_t, TestItem_t, assertEmpty, assertEquals, describe, it
+
     implicit none
     private
 
     public :: test_split_character
 contains
     function test_split_character() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: back_tests(3)
@@ -126,9 +127,6 @@ contains
     end function test_split_character
 
     pure function checkForwardNoSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -142,9 +140,6 @@ contains
     end function checkForwardNoSeparator
 
     pure function checkForwardNoSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -158,9 +153,6 @@ contains
     end function checkForwardNoSeparatorNotFound
 
     pure function checkForwardNoSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -174,9 +166,6 @@ contains
     end function checkForwardNoSeparatorEmptySet
 
     pure function checkForwardWithSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -192,9 +181,6 @@ contains
     end function checkForwardWithSeparator
 
     pure function checkForwardWithSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -210,9 +196,6 @@ contains
     end function checkForwardWithSeparatorNotFound
 
     pure function checkForwardWithSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -228,9 +211,6 @@ contains
     end function checkForwardWithSeparatorEmptySet
 
     pure function checkNotBackwardNoSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -244,9 +224,6 @@ contains
     end function checkNotBackwardNoSeparator
 
     pure function checkNotBackwardNoSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -260,9 +237,6 @@ contains
     end function checkNotBackwardNoSeparatorNotFound
 
     pure function checkNotBackwardNoSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -276,9 +250,6 @@ contains
     end function checkNotBackwardNoSeparatorEmptySet
 
     pure function checkNotBackwardWithSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -294,9 +265,6 @@ contains
     end function checkNotBackwardWithSeparator
 
     pure function checkNotBackwardWithSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -312,9 +280,6 @@ contains
     end function checkNotBackwardWithSeparatorNotFound
 
     pure function checkNotBackwardWithSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -330,9 +295,6 @@ contains
     end function checkNotBackwardWithSeparatorEmptySet
 
     pure function checkBackwardNoSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -346,9 +308,6 @@ contains
     end function checkBackwardNoSeparator
 
     pure function checkBackwardNoSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -362,9 +321,6 @@ contains
     end function checkBackwardNoSeparatorNotFound
 
     pure function checkBackwardNoSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: string
@@ -378,9 +334,6 @@ contains
     end function checkBackwardNoSeparatorEmptySet
 
     pure function checkBackwardWithSeparator() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -396,9 +349,6 @@ contains
     end function checkBackwardWithSeparator
 
     pure function checkBackwardWithSeparatorNotFound() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator
@@ -414,9 +364,6 @@ contains
     end function checkBackwardWithSeparatorNotFound
 
     pure function checkBackwardWithSeparatorEmptySet() result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, split
-        use Vegetables_m, only: Result_t, assertEmpty, assertEquals
-
         type(Result_t) :: result_
 
         type(VARYING_STRING) :: separator

@@ -1,13 +1,22 @@
 module assignment_test
+    use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, var_str
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            StringInput_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it, &
+            ASCII_STRING_GENERATOR
+
     implicit none
     private
 
     public :: test_assignment
 contains
     function test_assignment() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it, ASCII_STRING_GENERATOR
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(4)
@@ -30,10 +39,6 @@ contains
     end function test_assignment
 
     pure function checkAssignCharacterToString(string) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail
-
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
@@ -53,10 +58,6 @@ contains
     end function checkAssignCharacterToString
 
     pure function checkAssignStringToString(string) result(result_)
-        use ISO_VARYING_STRING, only: VARYING_STRING
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail, succeed
-
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
@@ -76,9 +77,6 @@ contains
     end function checkAssignStringToString
 
     pure function checkAssignToShorterCharacter() result(result_)
-        use ISO_VARYING_STRING, only: assignment(=), var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=4) :: assigned
@@ -92,9 +90,6 @@ contains
     end function checkAssignToShorterCharacter
 
     pure function checkAssignToLongerCharacter() result(result_)
-        use ISO_VARYING_STRING, only: assignment(=), var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=10) :: assigned

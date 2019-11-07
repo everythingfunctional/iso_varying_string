@@ -1,13 +1,19 @@
 module extract_test
+    use ISO_VARYING_STRING, only: char, extract, var_str
+    use Vegetables_m, only: &
+            Result_t, &
+            TestItem_t, &
+            assertEmpty, &
+            assertEquals, &
+            describe, &
+            it
+
     implicit none
     private
 
     public :: test_extract_character, test_extract_string
 contains
     function test_extract_character() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(6)
@@ -35,9 +41,6 @@ contains
     end function test_extract_character
 
     function test_extract_string() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(6)
@@ -65,9 +68,6 @@ contains
     end function test_extract_string
 
     pure function checkExtractCharacter() result(result_)
-        use ISO_VARYING_STRING, only: char, extract
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -76,9 +76,6 @@ contains
     end function checkExtractCharacter
 
     pure function checkExtractCharacterWithoutStart() result(result_)
-        use ISO_VARYING_STRING, only: char, extract
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -87,9 +84,6 @@ contains
     end function checkExtractCharacterWithoutStart
 
     pure function checkExtractCharacterWithStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, extract
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -98,9 +92,6 @@ contains
     end function checkExtractCharacterWithStartLTOne
 
     pure function checkExtractCharacterWithoutFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, extract
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -109,9 +100,6 @@ contains
     end function checkExtractCharacterWithoutFinish
 
     pure function checkExtractCharacterWithFinishGTLenString() result(result_)
-        use ISO_VARYING_STRING, only: char, extract
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -120,9 +108,6 @@ contains
     end function checkExtractCharacterWithFinishGTLenString
 
     pure function checkExtractCharacterZeroLength() result(result_)
-        use ISO_VARYING_STRING, only: char, extract
-        use Vegetables_m, only: Result_t, assertEmpty
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -131,9 +116,6 @@ contains
     end function checkExtractCharacterZeroLength
 
     pure function checkExtractString() result(result_)
-        use ISO_VARYING_STRING, only: char, extract, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -142,9 +124,6 @@ contains
     end function checkExtractString
 
     pure function checkExtractStringWithoutStart() result(result_)
-        use ISO_VARYING_STRING, only: char, extract, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -153,9 +132,6 @@ contains
     end function checkExtractStringWithoutStart
 
     pure function checkExtractStringWithStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, extract, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -164,9 +140,6 @@ contains
     end function checkExtractStringWithStartLTOne
 
     pure function checkExtractStringWithoutFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, extract, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -175,9 +148,6 @@ contains
     end function checkExtractStringWithoutFinish
 
     pure function checkExtractStringWithFinishGTLenString() result(result_)
-        use ISO_VARYING_STRING, only: char, extract, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
@@ -186,9 +156,6 @@ contains
     end function checkExtractStringWithFinishGTLenString
 
     pure function checkExtractStringZeroLength() result(result_)
-        use ISO_VARYING_STRING, only: char, extract, var_str
-        use Vegetables_m, only: Result_t, assertEmpty
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"

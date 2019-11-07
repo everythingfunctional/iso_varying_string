@@ -1,4 +1,7 @@
 module replace_range_test
+    use ISO_VARYING_STRING, only: char, replace, var_str
+    use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
+
     implicit none
     private
 
@@ -9,9 +12,6 @@ module replace_range_test
             test_replace_string_in_string_range
 contains
     function test_replace_character_in_character_range() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(4)
@@ -39,9 +39,6 @@ contains
     end function test_replace_character_in_character_range
 
     function test_replace_character_in_string_range() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(4)
@@ -69,9 +66,6 @@ contains
     end function test_replace_character_in_string_range
 
     function test_replace_string_in_character_range() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(4)
@@ -99,9 +93,6 @@ contains
     end function test_replace_string_in_character_range
 
     function test_replace_string_in_string_range() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(4)
@@ -129,9 +120,6 @@ contains
     end function test_replace_string_in_string_range
 
     pure function checkReplaceCharacterInCharacter() result(result_)
-        use ISO_VARYING_STRING, only: char, replace
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -140,9 +128,6 @@ contains
     end function checkReplaceCharacterInCharacter
 
     pure function checkReplaceCharacterInCharacterStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, replace
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -151,9 +136,6 @@ contains
     end function checkReplaceCharacterInCharacterStartLTOne
 
     pure function checkReplaceCharacterInCharacterStartGTEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, replace
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -162,9 +144,6 @@ contains
     end function checkReplaceCharacterInCharacterStartGTEnd
 
     pure function checkReplaceCharacterInCharacterStartGTFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, replace
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -173,9 +152,6 @@ contains
     end function checkReplaceCharacterInCharacterStartGTFinish
 
     pure function checkReplaceCharacterInString() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -184,9 +160,6 @@ contains
     end function checkReplaceCharacterInString
 
     pure function checkReplaceCharacterInStringStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -195,9 +168,6 @@ contains
     end function checkReplaceCharacterInStringStartLTOne
 
     pure function checkReplaceCharacterInStringStartGTEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -206,9 +176,6 @@ contains
     end function checkReplaceCharacterInStringStartGTEnd
 
     pure function checkReplaceCharacterInStringStartGTFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -217,9 +184,6 @@ contains
     end function checkReplaceCharacterInStringStartGTFinish
 
     pure function checkReplaceStringInCharacter() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -228,9 +192,6 @@ contains
     end function checkReplaceStringInCharacter
 
     pure function checkReplaceStringInCharacterStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -239,9 +200,6 @@ contains
     end function checkReplaceStringInCharacterStartLTOne
 
     pure function checkReplaceStringInCharacterStartGTEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -250,9 +208,6 @@ contains
     end function checkReplaceStringInCharacterStartGTEnd
 
     pure function checkReplaceStringInCharacterStartGTFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -261,9 +216,6 @@ contains
     end function checkReplaceStringInCharacterStartGTFinish
 
     pure function checkReplaceStringInString() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -272,9 +224,6 @@ contains
     end function checkReplaceStringInString
 
     pure function checkReplaceStringInStringStartLTOne() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -283,9 +232,6 @@ contains
     end function checkReplaceStringInStringStartLTOne
 
     pure function checkReplaceStringInStringStartGTEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &
@@ -294,9 +240,6 @@ contains
     end function checkReplaceStringInStringStartGTEnd
 
     pure function checkReplaceStringInStringStartGTFinish() result(result_)
-        use ISO_VARYING_STRING, only: char, replace, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         result_ = assertEquals( &

@@ -1,13 +1,21 @@
 module less_than_test
+    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
+    use ISO_VARYING_STRING, only: operator(//), operator(<), char
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertThat, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_less_than
 contains
     function test_less_than() result(tests)
-        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -30,10 +38,6 @@ contains
     end function test_less_than
 
     pure function checkStringLessThanString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), operator(<), char
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -49,10 +53,6 @@ contains
     end function checkStringLessThanString
 
     pure function checkCharacterLessThanString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), operator(<), char
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -68,10 +68,6 @@ contains
     end function checkCharacterLessThanString
 
     pure function checkStringLessThanCharacter(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), operator(<), char
-        use Vegetables_m, only: Input_t, Result_t, assertThat, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 

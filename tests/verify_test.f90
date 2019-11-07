@@ -1,13 +1,21 @@
 module verify_test
+    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
+    use ISO_VARYING_STRING, only: operator(//), char, verify
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_verify
 contains
     function test_verify() result(tests)
-        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -30,10 +38,6 @@ contains
     end function test_verify
 
     pure function checkVerifyStrings(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, verify
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -58,10 +62,6 @@ contains
     end function checkVerifyStrings
 
     pure function checkVerifyStringAndCharacter(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, verify
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -86,10 +86,6 @@ contains
     end function checkVerifyStringAndCharacter
 
     pure function checkVerifyCharacterAndString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char, verify
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 

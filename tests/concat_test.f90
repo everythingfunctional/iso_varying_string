@@ -1,13 +1,21 @@
 module concat_test
+    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
+    use ISO_VARYING_STRING, only: operator(//), char
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_concat
 contains
     function test_concat() result(tests)
-        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -30,10 +38,6 @@ contains
     end function test_concat
 
     pure function checkConcatStrings(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -48,10 +52,6 @@ contains
     end function checkConcatStrings
 
     pure function checkConcatStringAndCharacter(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 
@@ -66,10 +66,6 @@ contains
     end function checkConcatStringAndCharacter
 
     pure function checkConcatCharacterAndString(strings) result(result_)
-        use custom_generator, only: StringPairInput_t
-        use ISO_VARYING_STRING, only: operator(//), char
-        use Vegetables_m, only: Input_t, Result_t, assertEquals, fail
-
         class(Input_t), intent(in) :: strings
         type(Result_t) :: result_
 

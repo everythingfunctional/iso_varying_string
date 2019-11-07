@@ -1,4 +1,7 @@
 module insert_test
+    use ISO_VARYING_STRING, only: char, insert, var_str
+    use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
+
     implicit none
     private
 
@@ -9,9 +12,6 @@ module insert_test
             test_insert_string_into_string
 contains
     function test_insert_character_into_character() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -31,9 +31,6 @@ contains
     end function test_insert_character_into_character
 
     function test_insert_character_into_string() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -53,9 +50,6 @@ contains
     end function test_insert_character_into_string
 
     function test_insert_string_into_character() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -75,9 +69,6 @@ contains
     end function test_insert_string_into_character
 
     function test_insert_string_into_string() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(3)
@@ -97,9 +88,6 @@ contains
     end function test_insert_string_into_string
 
     pure function checkInsertCharacterIntoCharacter() result(result_)
-        use ISO_VARYING_STRING, only: char, insert
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -111,9 +99,6 @@ contains
     end function checkInsertCharacterIntoCharacter
 
     pure function checkInsertCharacterIntoCharacterAtEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, insert
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -125,9 +110,6 @@ contains
     end function checkInsertCharacterIntoCharacterAtEnd
 
     pure function checkInsertCharacterIntoCharacterAtBeginning() result(result_)
-        use ISO_VARYING_STRING, only: char, insert
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -139,9 +121,6 @@ contains
     end function checkInsertCharacterIntoCharacterAtBeginning
 
     pure function checkInsertCharacterIntoString() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -153,9 +132,6 @@ contains
     end function checkInsertCharacterIntoString
 
     pure function checkInsertCharacterIntoStringAtEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -167,9 +143,6 @@ contains
     end function checkInsertCharacterIntoStringAtEnd
 
     pure function checkInsertCharacterIntoStringAtBeginning() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -181,9 +154,6 @@ contains
     end function checkInsertCharacterIntoStringAtBeginning
 
     pure function checkInsertStringIntoCharacter() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -195,9 +165,6 @@ contains
     end function checkInsertStringIntoCharacter
 
     pure function checkInsertStringIntoCharacterAtEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -209,9 +176,6 @@ contains
     end function checkInsertStringIntoCharacterAtEnd
 
     pure function checkInsertStringIntoCharacterAtBeginning() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -223,9 +187,6 @@ contains
     end function checkInsertStringIntoCharacterAtBeginning
 
     pure function checkInsertStringIntoString() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -237,9 +198,6 @@ contains
     end function checkInsertStringIntoString
 
     pure function checkInsertStringIntoStringAtEnd() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
@@ -251,9 +209,6 @@ contains
     end function checkInsertStringIntoStringAtEnd
 
     pure function checkInsertStringIntoStringAtBeginning() result(result_)
-        use ISO_VARYING_STRING, only: char, insert, var_str
-        use Vegetables_m, only: Result_t, assertEquals
-
         type(Result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"

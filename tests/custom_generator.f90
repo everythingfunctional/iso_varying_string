@@ -1,6 +1,16 @@
 module custom_generator
-    use ISO_VARYING_STRING, only: VARYING_STRING
-    use Vegetables_m, only: Generator_t, Input_t
+    use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, len
+    use Vegetables_m, only: &
+            Generated_t, &
+            Generator_t, &
+            Input_t, &
+            ShrinkResult_t, &
+            Generated, &
+            getRandomAsciiCharacter, &
+            getRandomAsciiString, &
+            getRandomIntegerWithRange, &
+            ShrunkValue, &
+            SimplestValue
 
     implicit none
     private
@@ -48,9 +58,6 @@ module custom_generator
             ASCII_STRING_PAIR_GENERATOR = AsciiStringPairGenerator_t()
 contains
     function generateCharacter(self) result(generated_value)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: Generated_t, Generated, getRandomAsciiCharacter
-
         class(AsciiCharacterGenerator_t), intent(in) :: self
         type(Generated_t) :: generated_value
 
@@ -65,10 +72,6 @@ contains
     end function generateCharacter
 
     function generateStringAndInteger(self) result(generated_value)
-        use ISO_VARYING_STRING, only: assignment(=)
-        use Vegetables_m, only: &
-                Generated_t, Generated, getRandomIntegerWithRange, getRandomAsciiString
-
         class(AsciiStringAndIntegerGenerator_t), intent(in) :: self
         type(Generated_t) :: generated_value
 
@@ -83,9 +86,6 @@ contains
     end function generateStringAndInteger
 
     function generateStringPair(self) result(generated_value)
-        use ISO_VARYING_STRING, only: assignment(=)
-        use Vegetables_m, only: Generated_t, Generated, getRandomAsciiString
-
         class(AsciiStringPairGenerator_t), intent(in) :: self
         type(Generated_t) :: generated_value
 
@@ -100,9 +100,6 @@ contains
     end function generateStringPair
 
     pure function shrinkCharacter(input) result(shrunk)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: Input_t, ShrinkResult_t, SimplestValue
-
         class(Input_t), intent(in) :: input
         type(ShrinkResult_t) :: shrunk
 
@@ -110,13 +107,6 @@ contains
     end function shrinkCharacter
 
     pure function shrinkStringAndInteger(input) result(shrunk)
-        use ISO_VARYING_STRING, only: assignment(=), char, len
-        use Vegetables_m, only: &
-                Input_t, &
-                ShrinkResult_t, &
-                ShrunkValue, &
-                SimplestValue
-
         class(Input_t), intent(in) :: input
         type(ShrinkResult_t) :: shrunk
 
@@ -149,13 +139,6 @@ contains
     end function shrinkStringAndInteger
 
     pure function shrinkStringPair(input) result(shrunk)
-        use ISO_VARYING_STRING, only: assignment(=), char, len
-        use Vegetables_m, only: &
-                Input_t, &
-                ShrinkResult_t, &
-                ShrunkValue, &
-                SimplestValue
-
         class(Input_t), intent(in) :: input
         type(ShrinkResult_t) :: shrunk
 

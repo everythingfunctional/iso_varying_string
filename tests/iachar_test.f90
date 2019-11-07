@@ -1,13 +1,21 @@
 module iachar_test
+    use custom_generator, only: CharacterInput_t, ASCII_CHARACTER_GENERATOR
+    use ISO_VARYING_STRING, only: iachar, var_str
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it
+
     implicit none
     private
 
     public :: test_iachar
 contains
     function test_iachar() result(tests)
-        use custom_generator, only: ASCII_CHARACTER_GENERATOR
-        use Vegetables_m, only: TestItem_t, describe, it
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(1)
@@ -20,11 +28,6 @@ contains
     end function test_iachar
 
     pure function checkIachar(char_) result(result_)
-        use custom_generator, only: CharacterInput_t
-        use ISO_VARYING_STRING, only: iachar, var_str
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail
-
         class(Input_t), intent(in) :: char_
         type(Result_t) :: result_
 

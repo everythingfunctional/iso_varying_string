@@ -1,13 +1,22 @@
 module len_trim_test
+    use ISO_VARYING_STRING, only: char, len_trim
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            StringInput_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it, &
+            ASCII_STRING_GENERATOR
+
     implicit none
     private
 
     public :: test_len_trim
 contains
     function test_len_trim() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it, ASCII_STRING_GENERATOR
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(1)
@@ -15,15 +24,11 @@ contains
         individual_tests = it( &
                 "works the same for characters and strings", &
                 ASCII_STRING_GENERATOR, &
-                checkAdjustl)
+                checkLenTrim)
         tests = describe("Sec 3.4.8: LEN_TRIM", individual_tests)
     end function test_len_trim
 
-    pure function checkAdjustl(string) result(result_)
-        use ISO_VARYING_STRING, only: char, len_trim
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail
-
+    pure function checkLenTrim(string) result(result_)
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
@@ -36,5 +41,5 @@ contains
         class default
             result_ = fail("Expected to get a StringInput_t")
         end select
-    end function checkAdjustl
+    end function checkLenTrim
 end module len_trim_test

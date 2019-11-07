@@ -1,13 +1,22 @@
 module var_str_test
+    use ISO_VARYING_STRING, only: char, var_str
+    use Vegetables_m, only: &
+            Input_t, &
+            Result_t, &
+            StringInput_t, &
+            TestItem_t, &
+            assertEquals, &
+            describe, &
+            fail, &
+            it, &
+            ASCII_STRING_GENERATOR
+
     implicit none
     private
 
     public :: test_var_str
 contains
     function test_var_str() result(tests)
-        use ISO_VARYING_STRING ! To make the compiler happy
-        use Vegetables_m, only: TestItem_t, describe, it, ASCII_STRING_GENERATOR
-
         type(TestItem_t) :: tests
 
         type(TestItem_t) :: individual_tests(1)
@@ -21,10 +30,6 @@ contains
     end function test_var_str
 
     pure function checkVarStr(string) result(result_)
-        use ISO_VARYING_STRING, only: char, var_str
-        use Vegetables_m, only: &
-                Input_t, Result_t, StringInput_t, assertEquals, fail
-
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
