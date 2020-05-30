@@ -1,0 +1,8 @@
+name = "iso_varying_string"
+
+[[test]]
+  name = "test"
+  source-dir = "tests"
+  main = "main.f90"
+  [test.dependencies]
+    vegetables = { git = "https://gitlab.com/everythingfunctional/vegetables", branch = "MigrateToFpm" }
