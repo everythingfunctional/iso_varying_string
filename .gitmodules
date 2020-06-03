@@ -1,6 +1,0 @@
-[submodule "vegetables"]
-	path = vegetables
-	url = https://gitlab.com/everythingfunctional/vegetables.git
-[submodule "strff"]
-	path = strff
-	url = https://gitlab.com/everythingfunctional/strff.git
