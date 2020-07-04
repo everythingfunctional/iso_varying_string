@@ -12,3 +12,8 @@ vegetables = { git = "https://gitlab.com/everythingfunctional/vegetables", tag =
 name = "unit_test"
 source-dir = "test/unit_test"
 main = "main.f90"
+
+[[test]]
+name = "simple_put"
+source-dir = "test/simple_put"
+main = "main.f90"
