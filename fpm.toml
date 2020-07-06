@@ -27,3 +27,8 @@ main = "main.f90"
 name = "simple_get"
 source-dir = "test/simple_get"
 main = "main.f90"
+
+[[test]]
+name = "get_maxlen"
+source-dir = "test/get_maxlen"
+main = "main.f90"

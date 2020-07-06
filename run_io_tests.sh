@@ -21,3 +21,7 @@ fi
 fpm test simple_get << EOF
 hello simple_get
 EOF
+
+fpm test get_maxlen << EOF
+hello get_maxlen
+EOF

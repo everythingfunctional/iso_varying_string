@@ -794,6 +794,7 @@ contains
                 num_to_read = num_to_read - next_read_length
             end do
         end if
+        return
         9999 string = string // buffer(1:num_read)
     end subroutine getDefaultUnitToEndOfRecord
 
