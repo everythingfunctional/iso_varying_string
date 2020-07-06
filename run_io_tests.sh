@@ -25,3 +25,7 @@ EOF
 fpm test get_maxlen << EOF
 hello get_maxlen
 EOF
+
+fpm test get_iostat << EOF
+hello get_iostat
+EOF

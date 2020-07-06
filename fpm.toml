@@ -32,3 +32,8 @@ main = "main.f90"
 name = "get_maxlen"
 source-dir = "test/get_maxlen"
 main = "main.f90"
+
+[[test]]
+name = "get_iostat"
+source-dir = "test/get_iostat"
+main = "main.f90"
