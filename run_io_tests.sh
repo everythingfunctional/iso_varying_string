@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 
+set -e
+
+fpm build
+
 simple_put_response=$(fpm test simple_put)
-expecte_simple_put_response="hello from simple_put"
-if [[ "${simple_put_response}" != "${expecte_simple_put_response}" ]]; then
-    echo "didn't get 'hello from simple_put'. got '${simple_put_response}'"
+expected_simple_put_response="hello from simple_put"
+if [[ "${simple_put_response}" != "${expected_simple_put_response}" ]]; then
+    echo "expected '${expected_simple_put_response}' but got '${simple_put_response}'"
+    exit 1
+fi
+
+string_put_response=$(fpm test string_put)
+expected_string_put_response="hello from string_put"
+if [[ "${string_put_response}" != "${expected_string_put_response}" ]]; then
+    echo "expected '${expected_string_put_response}' but got '${string_put_response}'"
     exit 1
 fi

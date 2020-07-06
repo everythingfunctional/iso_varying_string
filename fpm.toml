@@ -17,3 +17,8 @@ main = "main.f90"
 name = "simple_put"
 source-dir = "test/simple_put"
 main = "main.f90"
+
+[[test]]
+name = "string_put"
+source-dir = "test/string_put"
+main = "main.f90"
