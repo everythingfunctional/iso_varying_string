@@ -42,3 +42,13 @@ main = "main.f90"
 name = "get_terminator"
 source-dir = "test/get_terminator"
 main = "main.f90"
+
+[[test]]
+name = "simple_put_line"
+source-dir = "test/simple_put_line"
+main = "main.f90"
+
+[[test]]
+name = "string_put_line"
+source-dir = "test/string_put_line"
+main = "main.f90"
