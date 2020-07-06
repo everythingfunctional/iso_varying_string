@@ -775,6 +775,7 @@ contains
         else
             num_to_read = huge(1)
         end if
+        string = ""
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit

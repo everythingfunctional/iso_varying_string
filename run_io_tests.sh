@@ -17,3 +17,7 @@ if [[ "${string_put_response}" != "${expected_string_put_response}" ]]; then
     echo "expected '${expected_string_put_response}' but got '${string_put_response}'"
     exit 1
 fi
+
+fpm test simple_get << EOF
+hello simple_get
+EOF
