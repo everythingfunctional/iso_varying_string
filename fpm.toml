@@ -37,3 +37,8 @@ main = "main.f90"
 name = "get_iostat"
 source-dir = "test/get_iostat"
 main = "main.f90"
+
+[[test]]
+name = "get_terminator"
+source-dir = "test/get_terminator"
+main = "main.f90"

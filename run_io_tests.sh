@@ -29,3 +29,7 @@ EOF
 fpm test get_iostat << EOF
 hello get_iostat
 EOF
+
+fpm test get_terminator << EOF
+hello,get terminator
+EOF
