@@ -52,3 +52,8 @@ main = "main.f90"
 name = "string_put_line"
 source-dir = "test/string_put_line"
 main = "main.f90"
+
+[[test]]
+name = "round_trip"
+source-dir = "test/round_trip"
+main = "main.f90"
