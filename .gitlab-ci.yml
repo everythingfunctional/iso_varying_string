@@ -5,5 +5,7 @@ variables:
 
 test:
   script:
-    - fpm test
-    - valgrind --leak-check=full --error-exitcode=1 build/gfortran_debug/test/runTests
+    - fpm test unit_test
+    - fpm test round_trip
+    - ./run_io_tests.sh
+    - valgrind --leak-check=full --error-exitcode=1 build/gfortran_debug/test/unit_test/unit_test

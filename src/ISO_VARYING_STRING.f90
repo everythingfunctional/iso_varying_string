@@ -775,6 +775,7 @@ contains
         else
             num_to_read = huge(1)
         end if
+        string = ""
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
@@ -793,6 +794,7 @@ contains
                 num_to_read = num_to_read - next_read_length
             end do
         end if
+        return
         9999 string = string // buffer(1:num_read)
     end subroutine getDefaultUnitToEndOfRecord
 
@@ -814,6 +816,7 @@ contains
         else
             num_to_read = huge(1)
         end if
+        string = ""
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
@@ -832,6 +835,7 @@ contains
                 num_to_read = num_to_read - next_read_length
             end do
         end if
+        return
         9999 string = string // buffer(1:num_read)
     end subroutine getWithUnitToEndOfRecord
 
@@ -874,6 +878,8 @@ contains
         else
             num_to_read = huge(1)
         end if
+        string = ""
+        if (present(separator)) separator = ""
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
@@ -918,6 +924,8 @@ contains
         else
             num_to_read = huge(1)
         end if
+        string = ""
+        if (present(separator)) separator = ""
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
