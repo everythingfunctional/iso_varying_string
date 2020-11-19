@@ -1,11 +1,11 @@
 program get_maxlen
     use iso_varying_string, only: &
-            VARYING_STRING, operator(//), operator(/=), get, put_line
+            varying_string, operator(//), operator(/=), get, put_line
 
     implicit none
 
-    type(VARYING_STRING) :: hello
-    type(VARYING_STRING) :: remaining
+    type(varying_string) :: hello
+    type(varying_string) :: remaining
 
     call get(hello, 5)
     if (hello /= "hello") then

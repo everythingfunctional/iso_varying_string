@@ -1,5 +1,5 @@
 module remove_test
-    use ISO_VARYING_STRING, only: char, remove, var_str
+    use iso_varying_string, only: char, remove, var_str
     use Vegetables_m, only: &
             Result_t, TestItem_t, assertEquals, describe, it
 

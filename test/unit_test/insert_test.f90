@@ -1,5 +1,5 @@
 module insert_test
-    use ISO_VARYING_STRING, only: char, insert, var_str
+    use iso_varying_string, only: char, insert, var_str
     use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
 
     implicit none

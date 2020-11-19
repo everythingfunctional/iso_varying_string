@@ -1,7 +1,7 @@
 program round_trip
     use iso_fortran_env, only: iostat_eor, iostat_end
     use iso_varying_string, only: &
-            VARYING_STRING, &
+            varying_string, &
             operator(//), &
             operator(/=), &
             get, &
@@ -10,8 +10,8 @@ program round_trip
             var_str
 
     integer :: file_unit
-    type(VARYING_STRING) :: string
-    type(VARYING_STRING) :: separator
+    type(varying_string) :: string
+    type(varying_string) :: separator
     integer :: stat
 
     open(newunit = file_unit, status = "SCRATCH")

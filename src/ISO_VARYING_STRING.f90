@@ -1,203 +1,8 @@
-module ISO_VARYING_STRING
+module iso_varying_string
     implicit none
     private
-
-    type, public :: VARYING_STRING ! Sec. 3.2
-        private
-        character(len=:), allocatable :: characters
-    end type VARYING_STRING
-
-    interface assignment(=) ! Sec. 3.3.1
-        module procedure assignCharacterToString
-        module procedure assignStringToCharacter
-    end interface
-
-    interface operator(//) ! Sec. 3.3.2
-        module procedure concatStrings
-        module procedure concatStringAndCharacter
-        module procedure concatCharacterAndString
-    end interface
-
-    interface operator(==) ! Sec. 3.3.3
-        module procedure string_EQ_String
-        module procedure character_EQ_String
-        module procedure string_EQ_Character
-    end interface
-
-    interface operator(/=) ! Sec. 3.3.3
-        module procedure string_NE_String
-        module procedure character_NE_String
-        module procedure string_NE_Character
-    end interface
-
-    interface operator(<) ! Sec. 3.3.3
-        module procedure string_LT_String
-        module procedure character_LT_String
-        module procedure string_LT_Character
-    end interface
-
-    interface operator(<=) ! Sec. 3.3.3
-        module procedure string_LE_String
-        module procedure character_LE_String
-        module procedure string_LE_Character
-    end interface
-
-    interface operator(>) ! Sec. 3.3.3
-        module procedure string_GT_String
-        module procedure character_GT_String
-        module procedure string_GT_Character
-    end interface
-
-    interface operator(>=) ! Sec. 3.3.3
-        module procedure string_GE_String
-        module procedure character_GE_String
-        module procedure string_GE_Character
-    end interface
-
-    interface ADJUSTL ! Sec. 3.4.1
-        module procedure stringADJUSTL
-    end interface
-
-    interface ADJUSTR ! Sec. 3.4.1
-        module procedure stringADJUSTR
-    end interface
-
-    interface CHAR ! Sec. 3.4.3
-        module procedure stringToChar
-        module procedure stringToCharWithLength
-    end interface
-
-    interface IACHAR ! Sec. 3.4.4
-        module procedure stringIACHAR
-    end interface
-
-    interface ICHAR ! Sec. 3.4.5
-        module procedure stringICHAR
-    end interface
-
-    interface INDEX ! Sec. 3.4.6
-        module procedure stringIndexString
-        module procedure stringIndexCharacter
-        module procedure CharacterIndexString
-    end interface
-
-    interface LEN ! Sec. 3.4.7
-        module procedure lenString
-    end interface
-
-    interface LEN_TRIM ! Sec. 3.4.8
-        module procedure lenTrimString
-    end interface
-
-    interface LGE ! Sec. 3.4.9
-        module procedure string_LGE_String
-        module procedure character_LGE_String
-        module procedure string_LGE_Character
-    end interface
-
-    interface LGT ! Sec. 3.4.10
-        module procedure string_LGT_String
-        module procedure character_LGT_String
-        module procedure string_LGT_Character
-    end interface
-
-    interface LLE ! Sec. 3.4.11
-        module procedure string_LLE_String
-        module procedure character_LLE_String
-        module procedure string_LLE_Character
-    end interface
-
-    interface LLT ! Sec. 3.4.12
-        module procedure string_LLT_String
-        module procedure character_LLT_String
-        module procedure string_LLT_Character
-    end interface
-
-    interface REPEAT ! Sec. 3.4.13
-        module procedure stringRepeat
-    end interface
-
-    interface SCAN ! Sec. 3.4.14
-        module procedure stringScanString
-        module procedure stringScanCharacter
-        module procedure characterScanString
-    end interface
-
-    interface TRIM ! Sec. 3.4.15
-        module procedure trimString
-    end interface
-
-    interface VERIFY ! Sec. 3.4.16
-        module procedure stringVerifyString
-        module procedure stringVerifyCharacter
-        module procedure characterVerifyString
-    end interface
-
-    interface GET ! Sec. 3.6.1
-        module procedure getDefaultUnitToEndOfRecord
-        module procedure getWithUnitToEndOfRecord
-        module procedure getDefaultUnitToTerminatorString
-        module procedure getWithUnitToTerminatorString
-        module procedure getDefaultUnitToTerminatorCharacters
-        module procedure getWithUnitToTerminatorCharacters
-    end interface
-
-    interface PUT ! Sec. 3.6.2
-        module procedure putStringDefaultUnit
-        module procedure putStringWithUnit
-        module procedure putCharactersDefaultUnit
-        module procedure putCharactersWithUnit
-    end interface
-
-    interface PUT_LINE ! Sec. 3.6.3
-        module procedure putLineStringDefaultUnit
-        module procedure putLineStringWithUnit
-        module procedure putLineCharactersDefaultUnit
-        module procedure putLineCharactersWithUnit
-    end interface
-
-    interface EXTRACT ! Sec. 3.7.1
-        module procedure extractCharacter
-        module procedure extractString
-    end interface
-
-    interface INSERT ! Sec. 3.7.2
-        module procedure insertCharacterIntoCharacter
-        module procedure insertCharacterIntoString
-        module procedure insertStringIntoCharacter
-        module procedure insertStringIntoString
-    end interface
-
-    interface REMOVE ! Sec. 3.7.3
-        module procedure removeCharacter
-        module procedure removeString
-    end interface
-
-    interface REPLACE ! Sec. 3.7.4
-        module procedure replaceCharacterWithCharacterStart
-        module procedure replaceStringWithCharacterStart
-        module procedure replaceCharacterWithStringStart
-        module procedure replaceStringWithStringStart
-        module procedure replaceCharacterWithCharacterRange
-        module procedure replaceStringWithCharacterRange
-        module procedure replaceCharacterWithStringRange
-        module procedure replaceStringWithStringRange
-        module procedure replaceTargetCharacterWithCharacterInCharacter
-        module procedure replaceTargetCharacterWithCharacterInString
-        module procedure replaceTargetCharacterWithStringInCharacter
-        module procedure replaceTargetCharacterWithStringInString
-        module procedure replaceTargetStringWithCharacterInCharacter
-        module procedure replaceTargetStringWithCharacterInString
-        module procedure replaceTargetStringWithStringInCharacter
-        module procedure replaceTargetStringWithStringInString
-    end interface
-
-    interface SPLIT ! Sec. 3.7.5
-        module procedure splitCharacter
-        module procedure splitString
-    end interface
-
     public :: &
+            varying_string, &
             assignment(=), &
             operator(//), &
             operator(==), &
@@ -206,44 +11,239 @@ module ISO_VARYING_STRING
             operator(<=), &
             operator(>), &
             operator(>=), &
-            ADJUSTL, &
-            ADJUSTR, &
-            CHAR, &
-            IACHAR, &
-            ICHAR, &
-            INDEX, &
-            LEN, &
-            LEN_TRIM, &
-            LGE, &
-            LGT, &
-            LLE, &
-            LLT, &
-            REPEAT, &
-            SCAN, &
-            TRIM, &
-            VERIFY, &
-            VAR_STR, &
-            GET, &
-            PUT, &
-            PUT_LINE, &
-            EXTRACT, &
-            INSERT, &
-            REMOVE, &
-            REPLACE, &
-            SPLIT
+            adjustl, &
+            adjustr, &
+            char, &
+            iachar, &
+            ichar, &
+            index, &
+            len, &
+            len_trim, &
+            lge, &
+            lgt, &
+            lle, &
+            llt, &
+            repeat, &
+            scan, &
+            trim, &
+            verify, &
+            var_str, &
+            get, &
+            put, &
+            put_line, &
+            extract, &
+            insert, &
+            remove, &
+            replace, &
+            split
+
+    type :: varying_string ! Sec. 3.2
+        private
+        character(len=:), allocatable :: characters
+    end type
+
+    interface assignment(=) ! Sec. 3.3.1
+        module procedure assign_character_to_string
+        module procedure assign_string_to_character
+    end interface
+
+    interface operator(//) ! Sec. 3.3.2
+        module procedure concat_strings
+        module procedure concat_string_and_character
+        module procedure concat_character_and_string
+    end interface
+
+    interface operator(==) ! Sec. 3.3.3
+        module procedure string_eq_string
+        module procedure character_eq_string
+        module procedure string_eq_character
+    end interface
+
+    interface operator(/=) ! Sec. 3.3.3
+        module procedure string_ne_string
+        module procedure character_ne_string
+        module procedure string_ne_character
+    end interface
+
+    interface operator(<) ! Sec. 3.3.3
+        module procedure string_lt_string
+        module procedure character_lt_string
+        module procedure string_lt_character
+    end interface
+
+    interface operator(<=) ! Sec. 3.3.3
+        module procedure string_le_string
+        module procedure character_le_string
+        module procedure string_le_character
+    end interface
+
+    interface operator(>) ! Sec. 3.3.3
+        module procedure string_gt_string
+        module procedure character_gt_string
+        module procedure string_gt_character
+    end interface
+
+    interface operator(>=) ! Sec. 3.3.3
+        module procedure string_ge_string
+        module procedure character_ge_string
+        module procedure string_ge_character
+    end interface
+
+    interface adjustl ! Sec. 3.4.1
+        module procedure string_adjustl
+    end interface
+
+    interface adjustr ! Sec. 3.4.1
+        module procedure string_adjustr
+    end interface
+
+    interface char ! Sec. 3.4.3
+        module procedure string_to_char
+        module procedure string_to_char_with_length
+    end interface
+
+    interface iachar ! Sec. 3.4.4
+        module procedure string_iachar
+    end interface
+
+    interface ichar ! Sec. 3.4.5
+        module procedure string_ichar
+    end interface
+
+    interface index ! Sec. 3.4.6
+        module procedure string_index_string
+        module procedure string_index_character
+        module procedure character_index_string
+    end interface
+
+    interface len ! Sec. 3.4.7
+        module procedure len_string
+    end interface
+
+    interface len_trim ! Sec. 3.4.8
+        module procedure len_trim_string
+    end interface
+
+    interface lge ! Sec. 3.4.9
+        module procedure string_lge_string
+        module procedure character_lge_string
+        module procedure string_lge_character
+    end interface
+
+    interface lgt ! Sec. 3.4.10
+        module procedure string_lgt_string
+        module procedure character_lgt_string
+        module procedure string_lgt_character
+    end interface
+
+    interface lle ! Sec. 3.4.11
+        module procedure string_lle_string
+        module procedure character_lle_string
+        module procedure string_lle_character
+    end interface
+
+    interface llt ! Sec. 3.4.12
+        module procedure string_llt_string
+        module procedure character_llt_string
+        module procedure string_llt_character
+    end interface
+
+    interface repeat ! Sec. 3.4.13
+        module procedure string_repeat
+    end interface
+
+    interface scan ! Sec. 3.4.14
+        module procedure string_scan_string
+        module procedure string_scan_character
+        module procedure character_scan_string
+    end interface
+
+    interface trim ! Sec. 3.4.15
+        module procedure trim_string
+    end interface
+
+    interface verify ! Sec. 3.4.16
+        module procedure string_verify_string
+        module procedure string_verify_character
+        module procedure character_verify_string
+    end interface
+
+    interface get ! Sec. 3.6.1
+        module procedure get_default_unit_to_end_of_record
+        module procedure get_with_unit_to_end_of_record
+        module procedure get_default_unit_to_terminator_string
+        module procedure get_with_unit_to_terminator_string
+        module procedure get_default_unit_to_terminator_characters
+        module procedure get_with_unit_to_terminator_characters
+    end interface
+
+    interface put ! Sec. 3.6.2
+        module procedure put_String_Default_Unit
+        module procedure put_string_with_unit
+        module procedure put_characters_default_unit
+        module procedure put_characters_with_unit
+    end interface
+
+    interface put_line ! Sec. 3.6.3
+        module procedure put_line_string_default_unit
+        module procedure put_line_string_with_unit
+        module procedure put_line_characters_default_unit
+        module procedure put_line_characters_with_unit
+    end interface
+
+    interface extract ! Sec. 3.7.1
+        module procedure extract_character
+        module procedure extract_string
+    end interface
+
+    interface insert ! Sec. 3.7.2
+        module procedure insert_character_into_character
+        module procedure insert_character_into_string
+        module procedure insert_string_into_character
+        module procedure insert_string_into_string
+    end interface
+
+    interface remove ! Sec. 3.7.3
+        module procedure remove_character
+        module procedure remove_string
+    end interface
+
+    interface replace ! Sec. 3.7.4
+        module procedure replace_character_with_character_start
+        module procedure replace_string_with_character_start
+        module procedure replace_character_with_string_start
+        module procedure replace_string_with_string_start
+        module procedure replace_character_with_character_range
+        module procedure replace_string_with_character_range
+        module procedure replace_character_with_string_range
+        module procedure replace_string_with_string_range
+        module procedure replace_target_character_with_character_in_character
+        module procedure replace_target_character_with_character_in_string
+        module procedure replace_target_character_with_string_in_character
+        module procedure replace_target_character_with_string_in_string
+        module procedure replace_target_string_with_character_in_character
+        module procedure replace_target_string_with_character_in_string
+        module procedure replace_target_string_with_string_in_character
+        module procedure replace_target_string_with_string_in_string
+    end interface
+
+    interface split ! Sec. 3.7.5
+        module procedure split_character
+        module procedure split_string
+    end interface
 contains
-    elemental subroutine assignCharacterToString(lhs, rhs)
+    elemental subroutine assign_character_to_string(lhs, rhs)
         ! Sec. 3.3.1
-        type(VARYING_STRING), intent(out) :: lhs
+        type(varying_string), intent(out) :: lhs
         character(len=*), intent(in) :: rhs
 
         lhs%characters = rhs
-    end subroutine assignCharacterToString
+    end subroutine
 
-    elemental subroutine assignStringToCharacter(lhs, rhs)
+    elemental subroutine assign_string_to_character(lhs, rhs)
         ! Sec. 3.3.1
         character(len=*), intent(out) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
 
         integer :: i
         integer :: length_input
@@ -265,492 +265,492 @@ contains
                 lhs(i:i) = " "
             end do
         end if
-    end subroutine assignStringToCharacter
+    end subroutine
 
-    elemental function concatStrings(lhs, rhs) result(concatenated)
+    elemental function concat_strings(lhs, rhs) result(concatenated)
         ! Sec. 3.3.2
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
-        type(VARYING_STRING) :: concatenated
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
+        type(varying_string) :: concatenated
 
         concatenated = char(lhs) // char(rhs)
-    end function concatStrings
+    end function
 
-    elemental function concatStringAndCharacter(lhs, rhs) result(concatenated)
+    elemental function concat_string_and_character(lhs, rhs) result(concatenated)
         ! Sec. 3.3.2
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        type(VARYING_STRING) :: concatenated
+        type(varying_string) :: concatenated
 
         concatenated = char(lhs) // rhs
-    end function concatStringAndCharacter
+    end function
 
-    elemental function concatCharacterAndString(lhs, rhs) result(concatenated)
+    elemental function concat_character_and_string(lhs, rhs) result(concatenated)
         ! Sec. 3.3.2
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
-        type(VARYING_STRING) :: concatenated
+        type(varying_string), intent(in) :: rhs
+        type(varying_string) :: concatenated
 
         concatenated = lhs // char(rhs)
-    end function concatCharacterAndString
+    end function
 
-    elemental function string_EQ_String(lhs, rhs) result(equals)
+    elemental function string_eq_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) == char(rhs)
-    end function string_EQ_String
+    end function
 
-    elemental function character_EQ_String(lhs, rhs) result(equals)
+    elemental function character_eq_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = lhs == char(rhs)
-    end function character_EQ_String
+    end function
 
-    elemental function string_EQ_Character(lhs, rhs) result(equals)
+    elemental function string_eq_character(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) == rhs
-    end function string_EQ_Character
+    end function
 
-    elemental function string_NE_String(lhs, rhs) result(equals)
+    elemental function string_ne_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) /= char(rhs)
-    end function string_NE_String
+    end function
 
-    elemental function character_NE_String(lhs, rhs) result(equals)
+    elemental function character_ne_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = lhs /= char(rhs)
-    end function character_NE_String
+    end function
 
-    elemental function string_NE_Character(lhs, rhs) result(equals)
+    elemental function string_ne_character(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) /= rhs
-    end function string_NE_Character
+    end function
 
-    elemental function string_LT_String(lhs, rhs) result(equals)
+    elemental function string_lt_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) < char(rhs)
-    end function string_LT_String
+    end function
 
-    elemental function character_LT_String(lhs, rhs) result(equals)
+    elemental function character_lt_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = lhs < char(rhs)
-    end function character_LT_String
+    end function
 
-    elemental function string_LT_Character(lhs, rhs) result(equals)
+    elemental function string_lt_character(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) < rhs
-    end function string_LT_Character
+    end function
 
-    elemental function string_LE_String(lhs, rhs) result(equals)
+    elemental function string_le_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) <= char(rhs)
-    end function string_LE_String
+    end function
 
-    elemental function character_LE_String(lhs, rhs) result(equals)
+    elemental function character_le_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = lhs <= char(rhs)
-    end function character_LE_String
+    end function
 
-    elemental function string_LE_Character(lhs, rhs) result(equals)
+    elemental function string_le_character(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) <= rhs
-    end function string_LE_Character
+    end function
 
-    elemental function string_GT_String(lhs, rhs) result(equals)
+    elemental function string_gt_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) > char(rhs)
-    end function string_GT_String
+    end function
 
-    elemental function character_GT_String(lhs, rhs) result(equals)
+    elemental function character_gt_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = lhs > char(rhs)
-    end function character_GT_String
+    end function
 
-    elemental function string_GT_Character(lhs, rhs) result(equals)
+    elemental function string_gt_character(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) > rhs
-    end function string_GT_Character
+    end function
 
-    elemental function string_GE_String(lhs, rhs) result(equals)
+    elemental function string_ge_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: lhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) >= char(rhs)
-    end function string_GE_String
+    end function
 
-    elemental function character_GE_String(lhs, rhs) result(equals)
+    elemental function character_ge_string(lhs, rhs) result(equals)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
-        type(VARYING_STRING), intent(in) :: rhs
+        type(varying_string), intent(in) :: rhs
         logical :: equals
 
         equals = lhs >= char(rhs)
-    end function character_GE_String
+    end function
 
-    elemental function string_GE_Character(lhs, rhs) result(equals)
+    elemental function string_ge_character(lhs, rhs) result(equals)
         ! Sec. 3.3.3
-        type(VARYING_STRING), intent(in) :: lhs
+        type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
         logical :: equals
 
         equals = char(lhs) >= rhs
-    end function string_GE_Character
+    end function
 
-    elemental function stringADJUSTL(string) result(adjusted)
+    elemental function string_adjustl(string) result(adjusted)
         ! Sec. 3.4.1
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING) :: adjusted
+        type(varying_string), intent(in) :: string
+        type(varying_string) :: adjusted
 
         adjusted = adjustl(char(string))
-    end function stringADJUSTL
+    end function
 
-    elemental function stringADJUSTR(string) result(adjusted)
+    elemental function string_adjustr(string) result(adjusted)
         ! Sec. 3.4.2
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING) :: adjusted
+        type(varying_string), intent(in) :: string
+        type(varying_string) :: adjusted
 
         adjusted = adjustr(char(string))
-    end function stringADJUSTR
+    end function
 
-    pure function stringToChar(string) result(chars)
+    pure function string_to_char(string) result(chars)
         ! Sec. 3.4.3
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         character(len=len(string%characters)) :: chars
 
         if (allocated(string%characters)) then
             chars = string
         end if
-    end function stringToChar
+    end function
 
-    pure function stringToCharWithLength(string, length) result(chars)
+    pure function string_to_char_with_length(string, length) result(chars)
         ! Sec. 3.4.3
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: length
         character(len=length) :: chars
 
         if (allocated(string%characters)) then
             chars = string
         end if
-    end function stringToCharWithLength
+    end function
 
-    elemental function stringIACHAR(c)
+    elemental function string_iachar(c)
         ! Sec. 3.4.4
-        type(VARYING_STRING), intent(in) :: c
-        integer :: stringIACHAR
+        type(varying_string), intent(in) :: c
+        integer :: string_iachar
 
-        stringIACHAR = iachar(char(c))
-    end function stringIACHAR
+        string_iachar = iachar(char(c))
+    end function
 
-    elemental function stringICHAR(c)
+    elemental function string_ichar(c)
         ! Sec. 3.4.5
-        type(VARYING_STRING), intent(in) :: c
-        integer :: stringICHAR
+        type(varying_string), intent(in) :: c
+        integer :: string_ichar
 
-        stringICHAR = ichar(char(c))
-    end function stringICHAR
+        string_ichar = ichar(char(c))
+    end function
 
-    elemental function stringIndexString(string, substring, back) result(position)
+    elemental function string_index_string(string, substring, back) result(position)
         ! Sec. 3.4.6
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: substring
+        type(varying_string), intent(in) :: string
+        type(varying_string), intent(in) :: substring
         logical, optional, intent(in) :: back
         integer :: position
 
         position = index(char(string), char(substring), back)
-    end function stringIndexString
+    end function
 
-    elemental function stringIndexCharacter(string, substring, back) result(position)
+    elemental function string_index_character(string, substring, back) result(position)
         ! Sec. 3.4.6
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         character(len=*), intent(in) :: substring
         logical, optional, intent(in) :: back
         integer :: position
 
         position = index(char(string), substring, back)
-    end function stringIndexCharacter
+    end function
 
-    elemental function characterIndexString(string, substring, back) result(position)
+    elemental function character_index_string(string, substring, back) result(position)
         ! Sec. 3.4.6
         character(len=*), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: substring
+        type(varying_string), intent(in) :: substring
         logical, optional, intent(in) :: back
         integer :: position
 
         position = index(string, char(substring), back)
-    end function characterIndexString
+    end function
 
-    elemental function lenString(string) result(length)
+    elemental function len_string(string) result(length)
         ! Sec. 3.4.7
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer :: length
 
         length = len(char(string))
-    end function lenString
+    end function
 
-    elemental function lenTrimString(string) result(length)
+    elemental function len_trim_string(string) result(length)
         ! Sec. 3.4.8
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer :: length
 
         length = len_trim(char(string))
-    end function lenTrimString
+    end function
 
-    elemental function string_LGE_String(string_a, string_b) result(greater_than_or_equals)
+    elemental function string_lge_string(string_a, string_b) result(greater_than_or_equals)
         ! Sec 3.4.9
-        type(VARYING_STRING), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_b
         logical :: greater_than_or_equals
 
         greater_than_or_equals = lge(char(string_a), char(string_b))
-    end function string_LGE_String
+    end function
 
-    elemental function character_LGE_String(string_a, string_b) result(greater_than_or_equals)
+    elemental function character_lge_string(string_a, string_b) result(greater_than_or_equals)
         ! Sec 3.4.9
         character(len=*), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_b
         logical :: greater_than_or_equals
 
         greater_than_or_equals = lge(string_a, char(string_b))
-    end function character_LGE_String
+    end function
 
-    elemental function string_LGE_Character(string_a, string_b) result(greater_than_or_equals)
+    elemental function string_lge_character(string_a, string_b) result(greater_than_or_equals)
         ! Sec 3.4.9
-        type(VARYING_STRING), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_a
         character(len=*), intent(in) :: string_b
         logical :: greater_than_or_equals
 
         greater_than_or_equals = lge(char(string_a), string_b)
-    end function string_LGE_Character
+    end function
 
-    elemental function string_LGT_String(string_a, string_b) result(greater_than)
+    elemental function string_lgt_string(string_a, string_b) result(greater_than)
         ! Sec 3.4.10
-        type(VARYING_STRING), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_b
         logical :: greater_than
 
         greater_than = lgt(char(string_a), char(string_b))
-    end function string_LGT_String
+    end function
 
-    elemental function character_LGT_String(string_a, string_b) result(greater_than)
+    elemental function character_lgt_string(string_a, string_b) result(greater_than)
         ! Sec 3.4.10
         character(len=*), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_b
         logical :: greater_than
 
         greater_than = lgt(string_a, char(string_b))
-    end function character_LGT_String
+    end function
 
-    elemental function string_LGT_Character(string_a, string_b) result(greater_than)
+    elemental function string_lgt_character(string_a, string_b) result(greater_than)
         ! Sec 3.4.10
-        type(VARYING_STRING), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_a
         character(len=*), intent(in) :: string_b
         logical :: greater_than
 
         greater_than = lgt(char(string_a), string_b)
-    end function string_LGT_Character
+    end function
 
-    elemental function string_LLE_String(string_a, string_b) result(less_than_or_equals)
+    elemental function string_lle_string(string_a, string_b) result(less_than_or_equals)
         ! Sec 3.4.11
-        type(VARYING_STRING), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_b
         logical :: less_than_or_equals
 
         less_than_or_equals = lle(char(string_a), char(string_b))
-    end function string_LLE_String
+    end function
 
-    elemental function character_LLE_String(string_a, string_b) result(less_than_or_equals)
+    elemental function character_lle_string(string_a, string_b) result(less_than_or_equals)
         ! Sec 3.4.11
         character(len=*), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_b
         logical :: less_than_or_equals
 
         less_than_or_equals = lle(string_a, char(string_b))
-    end function character_LLE_String
+    end function
 
-    elemental function string_LLE_Character(string_a, string_b) result(less_than_or_equals)
+    elemental function string_lle_character(string_a, string_b) result(less_than_or_equals)
         ! Sec 3.4.11
-        type(VARYING_STRING), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_a
         character(len=*), intent(in) :: string_b
         logical :: less_than_or_equals
 
         less_than_or_equals = lle(char(string_a), string_b)
-    end function string_LLE_Character
+    end function
 
-    elemental function string_LLT_String(string_a, string_b) result(less_than)
+    elemental function string_llt_string(string_a, string_b) result(less_than)
         ! Sec 3.4.12
-        type(VARYING_STRING), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_b
         logical :: less_than
 
         less_than = llt(char(string_a), char(string_b))
-    end function string_LLT_String
+    end function
 
-    elemental function character_LLT_String(string_a, string_b) result(less_than)
+    elemental function character_llt_string(string_a, string_b) result(less_than)
         ! Sec 3.4.12
         character(len=*), intent(in) :: string_a
-        type(VARYING_STRING), intent(in) :: string_b
+        type(varying_string), intent(in) :: string_b
         logical :: less_than
 
         less_than = llt(string_a, char(string_b))
-    end function character_LLT_String
+    end function
 
-    elemental function string_LLT_Character(string_a, string_b) result(less_than)
+    elemental function string_llt_character(string_a, string_b) result(less_than)
         ! Sec 3.4.12
-        type(VARYING_STRING), intent(in) :: string_a
+        type(varying_string), intent(in) :: string_a
         character(len=*), intent(in) :: string_b
         logical :: less_than
 
         less_than = llt(char(string_a), string_b)
-    end function string_LLT_Character
+    end function
 
-    elemental function stringRepeat(string, ncopies) result(repeated)
+    elemental function string_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: ncopies
-        type(VARYING_STRING) :: repeated
+        type(varying_string) :: repeated
 
         repeated = repeat(char(string), ncopies)
-    end function stringRepeat
+    end function
 
-    elemental function stringScanString(string, set, back) result(position)
+    elemental function string_scan_string(string, set, back) result(position)
         ! Sec. 3.4.14
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: set
+        type(varying_string), intent(in) :: string
+        type(varying_string), intent(in) :: set
         logical, optional, intent(in) :: back
         integer :: position
 
         position = scan(char(string), char(set), back)
-    end function stringScanString
+    end function
 
-    elemental function stringScanCharacter(string, set, back) result(position)
+    elemental function string_scan_character(string, set, back) result(position)
         ! Sec. 3.4.14
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         character(len=*), intent(in) :: set
         logical, optional, intent(in) :: back
         integer :: position
 
         position = scan(char(string), set, back)
-    end function stringScanCharacter
+    end function
 
-    elemental function characterScanString(string, set, back) result(position)
+    elemental function character_scan_string(string, set, back) result(position)
         ! Sec. 3.4.14
         character(len=*), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: set
+        type(varying_string), intent(in) :: set
         logical, optional, intent(in) :: back
         integer :: position
 
         position = scan(string, char(set), back)
-    end function characterScanString
+    end function
 
-    elemental function trimString(string) result(trimmed)
+    elemental function trim_string(string) result(trimmed)
         ! Sec. 3.4.15
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING) :: trimmed
+        type(varying_string), intent(in) :: string
+        type(varying_string) :: trimmed
 
         trimmed = trim(char(string))
-    end function trimString
+    end function
 
-    elemental function stringVerifyString(string, set, back) result(position)
+    elemental function string_verify_string(string, set, back) result(position)
         ! Sec. 3.5.16
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: set
+        type(varying_string), intent(in) :: string
+        type(varying_string), intent(in) :: set
         logical, optional, intent(in) :: back
         integer :: position
 
         position = verify(char(string), char(set), back)
-    end function stringVerifyString
+    end function
 
-    elemental function stringVerifyCharacter(string, set, back) result(position)
+    elemental function string_verify_character(string, set, back) result(position)
         ! Sec. 3.5.16
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         character(len=*), intent(in) :: set
         logical, optional, intent(in) :: back
         integer :: position
 
         position = verify(char(string), set, back)
-    end function stringVerifyCharacter
+    end function
 
-    elemental function characterVerifyString(string, set, back) result(position)
+    elemental function character_verify_string(string, set, back) result(position)
         ! Sec. 3.5.16
         character(len=*), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: set
+        type(varying_string), intent(in) :: set
         logical, optional, intent(in) :: back
         integer :: position
 
         position = verify(string, char(set), back)
-    end function characterVerifyString
+    end function
 
-    elemental function VAR_STR(char)
+    elemental function var_str(char)
         ! Sec. 3.5.1
         character(len=*), intent(in) :: char
-        type(VARYING_STRING) :: VAR_STR
+        type(varying_string) :: var_str
 
-        VAR_STR = char
-    end function VAR_STR
+        var_str = char
+    end function
 
-    subroutine getDefaultUnitToEndOfRecord(string, maxlen, iostat)
+    subroutine get_default_unit_to_end_of_record(string, maxlen, iostat)
         ! Sec. 3.6.1
-        type(VARYING_STRING), intent(out) :: string
+        type(varying_string), intent(out) :: string
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
@@ -786,12 +786,12 @@ contains
         end if
         return
         9999 string = string // buffer(1:num_read)
-    end subroutine getDefaultUnitToEndOfRecord
+    end subroutine
 
-    subroutine getWithUnitToEndOfRecord(unit, string, maxlen, iostat)
+    subroutine get_with_unit_to_end_of_record(unit, string, maxlen, iostat)
         ! Sec. 3.6.1
         integer, intent(in) :: unit
-        type(VARYING_STRING), intent(out) :: string
+        type(varying_string), intent(out) :: string
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
@@ -827,36 +827,36 @@ contains
         end if
         return
         9999 string = string // buffer(1:num_read)
-    end subroutine getWithUnitToEndOfRecord
+    end subroutine
 
-    subroutine getDefaultUnitToTerminatorString(string, set, separator, maxlen, iostat)
+    subroutine get_default_unit_to_terminator_string(string, set, separator, maxlen, iostat)
         ! Sec. 3.6.1
-        type(VARYING_STRING), intent(out) :: string
-        type(VARYING_STRING), intent(in) :: set ! possible terminator characters
-        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        type(varying_string), intent(out) :: string
+        type(varying_string), intent(in) :: set ! possible terminator characters
+        type(varying_string), optional, intent(out) :: separator ! actual terminator
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
         call get(string, char(set), separator, maxlen, iostat)
-    end subroutine getDefaultUnitToTerminatorString
+    end subroutine
 
-    subroutine getWithUnitToTerminatorString(unit, string, set, separator, maxlen, iostat)
+    subroutine get_with_unit_to_terminator_string(unit, string, set, separator, maxlen, iostat)
         ! Sec. 3.6.1
         integer, intent(in) :: unit
-        type(VARYING_STRING), intent(out) :: string
-        type(VARYING_STRING), intent(in) :: set ! possible terminator characters
-        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        type(varying_string), intent(out) :: string
+        type(varying_string), intent(in) :: set ! possible terminator characters
+        type(varying_string), optional, intent(out) :: separator ! actual terminator
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
         call get(unit, string, char(set), separator, maxlen, iostat)
-    end subroutine getWithUnitToTerminatorString
+    end subroutine
 
-    subroutine getDefaultUnitToTerminatorCharacters(string, set, separator, maxlen, iostat)
+    subroutine get_default_unit_to_terminator_characters(string, set, separator, maxlen, iostat)
         ! Sec. 3.6.1
-        type(VARYING_STRING), intent(out) :: string
+        type(varying_string), intent(out) :: string
         character(len=*), intent(in) :: set ! possible terminator characters
-        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        type(varying_string), optional, intent(out) :: separator ! actual terminator
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
@@ -895,14 +895,14 @@ contains
             end do
         end if
         9999 continue
-    end subroutine getDefaultUnitToTerminatorCharacters
+    end subroutine
 
-    subroutine getWithUnitToTerminatorCharacters(unit, string, set, separator, maxlen, iostat)
+    subroutine get_with_unit_to_terminator_characters(unit, string, set, separator, maxlen, iostat)
         ! Sec. 3.6.1
         integer, intent(in) :: unit
-        type(VARYING_STRING), intent(out) :: string
+        type(varying_string), intent(out) :: string
         character(len=*), intent(in) :: set ! possible terminator characters
-        type(VARYING_STRING), optional, intent(out) :: separator ! actual terminator
+        type(varying_string), optional, intent(out) :: separator ! actual terminator
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
@@ -941,26 +941,26 @@ contains
             end do
         end if
         9999 continue
-    end subroutine getWithUnitToTerminatorCharacters
+    end subroutine
 
-    subroutine putStringDefaultUnit(string, iostat)
+    subroutine put_string_default_unit(string, iostat)
         ! Sec. 3.6.2
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
         call put(char(string), iostat)
-    end subroutine putStringDefaultUnit
+    end subroutine
 
-    subroutine putStringWithUnit(unit, string, iostat)
+    subroutine put_string_with_unit(unit, string, iostat)
         ! Sec. 3.6.2
         integer, intent(in) :: unit
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
         call put(unit, char(string), iostat)
-    end subroutine putStringWithUnit
+    end subroutine
 
-    subroutine putCharactersDefaultUnit(string, iostat)
+    subroutine put_characters_default_unit(string, iostat)
         ! Sec. 3.6.2
         character(len=*), intent(in) :: string
         integer, optional, intent(out) :: iostat
@@ -970,9 +970,9 @@ contains
         else
             write(*, fmt='(A)', advance='NO') string
         end if
-    end subroutine putCharactersDefaultUnit
+    end subroutine
 
-    subroutine putCharactersWithUnit(unit, string, iostat)
+    subroutine put_characters_with_unit(unit, string, iostat)
         ! Sec. 3.6.2
         integer, intent(in) :: unit
         character(len=*), intent(in) :: string
@@ -983,26 +983,26 @@ contains
         else
             write(unit, fmt='(A)', advance='NO') string
         end if
-    end subroutine putCharactersWithUnit
+    end subroutine
 
-    subroutine putLineStringDefaultUnit(string, iostat)
+    subroutine put_line_string_default_unit(string, iostat)
         ! Sec. 3.6.3
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
         call put_line(char(string), iostat)
-    end subroutine putLineStringDefaultUnit
+    end subroutine
 
-    subroutine putLineStringWithUnit(unit, string, iostat)
+    subroutine put_line_string_with_unit(unit, string, iostat)
         ! Sec. 3.6.3
         integer, intent(in) :: unit
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
         call put_line(unit, char(string), iostat)
-    end subroutine putLineStringWithUnit
+    end subroutine
 
-    subroutine putLineCharactersDefaultUnit(string, iostat)
+    subroutine put_line_characters_default_unit(string, iostat)
         ! Sec. 3.6.3
         character(len=*), intent(in) :: string
         integer, optional, intent(out) :: iostat
@@ -1012,9 +1012,9 @@ contains
         else
             write(*, fmt='(A,/)', advance='NO') string
         end if
-    end subroutine putLineCharactersDefaultUnit
+    end subroutine
 
-    subroutine putLineCharactersWithUnit(unit, string, iostat)
+    subroutine put_line_characters_with_unit(unit, string, iostat)
         ! Sec. 3.6.3
         integer, intent(in) :: unit
         character(len=*), intent(in) :: string
@@ -1025,14 +1025,14 @@ contains
         else
             write(unit, fmt='(A,/)', advance='NO') string
         end if
-    end subroutine putLineCharactersWithUnit
+    end subroutine
 
-    elemental function extractCharacter(string, start, finish) result(extracted)
+    elemental function extract_character(string, start, finish) result(extracted)
         ! Sec. 3.7.1
         character(len=*), intent(in) :: string
         integer, optional, intent(in) :: start
         integer, optional, intent(in) :: finish
-        type(VARYING_STRING) :: extracted
+        type(varying_string) :: extracted
 
         integer :: start_
         integer :: finish_
@@ -1049,28 +1049,28 @@ contains
         end if
 
         extracted = string(start_:finish_)
-    end function extractCharacter
+    end function
 
-    elemental function extractString(string, start, finish) result(extracted)
+    elemental function extract_string(string, start, finish) result(extracted)
         ! Sec. 3.7.1
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, optional, intent(in) :: start
         integer, optional, intent(in) :: finish
-        type(VARYING_STRING) :: extracted
+        type(varying_string) :: extracted
 
         extracted = extract(char(string), start, finish)
-    end function extractString
+    end function
 
-    elemental function insertCharacterIntoCharacter(string, start, substring) result(inserted)
+    elemental function insert_character_into_character(string, start, substring) result(inserted)
         ! Sec. 3.7.2
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
         character(len=*), intent(in) :: substring
-        type(VARYING_STRING) :: inserted
+        type(varying_string) :: inserted
 
-        type(VARYING_STRING) :: beginning
-        type(VARYING_STRING) :: middle
-        type(VARYING_STRING) :: end_
+        type(varying_string) :: beginning
+        type(varying_string) :: middle
+        type(varying_string) :: end_
 
         if (start <= 1) then
             beginning = substring
@@ -1086,49 +1086,49 @@ contains
             end_ = string(start:)
         end if
         inserted = beginning // middle // end_
-    end function insertCharacterIntoCharacter
+    end function
 
-    elemental function insertCharacterIntoString(string, start, substring) result(inserted)
+    elemental function insert_character_into_string(string, start, substring) result(inserted)
         ! Sec. 3.7.2
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: start
         character(len=*), intent(in) :: substring
-        type(VARYING_STRING) :: inserted
+        type(varying_string) :: inserted
 
         inserted = insert(char(string), start, substring)
-    end function insertCharacterIntoString
+    end function
 
-    elemental function insertStringIntoCharacter(string ,start, substring) result(inserted)
+    elemental function insert_string_into_character(string ,start, substring) result(inserted)
         ! Sec. 3.7.2
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
-        type(VARYING_STRING), intent(in) :: substring
-        type(VARYING_STRING) :: inserted
+        type(varying_string), intent(in) :: substring
+        type(varying_string) :: inserted
 
         inserted = insert(string, start, char(substring))
-    end function insertStringIntoCharacter
+    end function
 
-    elemental function insertStringIntoString(string ,start, substring) result(inserted)
+    elemental function insert_string_into_string(string ,start, substring) result(inserted)
         ! Sec. 3.7.2
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: start
-        type(VARYING_STRING), intent(in) :: substring
-        type(VARYING_STRING) :: inserted
+        type(varying_string), intent(in) :: substring
+        type(varying_string) :: inserted
 
         inserted = insert(char(string), start, char(substring))
-    end function insertStringIntoString
+    end function
 
-    elemental function removeCharacter(string, start, finish) result(removed)
+    elemental function remove_character(string, start, finish) result(removed)
         ! Sec. 3.7.3
         character(len=*), intent(in) :: string
         integer, optional, intent(in) :: start
         integer, optional, intent(in) :: finish
-        type(VARYING_STRING) :: removed
+        type(varying_string) :: removed
 
         integer :: start_
         integer :: finish_
-        type(VARYING_STRING) :: beginning
-        type(VARYING_STRING) :: end_
+        type(varying_string) :: beginning
+        type(varying_string) :: end_
 
         if (present(start)) then
             start_ = start
@@ -1148,25 +1148,25 @@ contains
             end_ = string(finish_ + 1:len(string))
             removed = beginning // end_
         end if
-    end function removeCharacter
+    end function
 
-    elemental function removeString(string, start, finish) result(removed)
+    elemental function remove_string(string, start, finish) result(removed)
         ! Sec. 3.7.3
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, optional, intent(in) :: start
         integer, optional, intent(in) :: finish
-        type(VARYING_STRING) :: removed
+        type(varying_string) :: removed
 
         removed = remove(char(string), start, finish)
-    end function removeString
+    end function
 
-    elemental function replaceCharacterWithCharacterStart( &
+    elemental function replace_character_with_character_start( &
                 string, start, substring) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
         character(len=*), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         integer :: start_
 
@@ -1175,95 +1175,95 @@ contains
                 remove(string, start_, start_ + len(substring) - 1), &
                 start_, &
                 substring)
-    end function replaceCharacterWithCharacterStart
+    end function
 
-    elemental function replaceStringWithCharacterStart( &
+    elemental function replace_string_with_character_start( &
             string, start, substring) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: start
         character(len=*), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), start, substring)
-    end function replaceStringWithCharacterStart
+    end function
 
-    elemental function replaceCharacterWithStringStart( &
+    elemental function replace_character_with_string_start( &
             string, start, substring) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
-        type(VARYING_STRING), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string), intent(in) :: substring
+        type(varying_string) :: replaced
 
         replaced = replace(string, start, char(substring))
-    end function replaceCharacterWithStringStart
+    end function
 
-    elemental function replaceStringWithStringStart( &
+    elemental function replace_string_with_string_start( &
             string, start, substring) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: start
-        type(VARYING_STRING), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string), intent(in) :: substring
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), start, char(substring))
-    end function replaceStringWithStringStart
+    end function
 
-    elemental function replaceCharacterWithCharacterRange( &
+    elemental function replace_character_with_character_range( &
             string, start, finish, substring) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
         integer, intent(in) :: finish
         character(len=*), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
-        type(VARYING_STRING) :: beginning
-        type(VARYING_STRING) :: ending
+        type(varying_string) :: beginning
+        type(varying_string) :: ending
 
         beginning = string(1 : start-1)
         ending = string(max(finish+1, start) : )
         replaced = beginning // substring // ending
-    end function replaceCharacterWithCharacterRange
+    end function
 
-    elemental function replaceStringWithCharacterRange( &
+    elemental function replace_string_with_character_range( &
             string, start, finish, substring) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: start
         integer, intent(in) :: finish
         character(len=*), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), start, finish, substring)
-    end function replaceStringWithCharacterRange
+    end function
 
-    elemental function replaceCharacterWithStringRange( &
+    elemental function replace_character_with_string_range( &
             string, start, finish, substring) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
         integer, intent(in) :: start
         integer, intent(in) :: finish
-        type(VARYING_STRING), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string), intent(in) :: substring
+        type(varying_string) :: replaced
 
         replaced = replace(string, start, finish, char(substring))
-    end function replaceCharacterWithStringRange
+    end function
 
-    elemental function replaceStringWithStringRange( &
+    elemental function replace_string_with_string_range( &
             string, start, finish, substring) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         integer, intent(in) :: start
         integer, intent(in) :: finish
-        type(VARYING_STRING), intent(in) :: substring
-        type(VARYING_STRING) :: replaced
+        type(varying_string), intent(in) :: substring
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), start, finish, char(substring))
-    end function replaceStringWithStringRange
+    end function
 
-    elemental function replaceTargetCharacterWithCharacterInCharacter( &
+    elemental function replace_target_character_with_character_in_character( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
@@ -1271,7 +1271,7 @@ contains
         character(len=*), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         logical :: back_
         logical :: every_
@@ -1288,11 +1288,11 @@ contains
             every_ = .false.
         end if
 
-        replaced = recursiveReplace(string)
+        replaced = recursive_replace(string)
     contains
-        pure recursive function recursiveReplace(string_) result(replaced_)
+        pure recursive function recursive_replace(string_) result(replaced_)
             character(len=*), intent(in) :: string_
-            type(VARYING_STRING) :: replaced_
+            type(varying_string) :: replaced_
 
             integer :: position
 
@@ -1301,14 +1301,14 @@ contains
                 if (every_) then
                     if (back_) then
                         replaced_ = &
-                                recursiveReplace(string_(1:position-1)) &
+                                recursive_replace(string_(1:position-1)) &
                                 // substring &
                                 // string_(position+len(target):)
                     else
                         replaced_ = &
                                 string_(1:position-1) &
                                 // substring &
-                                // recursiveReplace(string_(position+len(target):))
+                                // recursive_replace(string_(position+len(target):))
                     end if
                 else
                     replaced_ = replace( &
@@ -1317,106 +1317,106 @@ contains
             else
                 replaced_ = string_
             end if
-        end function recursiveReplace
-    end function replaceTargetCharacterWithCharacterInCharacter
+        end function
+    end function replace_target_character_with_character_in_character
 
-    elemental function replaceTargetCharacterWithCharacterInString( &
+    elemental function replace_target_character_with_character_in_string( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         character(len=*), intent(in) :: target
         character(len=*), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), target, substring, every, back)
-    end function replaceTargetCharacterWithCharacterInString
+    end function
 
-    elemental function replaceTargetCharacterWithStringInCharacter( &
+    elemental function replace_target_character_with_string_in_character( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
         character(len=*), intent(in) :: target
-        type(VARYING_STRING), intent(in) :: substring
+        type(varying_string), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(string, target, char(substring), every, back)
-    end function replaceTargetCharacterWithStringInCharacter
+    end function
 
-    elemental function replaceTargetCharacterWithStringInString( &
+    elemental function replace_target_character_with_string_in_string( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
+        type(varying_string), intent(in) :: string
         character(len=*), intent(in) :: target
-        type(VARYING_STRING), intent(in) :: substring
+        type(varying_string), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), target, char(substring), every, back)
-    end function replaceTargetCharacterWithStringInString
+    end function
 
-    elemental function replaceTargetStringWithCharacterInCharacter( &
+    elemental function replace_target_string_with_character_in_character( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: target
+        type(varying_string), intent(in) :: target
         character(len=*), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(string, char(target), substring, every, back)
-    end function replaceTargetStringWithCharacterInCharacter
+    end function
 
-    elemental function replaceTargetStringWithCharacterInString( &
+    elemental function replace_target_string_with_character_in_string( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: target
+        type(varying_string), intent(in) :: string
+        type(varying_string), intent(in) :: target
         character(len=*), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), char(target), substring, every, back)
-    end function replaceTargetStringWithCharacterInString
+    end function
 
-    elemental function replaceTargetStringWithStringInCharacter( &
+    elemental function replace_target_string_with_string_in_character( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
         character(len=*), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: target
-        type(VARYING_STRING), intent(in) :: substring
+        type(varying_string), intent(in) :: target
+        type(varying_string), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(string, char(target), char(substring), every, back)
-    end function replaceTargetStringWithStringInCharacter
+    end function
 
-    elemental function replaceTargetStringWithStringInString( &
+    elemental function replace_target_string_with_string_in_string( &
             string, target, substring, every, back) result(replaced)
         ! Sec. 3.7.4
-        type(VARYING_STRING), intent(in) :: string
-        type(VARYING_STRING), intent(in) :: target
-        type(VARYING_STRING), intent(in) :: substring
+        type(varying_string), intent(in) :: string
+        type(varying_string), intent(in) :: target
+        type(varying_string), intent(in) :: substring
         logical, optional, intent(in) :: every
         logical, optional, intent(in) :: back
-        type(VARYING_STRING) :: replaced
+        type(varying_string) :: replaced
 
         replaced = replace(char(string), char(target), char(substring), every, back)
-    end function replaceTargetStringWithStringInString
+    end function
 
-    elemental subroutine splitCharacter(string, word, set, separator, back)
+    elemental subroutine split_character(string, word, set, separator, back)
         ! Sec. 3.7.5
-        type(VARYING_STRING), intent(inout) :: string
-        type(VARYING_STRING), intent(out) :: word
+        type(varying_string), intent(inout) :: string
+        type(varying_string), intent(out) :: word
         character(len=*), intent(in) :: set
-        type(VARYING_STRING), optional, intent(out) :: separator
+        type(varying_string), optional, intent(out) :: separator
         logical, optional, intent(in) :: back
 
         logical :: backwards
@@ -1459,16 +1459,16 @@ contains
                 string%characters = temp
             end if
         end if
-    end subroutine splitCharacter
+    end subroutine
 
-    elemental subroutine splitString(string, word, set, separator, back)
+    elemental subroutine split_string(string, word, set, separator, back)
         ! Sec. 3.7.5
-        type(VARYING_STRING), intent(inout) :: string
-        type(VARYING_STRING), intent(out) :: word
-        type(VARYING_STRING), intent(in) :: set
-        type(VARYING_STRING), optional, intent(out) :: separator
+        type(varying_string), intent(inout) :: string
+        type(varying_string), intent(out) :: word
+        type(varying_string), intent(in) :: set
+        type(varying_string), optional, intent(out) :: separator
         logical, optional, intent(in) :: back
 
         call split(string, word, char(set), separator, back)
-    end subroutine splitString
-end module ISO_VARYING_STRING
+    end subroutine
+end module

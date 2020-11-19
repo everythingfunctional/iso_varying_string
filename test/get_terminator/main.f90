@@ -1,11 +1,11 @@
 program get_terminator
     use iso_varying_string, only: &
-            VARYING_STRING, operator(//), operator(/=), get, put_line
+            varying_string, operator(//), operator(/=), get, put_line
 
     implicit none
 
-    type(VARYING_STRING) :: string
-    type(VARYING_STRING) :: separator
+    type(varying_string) :: string
+    type(varying_string) :: separator
 
     call get(string, ", ", separator)
     if (string /= "hello") then

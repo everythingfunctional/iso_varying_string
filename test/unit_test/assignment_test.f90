@@ -1,5 +1,5 @@
 module assignment_test
-    use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, var_str
+    use iso_varying_string, only: varying_string, assignment(=), char, var_str
     use Vegetables_m, only: &
             Input_t, &
             Result_t, &
@@ -42,7 +42,7 @@ contains
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: assigned
+        type(varying_string) :: assigned
 
         select type (string)
         type is (StringInput_t)
@@ -61,7 +61,7 @@ contains
         class(Input_t), intent(in) :: string
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: assigned
+        type(varying_string) :: assigned
 
         select type (string)
         type is (StringInput_t)

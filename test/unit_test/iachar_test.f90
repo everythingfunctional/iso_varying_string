@@ -1,6 +1,6 @@
 module iachar_test
     use custom_generator, only: CharacterInput_t, ASCII_CHARACTER_GENERATOR
-    use ISO_VARYING_STRING, only: iachar, var_str
+    use iso_varying_string, only: iachar, var_str
     use Vegetables_m, only: &
             Input_t, &
             Result_t, &

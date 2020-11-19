@@ -1,5 +1,5 @@
 module adjustl_test
-    use ISO_VARYING_STRING, only: adjustl, char, var_str
+    use iso_varying_string, only: adjustl, char, var_str
     use Vegetables_m, only: &
             Input_t, &
             Result_t, &

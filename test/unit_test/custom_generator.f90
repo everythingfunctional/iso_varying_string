@@ -1,5 +1,5 @@
 module custom_generator
-    use ISO_VARYING_STRING, only: VARYING_STRING, assignment(=), char, len
+    use iso_varying_string, only: varying_string, assignment(=), char, len
     use Vegetables_m, only: &
             Generated_t, &
             Generator_t, &
@@ -20,13 +20,13 @@ module custom_generator
     end type CharacterInput_t
 
     type, public, extends(Input_t) :: StringAndIntegerInput_t
-        type(VARYING_STRING) :: string
+        type(varying_string) :: string
         integer :: integer_
     end type StringAndIntegerInput_t
 
     type, public, extends(Input_t) :: StringPairInput_t
-        type(VARYING_STRING) :: first
-        type(VARYING_STRING) :: second
+        type(varying_string) :: first
+        type(varying_string) :: second
     end type StringPairInput_t
 
     type, public, extends(Generator_t) :: AsciiCharacterGenerator_t

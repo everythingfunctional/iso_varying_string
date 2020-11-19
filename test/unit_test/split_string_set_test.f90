@@ -1,6 +1,6 @@
 module split_string_set_test
-    use ISO_VARYING_STRING, only: &
-            VARYING_STRING, assignment(=), char, split, var_str
+    use iso_varying_string, only: &
+            varying_string, assignment(=), char, split, var_str
     use Vegetables_m, only: &
             Result_t, TestItem_t, assertEmpty, assertEquals, describe, it
 
@@ -130,8 +130,8 @@ contains
     pure function checkForwardNoSeparator() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(" ,"))
@@ -143,8 +143,8 @@ contains
     pure function checkForwardNoSeparatorNotFound() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str("!"))
@@ -156,8 +156,8 @@ contains
     pure function checkForwardNoSeparatorEmptySet() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(""))
@@ -169,9 +169,9 @@ contains
     pure function checkForwardWithSeparator() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(" ,"), separator)
@@ -184,9 +184,9 @@ contains
     pure function checkForwardWithSeparatorNotFound() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str("!"), separator)
@@ -199,9 +199,9 @@ contains
     pure function checkForwardWithSeparatorEmptySet() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(""), separator)
@@ -214,8 +214,8 @@ contains
     pure function checkNotBackwardNoSeparator() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(" ,"), back=.false.)
@@ -227,8 +227,8 @@ contains
     pure function checkNotBackwardNoSeparatorNotFound() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str("!"), back=.false.)
@@ -240,8 +240,8 @@ contains
     pure function checkNotBackwardNoSeparatorEmptySet() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(""), back=.false.)
@@ -253,9 +253,9 @@ contains
     pure function checkNotBackwardWithSeparator() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(" ,"), separator, .false.)
@@ -268,9 +268,9 @@ contains
     pure function checkNotBackwardWithSeparatorNotFound() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str("!"), separator, .false.)
@@ -283,9 +283,9 @@ contains
     pure function checkNotBackwardWithSeparatorEmptySet() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(""), separator, .false.)
@@ -298,8 +298,8 @@ contains
     pure function checkBackwardNoSeparator() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(" ,"), back=.true.)
@@ -311,8 +311,8 @@ contains
     pure function checkBackwardNoSeparatorNotFound() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str("!"), back=.true.)
@@ -324,8 +324,8 @@ contains
     pure function checkBackwardNoSeparatorEmptySet() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(""), back=.true.)
@@ -337,9 +337,9 @@ contains
     pure function checkBackwardWithSeparator() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(" ,"), separator, .true.)
@@ -352,9 +352,9 @@ contains
     pure function checkBackwardWithSeparatorNotFound() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str("!"), separator, .true.)
@@ -367,9 +367,9 @@ contains
     pure function checkBackwardWithSeparatorEmptySet() result(result_)
         type(Result_t) :: result_
 
-        type(VARYING_STRING) :: separator
-        type(VARYING_STRING) :: string
-        type(VARYING_STRING) :: word
+        type(varying_string) :: separator
+        type(varying_string) :: string
+        type(varying_string) :: word
 
         string = "split, this"
         call split(string, word, var_str(""), separator, .true.)

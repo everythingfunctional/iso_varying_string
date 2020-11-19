@@ -1,6 +1,6 @@
 module concat_test
     use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
-    use ISO_VARYING_STRING, only: operator(//), char
+    use iso_varying_string, only: operator(//), char
     use Vegetables_m, only: &
             Input_t, &
             Result_t, &

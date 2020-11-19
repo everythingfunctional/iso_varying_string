@@ -1,5 +1,5 @@
 module extract_test
-    use ISO_VARYING_STRING, only: char, extract, var_str
+    use iso_varying_string, only: char, extract, var_str
     use Vegetables_m, only: &
             Result_t, &
             TestItem_t, &

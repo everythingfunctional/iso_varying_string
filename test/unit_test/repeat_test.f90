@@ -1,7 +1,7 @@
 module repeat_test
     use custom_generator, only: &
             StringAndIntegerInput_t, ASCII_STRING_AND_INTEGER_GENERATOR
-    use ISO_VARYING_STRING, only: char, repeat
+    use iso_varying_string, only: char, repeat
     use Vegetables_m, only: &
             Input_t, Result_t, TestItem_t, assertEquals, describe, fail, it
 

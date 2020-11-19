@@ -1,9 +1,9 @@
 program get_iostat
     use iso_fortran_env, only: iostat_eor, iostat_end
-    use iso_varying_string, only: VARYING_STRING, get, put_line
+    use iso_varying_string, only: varying_string, get, put_line
 
     integer :: stat
-    type(VARYING_STRING) :: string
+    type(varying_string) :: string
 
     call get(string, iostat = stat)
     if (stat /= iostat_eor) then

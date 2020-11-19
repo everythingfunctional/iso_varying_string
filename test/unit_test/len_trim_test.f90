@@ -1,5 +1,5 @@
 module len_trim_test
-    use ISO_VARYING_STRING, only: char, len_trim
+    use iso_varying_string, only: char, len_trim
     use Vegetables_m, only: &
             Input_t, &
             Result_t, &

@@ -1,10 +1,10 @@
 program simple_get
     use iso_varying_string, only: &
-            VARYING_STRING, operator(//), operator(/=), get, put_line
+            varying_string, operator(//), operator(/=), get, put_line
 
     implicit none
 
-    type(VARYING_STRING) :: string
+    type(varying_string) :: string
 
     call get(string)
     if (string /= "hello simple_get") then

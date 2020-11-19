@@ -1,5 +1,5 @@
 module len_test
-    use ISO_VARYING_STRING, only: char, len
+    use iso_varying_string, only: char, len
     use Vegetables_m, only: &
             Input_t, &
             Result_t, &
