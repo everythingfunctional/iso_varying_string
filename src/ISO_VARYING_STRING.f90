@@ -4,10 +4,7 @@ module ISO_VARYING_STRING
 
     type, public :: VARYING_STRING ! Sec. 3.2
         private
-        character(len=1), allocatable :: characters(:)
-    contains
-        private
-        final :: destructor
+        character(len=:), allocatable :: characters
     end type VARYING_STRING
 
     interface assignment(=) ! Sec. 3.3.1
@@ -240,14 +237,7 @@ contains
         type(VARYING_STRING), intent(out) :: lhs
         character(len=*), intent(in) :: rhs
 
-        integer :: i
-        integer :: length
-
-        length = len(rhs)
-        allocate(lhs%characters(length))
-        do concurrent (i = 1 : length)
-            lhs%characters(i) = rhs(i:i)
-        end do
+        lhs%characters = rhs
     end subroutine assignCharacterToString
 
     elemental subroutine assignStringToCharacter(lhs, rhs)
@@ -261,9 +251,9 @@ contains
 
         length_output = len(lhs)
         if (allocated(rhs%characters)) then
-            length_input = size(rhs%characters)
+            length_input = len(rhs%characters)
             do concurrent (i = 1 : min(length_input, length_output))
-                lhs(i:i) = rhs%characters(i)
+                lhs(i:i) = rhs%characters(i:i)
             end do
             if (length_input < length_output) then
                 do concurrent (i = length_input+1 : length_output)
@@ -485,7 +475,7 @@ contains
     pure function stringToChar(string) result(chars)
         ! Sec. 3.4.3
         type(VARYING_STRING), intent(in) :: string
-        character(len=size(string%characters)) :: chars
+        character(len=len(string%characters)) :: chars
 
         if (allocated(string%characters)) then
             chars = string
@@ -1432,7 +1422,7 @@ contains
         logical :: backwards
         integer :: i
         integer :: string_length
-        character(len=1), allocatable :: temp(:)
+        character(len=:), allocatable :: temp
 
         string_length = len(string)
         if (present(back)) then
@@ -1442,35 +1432,31 @@ contains
         end if
         if (backwards) then
             do i = string_length, 1, -1
-                if (index(set, string%characters(i)) /= 0) exit
+                if (index(set, string%characters(i:i)) /= 0) exit
             end do
             if (i < 1) then
                 word = string
                 string = ""
                 if (present(separator)) separator = ""
             else
-                allocate(word%characters, source = string%characters(i+1:))
-                allocate(temp, source = string%characters(:i-1))
-                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
-                deallocate(string%characters)
-                allocate(string%characters, source = temp)
-                deallocate(temp)
+                word%characters = string%characters(i+1:)
+                temp = string%characters(:i-1)
+                if (present(separator)) separator%characters = string%characters(i:i)
+                string%characters = temp
             end if
         else
             do i = 1, string_length
-                if (index(set, string%characters(i)) /= 0) exit
+                if (index(set, string%characters(i:i)) /= 0) exit
             end do
             if (i > string_length) then
                 word = string
                 string = ""
                 if (present(separator)) separator = ""
             else
-                allocate(word%characters, source = string%characters(1:i-1))
-                allocate(temp, source = string%characters(i+1:))
-                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
-                deallocate(string%characters)
-                allocate(string%characters, source = temp)
-                deallocate(temp)
+                word%characters = string%characters(1:i-1)
+                temp = string%characters(i+1:)
+                if (present(separator)) separator%characters = string%characters(i:i)
+                string%characters = temp
             end if
         end if
     end subroutine splitCharacter
@@ -1485,10 +1471,4 @@ contains
 
         call split(string, word, char(set), separator, back)
     end subroutine splitString
-
-    pure subroutine destructor(self)
-        type(VARYING_STRING), intent(inout) :: self
-
-        if (allocated(self%characters)) deallocate(self%characters)
-    end subroutine destructor
 end module ISO_VARYING_STRING
