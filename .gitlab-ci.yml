@@ -5,6 +5,32 @@ variables:
 
 test:
   script:
-    - fpm test --target unit_test
-    - fpm test --target round_trip
+    - fpm test \
+      --flag '-Wall' \
+      --flag '-Wextra' \
+      --flag '-Wimplicit-interface' \
+      --flag '-Werror' \
+      --flag '-fPIC' \
+      --flag '-g3' \
+      --flag '-fbounds-check' \
+      --flag '-fcheck-array-temporaries' \
+      --flag '-fbacktrace' \
+      --flag '-std=f2018' \
+      --flag '-fcheck=all' \
+      --runner "valgrind --leak-check=full --error-exitcode=1" \
+      --target unit_test
+    - fpm test \
+      --flag '-Wall' \
+      --flag '-Wextra' \
+      --flag '-Wimplicit-interface' \
+      --flag '-Werror' \
+      --flag '-fPIC' \
+      --flag '-g3' \
+      --flag '-fbounds-check' \
+      --flag '-fcheck-array-temporaries' \
+      --flag '-fbacktrace' \
+      --flag '-std=f2018' \
+      --flag '-fcheck=all' \
+      --runner "valgrind --leak-check=full --error-exitcode=1" \
+      --target round_trip
     - ./run_io_tests.sh
