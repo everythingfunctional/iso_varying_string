@@ -39,7 +39,7 @@ module iso_varying_string
 
     type :: varying_string ! Sec. 3.2
         private
-        character(len=:), allocatable :: characters
+        character(len=1), allocatable :: characters(:)
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -237,7 +237,14 @@ contains
         type(varying_string), intent(out) :: lhs
         character(len=*), intent(in) :: rhs
 
-        lhs%characters = rhs
+        integer :: i
+        integer :: length
+
+        length = len(rhs)
+        allocate(lhs%characters(length))
+        do concurrent (i = 1 : length)
+            lhs%characters(i) = rhs(i:i)
+        end do
     end subroutine
 
     elemental subroutine assign_string_to_character(lhs, rhs)
@@ -251,9 +258,9 @@ contains
 
         length_output = len(lhs)
         if (allocated(rhs%characters)) then
-            length_input = len(rhs%characters)
+            length_input = size(rhs%characters)
             do concurrent (i = 1 : min(length_input, length_output))
-                lhs(i:i) = rhs%characters(i:i)
+                lhs(i:i) = rhs%characters(i)
             end do
             if (length_input < length_output) then
                 do concurrent (i = length_input+1 : length_output)
@@ -478,7 +485,11 @@ contains
         character(len=:), allocatable :: chars
 
         if (allocated(string%characters)) then
-            chars = string%characters
+            block
+                character(len=size(string%characters)) :: tmp
+                tmp = string
+                chars = tmp
+            end block
           else
             chars = ""
         end if
@@ -1435,31 +1446,31 @@ contains
         end if
         if (backwards) then
             do i = string_length, 1, -1
-                if (index(set, string%characters(i:i)) /= 0) exit
+                if (index(set, extract(string, i, i)) /= 0) exit
             end do
             if (i < 1) then
                 word = string
                 string = ""
                 if (present(separator)) separator = ""
             else
-                word%characters = string%characters(i+1:)
-                temp = string%characters(:i-1)
-                if (present(separator)) separator%characters = string%characters(i:i)
-                string%characters = temp
+                word = extract(string, i+1)
+                temp = char(extract(string, 1, i-1))
+                if (present(separator)) separator = extract(string, i, i)
+                string = temp
             end if
         else
             do i = 1, string_length
-                if (index(set, string%characters(i:i)) /= 0) exit
+                if (index(set, extract(string, i, i)) /= 0) exit
             end do
             if (i > string_length) then
                 word = string
                 string = ""
                 if (present(separator)) separator = ""
             else
-                word%characters = string%characters(1:i-1)
-                temp = string%characters(i+1:)
-                if (present(separator)) separator%characters = string%characters(i:i)
-                string%characters = temp
+                word = extract(string, 1, i-1)
+                temp = char(extract(string, i+1))
+                if (present(separator)) separator = extract(string, i, i)
+                string = temp
             end if
         end if
     end subroutine
