@@ -1,7 +1,4 @@
 module replace_start_test
-    use iso_varying_string, only: char, replace, var_str
-    use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
-
     implicit none
     private
 
@@ -12,186 +9,242 @@ module replace_start_test
             test_replace_string_in_string_start
 contains
     function test_replace_character_in_character_start() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters of substring are inserted into a copy of string" &
                 // " at the position start, and the characters in postions from" &
                 // " start to min(start+len(substring)-1, len(string)) are deleted.", &
-                checkReplaceCharacterInCharacter)
+                check_replace_character_in_character)
         individual_tests(2) = it( &
                 "If start is greater than len(string), the substring is appended to the copy of string.", &
-                checkReplaceCharacterInCharacterAfter)
+                check_replace_character_in_character_after)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start", &
-                checkReplaceCharacterInCharacterBefore)
+                check_replace_character_in_character_before)
         individual_tests(4) = it( &
                 "If substring runs off the end, the resulting string is longer?", &
-                checkReplaceCharacterInCharacterOverrun)
+                check_replace_character_in_character_overrun)
         tests = describe("Sec. 3.7.4: REPLACE in character with character at start", individual_tests)
-    end function test_replace_character_in_character_start
+    end function
 
     function test_replace_character_in_string_start() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters of substring are inserted into a copy of string" &
                 // " at the position start, and the characters in postions from" &
                 // " start to min(start+len(substring)-1, len(string)) are deleted.", &
-                checkReplaceCharacterInString)
+                check_replace_character_in_string)
         individual_tests(2) = it( &
                 "If start is greater than len(string), the substring is appended to the copy of string.", &
-                checkReplaceCharacterInStringAfter)
+                check_replace_character_in_string_after)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start", &
-                checkReplaceCharacterInStringBefore)
+                check_replace_character_in_string_before)
         individual_tests(4) = it( &
                 "If substring runs off the end, the resulting string is longer?", &
-                checkReplaceCharacterInStringOverrun)
+                check_replace_character_in_string_overrun)
         tests = describe("Sec. 3.7.4: REPLACE in string with character at start", individual_tests)
-    end function test_replace_character_in_string_start
+    end function
 
     function test_replace_string_in_character_start() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters of substring are inserted into a copy of string" &
                 // " at the position start, and the characters in postions from" &
                 // " start to min(start+len(substring)-1, len(string)) are deleted.", &
-                checkReplaceStringInCharacter)
+                check_replace_string_in_character)
         individual_tests(2) = it( &
                 "If start is greater than len(string), the substring is appended to the copy of string.", &
-                checkReplaceStringInCharacterAfter)
+                check_replace_string_in_character_after)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start", &
-                checkReplaceStringInCharacterBefore)
+                check_replace_string_in_character_before)
         individual_tests(4) = it( &
                 "If substring runs off the end, the resulting string is longer?", &
-                checkReplaceStringInCharacterOverrun)
+                check_replace_string_in_character_overrun)
         tests = describe("Sec. 3.7.4: REPLACE in character with string at start", individual_tests)
-    end function test_replace_string_in_character_start
+    end function
 
     function test_replace_string_in_string_start() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters of substring are inserted into a copy of string" &
                 // " at the position start, and the characters in postions from" &
                 // " start to min(start+len(substring)-1, len(string)) are deleted.", &
-                checkReplaceStringInString)
+                check_replace_string_in_string)
         individual_tests(2) = it( &
                 "If start is greater than len(string), the substring is appended to the copy of string.", &
-                checkReplaceStringInStringAfter)
+                check_replace_string_in_string_after)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start", &
-                checkReplaceStringInStringBefore)
+                check_replace_string_in_string_before)
         individual_tests(4) = it( &
                 "If substring runs off the end, the resulting string is longer?", &
-                checkReplaceStringInStringOverrun)
+                check_replace_string_in_string_overrun)
         tests = describe("Sec. 3.7.4: REPLACE in string with string at start", individual_tests)
-    end function test_replace_string_in_string_start
+    end function
 
-    pure function checkReplaceCharacterInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_character() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("SOMETHRING", char(replace("SOMESTRING", 5, "TH")))
-    end function checkReplaceCharacterInCharacter
+        type(result_t) :: result_
 
-    pure function checkReplaceCharacterInCharacterAfter() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("SOMETHRING", replace("SOMESTRING", 5, "TH"))
+    end function
 
-        result_ = assertEquals("SOMETHINGELSE", char(replace("SOMETHING", 10, "ELSE")))
-    end function checkReplaceCharacterInCharacterAfter
+    pure function check_replace_character_in_character_after() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkReplaceCharacterInCharacterBefore() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("ELSETHING", char(replace("SOMETHING", -1, "ELSE")))
-    end function checkReplaceCharacterInCharacterBefore
+        result_ = assert_equals("SOMETHINGELSE", replace("SOMETHING", 10, "ELSE"))
+    end function
 
-    pure function checkReplaceCharacterInCharacterOverrun() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_character_before() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("OVERRUN", char(replace("OVERT", 5, "RUN")))
-    end function checkReplaceCharacterInCharacterOverrun
+        type(result_t) :: result_
 
-    pure function checkReplaceCharacterInString() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("ELSETHING", replace("SOMETHING", -1, "ELSE"))
+    end function
 
-        result_ = assertEquals("SOMETHRING", char(replace(var_str("SOMESTRING"), 5, "TH")))
-    end function checkReplaceCharacterInString
+    pure function check_replace_character_in_character_overrun() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkReplaceCharacterInStringAfter() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("SOMETHINGELSE", char(replace(var_str("SOMETHING"), 10, "ELSE")))
-    end function checkReplaceCharacterInStringAfter
+        result_ = assert_equals("OVERRUN", replace("OVERT", 5, "RUN"))
+    end function
 
-    pure function checkReplaceCharacterInStringBefore() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("ELSETHING", char(replace(var_str("SOMETHING"), -1, "ELSE")))
-    end function checkReplaceCharacterInStringBefore
+        type(result_t) :: result_
 
-    pure function checkReplaceCharacterInStringOverrun() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("SOMETHRING", replace(var_str("SOMESTRING"), 5, "TH"))
+    end function
 
-        result_ = assertEquals("OVERRUN", char(replace(var_str("OVERT"), 5, "RUN")))
-    end function checkReplaceCharacterInStringOverrun
+    pure function check_replace_character_in_string_after() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkReplaceStringInCharacter() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("SOMETHRING", char(replace("SOMESTRING", 5, var_str("TH"))))
-    end function checkReplaceStringInCharacter
+        result_ = assert_equals("SOMETHINGELSE", replace(var_str("SOMETHING"), 10, "ELSE"))
+    end function
 
-    pure function checkReplaceStringInCharacterAfter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_string_before() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("SOMETHINGELSE", char(replace("SOMETHING", 10, var_str("ELSE"))))
-    end function checkReplaceStringInCharacterAfter
+        type(result_t) :: result_
 
-    pure function checkReplaceStringInCharacterBefore() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("ELSETHING", replace(var_str("SOMETHING"), -1, "ELSE"))
+    end function
 
-        result_ = assertEquals("ELSETHING", char(replace("SOMETHING", -1, var_str("ELSE"))))
-    end function checkReplaceStringInCharacterBefore
+    pure function check_replace_character_in_string_overrun() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkReplaceStringInCharacterOverrun() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("OVERRUN", char(replace("OVERT", 5, var_str("RUN"))))
-    end function checkReplaceStringInCharacterOverrun
+        result_ = assert_equals("OVERRUN", replace(var_str("OVERT"), 5, "RUN"))
+    end function
 
-    pure function checkReplaceStringInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_character() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("SOMETHRING", char(replace(var_str("SOMESTRING"), 5, var_str("TH"))))
-    end function checkReplaceStringInString
+        type(result_t) :: result_
 
-    pure function checkReplaceStringInStringAfter() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("SOMETHRING", replace("SOMESTRING", 5, var_str("TH")))
+    end function
 
-        result_ = assertEquals("SOMETHINGELSE", char(replace(var_str("SOMETHING"), 10, var_str("ELSE"))))
-    end function checkReplaceStringInStringAfter
+    pure function check_replace_string_in_character_after() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkReplaceStringInStringBefore() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("ELSETHING", char(replace(var_str("SOMETHING"), -1, var_str("ELSE"))))
-    end function checkReplaceStringInStringBefore
+        result_ = assert_equals("SOMETHINGELSE", replace("SOMETHING", 10, var_str("ELSE")))
+    end function
 
-    pure function checkReplaceStringInStringOverrun() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_character_before() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("OVERRUN", char(replace(var_str("OVERT"), 5, var_str("RUN"))))
-    end function checkReplaceStringInStringOverrun
-end module replace_start_test
+        type(result_t) :: result_
+
+        result_ = assert_equals("ELSETHING", replace("SOMETHING", -1, var_str("ELSE")))
+    end function
+
+    pure function check_replace_string_in_character_overrun() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("OVERRUN", replace("OVERT", 5, var_str("RUN")))
+    end function
+
+    pure function check_replace_string_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("SOMETHRING", replace(var_str("SOMESTRING"), 5, var_str("TH")))
+    end function
+
+    pure function check_replace_string_in_string_after() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("SOMETHINGELSE", replace(var_str("SOMETHING"), 10, var_str("ELSE")))
+    end function
+
+    pure function check_replace_string_in_string_before() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("ELSETHING", replace(var_str("SOMETHING"), -1, var_str("ELSE")))
+    end function
+
+    pure function check_replace_string_in_string_overrun() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("OVERRUN", replace(var_str("OVERT"), 5, var_str("RUN")))
+    end function
+end module

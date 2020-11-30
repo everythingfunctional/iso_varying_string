@@ -1,45 +1,39 @@
 module len_test
-    use iso_varying_string, only: char, len
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            StringInput_t, &
-            TestItem_t, &
-            assertEquals, &
-            describe, &
-            fail, &
-            it, &
-            ASCII_STRING_GENERATOR
-
     implicit none
     private
 
     public :: test_len
 contains
     function test_len() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it, ASCII_STRING_GENERATOR
 
-        type(TestItem_t) :: individual_tests(1)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(1)
 
         individual_tests = it( &
                 "works the same for characters and strings", &
                 ASCII_STRING_GENERATOR, &
-                checkLen)
+                check_len)
         tests = describe("Sec 3.4.7: LEN", individual_tests)
-    end function test_len
+    end function
 
-    pure function checkLen(string) result(result_)
-        class(Input_t), intent(in) :: string
-        type(Result_t) :: result_
+    pure function check_len(string) result(result_)
+        use iso_varying_string, only: char, len
+        use vegetables, only: &
+                input_t, result_t, string_input_t, assert_equals, fail
+
+        class(input_t), intent(in) :: string
+        type(result_t) :: result_
 
         select type (string)
-        type is (StringInput_t)
-            result_ = assertEquals( &
+        type is (string_input_t)
+            result_ = assert_equals( &
                     len(char(string%value_)), &
                     len(string%value_), &
                     string%value_)
         class default
-            result_ = fail("Expected to get a StringInput_t")
+            result_ = fail("Expected to get a string_input_t")
         end select
-    end function checkLen
-end module len_test
+    end function
+end module

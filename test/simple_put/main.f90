@@ -4,4 +4,4 @@ program simple_put
     implicit none
 
     call put("hello from simple_put")
-end program simple_put
+end program

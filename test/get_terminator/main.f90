@@ -10,28 +10,28 @@ program get_terminator
     call get(string, ", ", separator)
     if (string /= "hello") then
         call put_line("expected 'hello' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     if (separator /= ",") then
         call put_line("separator should have been ',' but was '" // separator // "'")
-        call exit(1)
+        error stop
     end if
     call get(string, ", ", separator)
     if (string /= "get") then
         call put_line("expected 'get' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     if (separator /= " ") then
         call put_line("separator should have been ' ' but was '" // separator // "'")
-        call exit(1)
+        error stop
     end if
     call get(string, ", ", separator)
     if (string /= "terminator") then
         call put_line("expected 'terminator' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     if (separator /= "") then
         call put_line("separator should have been empty, but was '" // separator // "'")
-        call exit(1)
+        error stop
     end if
-end program get_terminator
+end program

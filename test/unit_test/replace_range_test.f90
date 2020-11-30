@@ -1,7 +1,4 @@
 module replace_range_test
-    use iso_varying_string, only: char, replace, var_str
-    use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
-
     implicit none
     private
 
@@ -12,238 +9,294 @@ module replace_range_test
             test_replace_string_in_string_range
 contains
     function test_replace_character_in_character_range() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters in the copy of string between positions start" &
                 // " and finish, including those at start and finish, are" &
                 // " deleted and replaced by characters of substring.", &
-                checkReplaceCharacterInCharacter)
+                check_replace_character_in_character)
         individual_tests(2) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkReplaceCharacterInCharacterStartLTOne)
+                check_replace_character_in_character_start_lt_one)
         individual_tests(3) = it( &
                 "If finish is greater than len(string), the value len(string)" &
                 // " is used for finish.", &
-                checkReplaceCharacterInCharacterStartGTEnd)
+                check_replace_character_in_character_start_gt_end)
         individual_tests(4) = it( &
                 "If finish is less than start, the characters of substring" &
                 // " are inserted before the character at start and no" &
                 // " characters are deleted.", &
-                checkReplaceCharacterInCharacterStartGTFinish)
+                check_replace_character_in_character_start_gt_finish)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE in character with character in range", &
                 individual_tests)
-    end function test_replace_character_in_character_range
+    end function
 
     function test_replace_character_in_string_range() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters in the copy of string between positions start" &
                 // " and finish, including those at start and finish, are" &
                 // " deleted and replaced by characters of substring.", &
-                checkReplaceCharacterInString)
+                check_replace_character_in_string)
         individual_tests(2) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkReplaceCharacterInStringStartLTOne)
+                check_replace_character_in_string_start_lt_one)
         individual_tests(3) = it( &
                 "If finish is greater than len(string), the value len(string)" &
                 // " is used for finish.", &
-                checkReplaceCharacterInStringStartGTEnd)
+                check_replace_character_in_string_start_gt_end)
         individual_tests(4) = it( &
                 "If finish is less than start, the characters of substring" &
                 // " are inserted before the character at start and no" &
                 // " characters are deleted.", &
-                checkReplaceCharacterInStringStartGTFinish)
+                check_replace_character_in_string_start_gt_finish)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE in string with character in range", &
                 individual_tests)
-    end function test_replace_character_in_string_range
+    end function
 
     function test_replace_string_in_character_range() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters in the copy of string between positions start" &
                 // " and finish, including those at start and finish, are" &
                 // " deleted and replaced by characters of substring.", &
-                checkReplaceStringInCharacter)
+                check_replace_string_in_character)
         individual_tests(2) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkReplaceStringInCharacterStartLTOne)
+                check_replace_string_in_character_start_lt_one)
         individual_tests(3) = it( &
                 "If finish is greater than len(string), the value len(string)" &
                 // " is used for finish.", &
-                checkReplaceStringInCharacterStartGTEnd)
+                check_replace_string_in_character_start_gt_end)
         individual_tests(4) = it( &
                 "If finish is less than start, the characters of substring" &
                 // " are inserted before the character at start and no" &
                 // " characters are deleted.", &
-                checkReplaceStringInCharacterStartGTFinish)
+                check_replace_string_in_character_start_gt_finish)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE in character with string in range", &
                 individual_tests)
-    end function test_replace_string_in_character_range
+    end function
 
     function test_replace_string_in_string_range() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(4)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(4)
 
         individual_tests(1) = it( &
                 "The characters in the copy of string between positions start" &
                 // " and finish, including those at start and finish, are" &
                 // " deleted and replaced by characters of substring.", &
-                checkReplaceStringInString)
+                check_replace_string_in_string)
         individual_tests(2) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkReplaceStringInStringStartLTOne)
+                check_replace_string_in_string_start_lt_one)
         individual_tests(3) = it( &
                 "If finish is greater than len(string), the value len(string)" &
                 // " is used for finish.", &
-                checkReplaceStringInStringStartGTEnd)
+                check_replace_string_in_string_start_gt_end)
         individual_tests(4) = it( &
                 "If finish is less than start, the characters of substring" &
                 // " are inserted before the character at start and no" &
                 // " characters are deleted.", &
-                checkReplaceStringInStringStartGTFinish)
+                check_replace_string_in_string_start_gt_finish)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE in string with string in range", &
                 individual_tests)
-    end function test_replace_string_in_string_range
+    end function
 
-    pure function checkReplaceCharacterInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_character() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS CRAZY", &
-                char(replace("THAT IS CRAZY", 6, 7, "WAS")))
-    end function checkReplaceCharacterInCharacter
+                replace("THAT IS CRAZY", 6, 7, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInCharacterStartLTOne() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_character_start_lt_one() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "WAS CRAZY", &
-                char(replace("THAT IS CRAZY", -1, 7, "WAS")))
-    end function checkReplaceCharacterInCharacterStartLTOne
+                replace("THAT IS CRAZY", -1, 7, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInCharacterStartGTEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_character_start_gt_end() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS", &
-                char(replace("THAT IS CRAZY", 6, 15, "WAS")))
-    end function checkReplaceCharacterInCharacterStartGTEnd
+                replace("THAT IS CRAZY", 6, 15, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInCharacterStartGTFinish() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_character_start_gt_finish() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WASIS CRAZY", &
-                char(replace("THAT IS CRAZY", 6, 1, "WAS")))
-    end function checkReplaceCharacterInCharacterStartGTFinish
+                replace("THAT IS CRAZY", 6, 1, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS CRAZY", &
-                char(replace(var_str("THAT IS CRAZY"), 6, 7, "WAS")))
-    end function checkReplaceCharacterInString
+                replace(var_str("THAT IS CRAZY"), 6, 7, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInStringStartLTOne() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_string_start_lt_one() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "WAS CRAZY", &
-                char(replace(var_str("THAT IS CRAZY"), -1, 7, "WAS")))
-    end function checkReplaceCharacterInStringStartLTOne
+                replace(var_str("THAT IS CRAZY"), -1, 7, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInStringStartGTEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_string_start_gt_end() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS", &
-                char(replace(var_str("THAT IS CRAZY"), 6, 15, "WAS")))
-    end function checkReplaceCharacterInStringStartGTEnd
+                replace(var_str("THAT IS CRAZY"), 6, 15, "WAS"))
+    end function
 
-    pure function checkReplaceCharacterInStringStartGTFinish() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_in_string_start_gt_finish() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WASIS CRAZY", &
-                char(replace(var_str("THAT IS CRAZY"), 6, 1, "WAS")))
-    end function checkReplaceCharacterInStringStartGTFinish
+                replace(var_str("THAT IS CRAZY"), 6, 1, "WAS"))
+    end function
 
-    pure function checkReplaceStringInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_character() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS CRAZY", &
-                char(replace("THAT IS CRAZY", 6, 7, var_str("WAS"))))
-    end function checkReplaceStringInCharacter
+                replace("THAT IS CRAZY", 6, 7, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInCharacterStartLTOne() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_character_start_lt_one() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "WAS CRAZY", &
-                char(replace("THAT IS CRAZY", -1, 7, var_str("WAS"))))
-    end function checkReplaceStringInCharacterStartLTOne
+                replace("THAT IS CRAZY", -1, 7, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInCharacterStartGTEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_character_start_gt_end() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS", &
-                char(replace("THAT IS CRAZY", 6, 15, var_str("WAS"))))
-    end function checkReplaceStringInCharacterStartGTEnd
+                replace("THAT IS CRAZY", 6, 15, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInCharacterStartGTFinish() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_character_start_gt_finish() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WASIS CRAZY", &
-                char(replace("THAT IS CRAZY", 6, 1, var_str("WAS"))))
-    end function checkReplaceStringInCharacterStartGTFinish
+                replace("THAT IS CRAZY", 6, 1, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS CRAZY", &
-                char(replace(var_str("THAT IS CRAZY"), 6, 7, var_str("WAS"))))
-    end function checkReplaceStringInString
+                replace(var_str("THAT IS CRAZY"), 6, 7, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInStringStartLTOne() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_string_start_lt_one() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "WAS CRAZY", &
-                char(replace(var_str("THAT IS CRAZY"), -1, 7, var_str("WAS"))))
-    end function checkReplaceStringInStringStartLTOne
+                replace(var_str("THAT IS CRAZY"), -1, 7, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInStringStartGTEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_string_start_gt_end() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WAS", &
-                char(replace(var_str("THAT IS CRAZY"), 6, 15, var_str("WAS"))))
-    end function checkReplaceStringInStringStartGTEnd
+                replace(var_str("THAT IS CRAZY"), 6, 15, var_str("WAS")))
+    end function
 
-    pure function checkReplaceStringInStringStartGTFinish() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_in_string_start_gt_finish() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "THAT WASIS CRAZY", &
-                char(replace(var_str("THAT IS CRAZY"), 6, 1, var_str("WAS"))))
-    end function checkReplaceStringInStringStartGTFinish
-end module replace_range_test
+                replace(var_str("THAT IS CRAZY"), 6, 1, var_str("WAS")))
+    end function
+end module

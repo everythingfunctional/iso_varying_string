@@ -1,7 +1,4 @@
 module replace_target_test
-    use iso_varying_string, only: char, replace, var_str
-    use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
-
     implicit none
     private
 
@@ -16,546 +13,634 @@ module replace_target_test
             test_replace_string_with_string_in_string
 contains
     function test_replace_character_with_character_in_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceCharacterWithCharacterInCharacter)
+                check_replace_character_with_character_in_character)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceCharacterWithCharacterInCharacterBackward)
+                check_replace_character_with_character_in_character_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceCharacterWithCharacterInCharacterEvery)
+                check_replace_character_with_character_in_character_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target character with character in character", &
                 individual_tests)
-    end function test_replace_character_with_character_in_character
+    end function
 
     function test_replace_character_with_character_in_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceCharacterWithCharacterInString)
+                check_replace_character_with_character_in_string)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceCharacterWithCharacterInStringBackward)
+                check_replace_character_with_character_in_string_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceCharacterWithCharacterInStringEvery)
+                check_replace_character_with_character_in_string_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target character with character in string", &
                 individual_tests)
-    end function test_replace_character_with_character_in_string
+    end function
 
     function test_replace_character_with_string_in_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceCharacterWithStringInCharacter)
+                check_replace_character_with_string_in_character)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceCharacterWithStringInCharacterBackward)
+                check_replace_character_with_string_in_character_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceCharacterWithStringInCharacterEvery)
+                check_replace_character_with_string_in_character_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target character with string in character", &
                 individual_tests)
-    end function test_replace_character_with_string_in_character
+    end function
 
     function test_replace_character_with_string_in_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceCharacterWithStringInString)
+                check_replace_character_with_string_in_string)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceCharacterWithStringInStringBackward)
+                check_replace_character_with_string_in_string_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceCharacterWithStringInStringEvery)
+                check_replace_character_with_string_in_string_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target character with string in string", &
                 individual_tests)
-    end function test_replace_character_with_string_in_string
+    end function
 
     function test_replace_string_with_character_in_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceStringWithCharacterInCharacter)
+                check_replace_string_with_character_in_character)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceStringWithCharacterInCharacterBackward)
+                check_replace_string_with_character_in_character_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceStringWithCharacterInCharacterEvery)
+                check_replace_string_with_character_in_character_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target string with character in character", &
                 individual_tests)
-    end function test_replace_string_with_character_in_character
+    end function
 
     function test_replace_string_with_character_in_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceStringWithCharacterInString)
+                check_replace_string_with_character_in_string)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceStringWithCharacterInStringBackward)
+                check_replace_string_with_character_in_string_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceStringWithCharacterInStringEvery)
+                check_replace_string_with_character_in_string_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target string with character in string", &
                 individual_tests)
-    end function test_replace_string_with_character_in_string
+    end function
 
     function test_replace_string_with_string_in_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceStringWithStringInCharacter)
+                check_replace_string_with_string_in_character)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceStringWithStringInCharacterBackward)
+                check_replace_string_with_string_in_character_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceStringWithStringInCharacterEvery)
+                check_replace_string_with_string_in_character_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target string with string in character", &
                 individual_tests)
-    end function test_replace_string_with_string_in_character
+    end function
 
     function test_replace_string_with_string_in_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The copy of string is searched for occurences of target. If" &
                 // " target is found, it is replaced by substring.", &
-                checkReplaceStringWithStringInString)
+                check_replace_string_with_string_in_string)
         individual_tests(2) = it( &
                 "The search is done in the backward direction if the argument" &
                 // " back is present with the value true.", &
-                checkReplaceStringWithStringInStringBackward)
+                check_replace_string_with_string_in_string_backward)
         individual_tests(3) = it( &
                 "If every is present with the value true, the search and replace" &
                 // " is continued from the character following target in the" &
                 // " search direction specified until all occurrences of" &
                 // " target in the copy string are replaced.", &
-                checkReplaceStringWithStringInStringEvery)
+                check_replace_string_with_string_in_string_every)
         tests = describe( &
                 "Sec. 3.7.4: REPLACE target string with string in string", &
                 individual_tests)
-    end function test_replace_string_with_string_in_string
+    end function
 
-    pure function checkReplaceCharacterWithCharacterInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_character_in_character() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         "this in this string", &
                         "this", &
-                        "with this")))
-    end function checkReplaceCharacterWithCharacterInCharacter
+                        "with this"))
+    end function
 
-    pure function checkReplaceCharacterWithCharacterInCharacterBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_character_in_character_backward() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         "this in this string", &
                         "this", &
                         "with this", &
-                        back = .TRUE.)))
-    end function checkReplaceCharacterWithCharacterInCharacterBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithCharacterInCharacterEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_character_in_character_every() result(result_)
+        use iso_varying_string, only: replace
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 "this in this string", &
                                 "this", &
                                 "with this", &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 "this in this string", &
                                 "this", &
                                 "with this", &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceCharacterWithCharacterInCharacterEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithCharacterInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_character_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         var_str("this in this string"), &
                         "this", &
-                        "with this")))
-    end function checkReplaceCharacterWithCharacterInString
+                        "with this"))
+    end function
 
-    pure function checkReplaceCharacterWithCharacterInStringBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_character_in_string_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         var_str("this in this string"), &
                         "this", &
                         "with this", &
-                        back = .TRUE.)))
-    end function checkReplaceCharacterWithCharacterInStringBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithCharacterInStringEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_character_in_string_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 var_str("this in this string"), &
                                 "this", &
                                 "with this", &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 var_str("this in this string"), &
                                 "this", &
                                 "with this", &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceCharacterWithCharacterInStringEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithStringInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_string_in_character() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         "this in this string", &
                         "this", &
-                        var_str("with this"))))
-    end function checkReplaceCharacterWithStringInCharacter
+                        var_str("with this")))
+    end function
 
-    pure function checkReplaceCharacterWithStringInCharacterBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_string_in_character_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         "this in this string", &
                         "this", &
                         var_str("with this"), &
-                        back = .TRUE.)))
-    end function checkReplaceCharacterWithStringInCharacterBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithStringInCharacterEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_string_in_character_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 "this in this string", &
                                 "this", &
                                 var_str("with this"), &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 "this in this string", &
                                 "this", &
                                 var_str("with this"), &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceCharacterWithStringInCharacterEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithStringInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_string_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         var_str("this in this string"), &
                         "this", &
-                        var_str("with this"))))
-    end function checkReplaceCharacterWithStringInString
+                        var_str("with this")))
+    end function
 
-    pure function checkReplaceCharacterWithStringInStringBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_string_in_string_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         var_str("this in this string"), &
                         "this", &
                         var_str("with this"), &
-                        back = .TRUE.)))
-    end function checkReplaceCharacterWithStringInStringBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceCharacterWithStringInStringEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_character_with_string_in_string_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 var_str("this in this string"), &
                                 "this", &
                                 var_str("with this"), &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 var_str("this in this string"), &
                                 "this", &
                                 var_str("with this"), &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceCharacterWithStringInStringEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithCharacterInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_character_in_character() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         "this in this string", &
                         var_str("this"), &
-                        "with this")))
-    end function checkReplaceStringWithCharacterInCharacter
+                        "with this"))
+    end function
 
-    pure function checkReplaceStringWithCharacterInCharacterBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_character_in_character_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         "this in this string", &
                         var_str("this"), &
                         "with this", &
-                        back = .TRUE.)))
-    end function checkReplaceStringWithCharacterInCharacterBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithCharacterInCharacterEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_character_in_character_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 "this in this string", &
                                 var_str("this"), &
                                 "with this", &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 "this in this string", &
                                 var_str("this"), &
                                 "with this", &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceStringWithCharacterInCharacterEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithCharacterInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_character_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         var_str("this in this string"), &
                         var_str("this"), &
-                        "with this")))
-    end function checkReplaceStringWithCharacterInString
+                        "with this"))
+    end function
 
-    pure function checkReplaceStringWithCharacterInStringBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_character_in_string_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         var_str("this in this string"), &
                         var_str("this"), &
                         "with this", &
-                        back = .TRUE.)))
-    end function checkReplaceStringWithCharacterInStringBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithCharacterInStringEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_character_in_string_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 var_str("this in this string"), &
                                 var_str("this"), &
                                 "with this", &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 var_str("this in this string"), &
                                 var_str("this"), &
                                 "with this", &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceStringWithCharacterInStringEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithStringInCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_string_in_character() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         "this in this string", &
                         var_str("this"), &
-                        var_str("with this"))))
-    end function checkReplaceStringWithStringInCharacter
+                        var_str("with this")))
+    end function
 
-    pure function checkReplaceStringWithStringInCharacterBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_string_in_character_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         "this in this string", &
                         var_str("this"), &
                         var_str("with this"), &
-                        back = .TRUE.)))
-    end function checkReplaceStringWithStringInCharacterBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithStringInCharacterEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_string_in_character_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 "this in this string", &
                                 var_str("this"), &
                                 var_str("with this"), &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 "this in this string", &
                                 var_str("this"), &
                                 var_str("with this"), &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceStringWithStringInCharacterEvery
+                                back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithStringInString() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_string_in_string() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "with this in this string", &
-                char(replace( &
+                replace( &
                         var_str("this in this string"), &
                         var_str("this"), &
-                        var_str("with this"))))
-    end function checkReplaceStringWithStringInString
+                        var_str("with this")))
+    end function
 
-    pure function checkReplaceStringWithStringInStringBackward() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_string_in_string_backward() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals( &
+        type(result_t) :: result_
+
+        result_ = assert_equals( &
                 "this in with this string", &
-                char(replace(&
+                replace(&
                         var_str("this in this string"), &
                         var_str("this"), &
                         var_str("with this"), &
-                        back = .TRUE.)))
-    end function checkReplaceStringWithStringInStringBackward
+                        back = .TRUE.))
+    end function
 
-    pure function checkReplaceStringWithStringInStringEvery() result(result_)
-        type(Result_t) :: result_
+    pure function check_replace_string_with_string_in_string_every() result(result_)
+        use iso_varying_string, only: replace, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         result_ = &
-                assertEquals( &
+                assert_equals( &
                         "with this in with this string", &
-                        char(replace(&
+                        replace(&
                                 var_str("this in this string"), &
                                 var_str("this"), &
                                 var_str("with this"), &
-                                every = .TRUE.))) &
-                .and.assertEquals( &
+                                every = .TRUE.)) &
+                .and.assert_equals( &
                         "with this in with this string", &
-                        char(replace( &
+                        replace( &
                                 var_str("this in this string"), &
                                 var_str("this"), &
                                 var_str("with this"), &
                                 every = .TRUE., &
-                                back = .TRUE.)))
-    end function checkReplaceStringWithStringInStringEvery
-end module replace_target_test
+                                back = .TRUE.))
+    end function
+end module

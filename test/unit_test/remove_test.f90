@@ -1,136 +1,172 @@
 module remove_test
-    use iso_varying_string, only: char, remove, var_str
-    use Vegetables_m, only: &
-            Result_t, TestItem_t, assertEquals, describe, it
-
     implicit none
     private
 
     public :: test_remove_character, test_remove_string
 contains
     function test_remove_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(6)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(6)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string between positions start and finish, inclusive.", &
-                checkRemoveCharacter)
+                check_remove_character)
         individual_tests(2) = it( &
                 "If start is absent, the value one is used for start.", &
-                checkRemoveCharacterWithoutStart)
+                check_remove_character_without_start)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkRemoveCharacterWithStartLTOne)
+                check_remove_character_with_start_lt_one)
         individual_tests(4) = it( &
                 "If finish is absent, the value LEN(string) is used for finish.", &
-                checkRemoveCharacterWithoutFinish)
+                check_remove_character_without_finish)
         individual_tests(5) = it( &
                 "If finish is greater than LEN(string), the value LEN(string) is used for finish.", &
-                checkRemoveCharacterWithFinishGTLenString)
+                check_remove_character_with_finish_gt_len_string)
         individual_tests(6) = it( &
                 "If finish is less than start, the characters of string are delivered unchanged.", &
-                checkRemoveCharacterZeroLength)
+                check_remove_character_zero_length)
         tests = describe("Sec. 3.7.3 REMOVE character", individual_tests)
-    end function test_remove_character
+    end function
 
     function test_remove_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(6)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(6)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string between positions start and finish, inclusive.", &
-                checkRemoveString)
+                check_remove_string)
         individual_tests(2) = it( &
                 "If start is absent, the value one is used for start.", &
-                checkRemoveStringWithoutStart)
+                check_remove_string_without_start)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkRemoveStringWithStartLTOne)
+                check_remove_string_with_start_lt_one)
         individual_tests(4) = it( &
                 "If finish is absent, the value LEN(string) is used for finish.", &
-                checkRemoveStringWithoutFinish)
+                check_remove_string_without_finish)
         individual_tests(5) = it( &
                 "If finish is greater than LEN(string), the value LEN(string) is used for finish.", &
-                checkRemoveStringWithFinishGTLenString)
+                check_remove_string_with_finish_gt_len_string)
         individual_tests(6) = it( &
                 "If finish is less than start, the characters of string are delivered unchanged.", &
-                checkRemoveStringZeroLength)
+                check_remove_string_zero_length)
         tests = describe("Sec. 3.7.3 REMOVE string", individual_tests)
-    end function test_remove_string
+    end function
 
-    pure function checkRemoveCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_remove_character() result(result_)
+        use iso_varying_string, only: remove
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("EPLE", char(remove("EXAMPLE", 2, 4)))
-    end function checkRemoveCharacter
+        type(result_t) :: result_
 
-    pure function checkRemoveCharacterWithoutStart() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("EPLE", remove("EXAMPLE", 2, 4))
+    end function
 
-        result_ = assertEquals("PLE", char(remove("EXAMPLE", finish = 4)))
-    end function checkRemoveCharacterWithoutStart
+    pure function check_remove_character_without_start() result(result_)
+        use iso_varying_string, only: remove
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkRemoveCharacterWithStartLTOne() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("PLE", char(remove("EXAMPLE", -1, 4)))
-    end function checkRemoveCharacterWithStartLTOne
+        result_ = assert_equals("PLE", remove("EXAMPLE", finish = 4))
+    end function
 
-    pure function checkRemoveCharacterWithoutFinish() result(result_)
-        type(Result_t) :: result_
+    pure function check_remove_character_with_start_lt_one() result(result_)
+        use iso_varying_string, only: remove
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("E", char(remove("EXAMPLE", 2)))
-    end function checkRemoveCharacterWithoutFinish
+        type(result_t) :: result_
 
-    pure function checkRemoveCharacterWithFinishGTLenString() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("PLE", remove("EXAMPLE", -1, 4))
+    end function
 
-        result_ = assertEquals("E", char(remove("EXAMPLE", 2, 8)))
-    end function checkRemoveCharacterWithFinishGTLenString
+    pure function check_remove_character_without_finish() result(result_)
+        use iso_varying_string, only: remove
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkRemoveCharacterZeroLength() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("EXAMPLE", char(remove("EXAMPLE", 10, -2)))
-    end function checkRemoveCharacterZeroLength
+        result_ = assert_equals("E", remove("EXAMPLE", 2))
+    end function
 
-    pure function checkRemoveString() result(result_)
-        type(Result_t) :: result_
+    pure function check_remove_character_with_finish_gt_len_string() result(result_)
+        use iso_varying_string, only: remove
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("EPLE", char(remove(var_str("EXAMPLE"), 2, 4)))
-    end function checkRemoveString
+        type(result_t) :: result_
 
-    pure function checkRemoveStringWithoutStart() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("E", remove("EXAMPLE", 2, 8))
+    end function
 
-        result_ = assertEquals("PLE", char(remove(var_str("EXAMPLE"), finish = 4)))
-    end function checkRemoveStringWithoutStart
+    pure function check_remove_character_zero_length() result(result_)
+        use iso_varying_string, only: remove
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkRemoveStringWithStartLTOne() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("PLE", char(remove(var_str("EXAMPLE"), -1, 4)))
-    end function checkRemoveStringWithStartLTOne
+        result_ = assert_equals("EXAMPLE", remove("EXAMPLE", 10, -2))
+    end function
 
-    pure function checkRemoveStringWithoutFinish() result(result_)
-        type(Result_t) :: result_
+    pure function check_remove_string() result(result_)
+        use iso_varying_string, only: remove, var_str
+        use vegetables, only: result_t, assert_equals
 
-        result_ = assertEquals("E", char(remove(var_str("EXAMPLE"), 2)))
-    end function checkRemoveStringWithoutFinish
+        type(result_t) :: result_
 
-    pure function checkRemoveStringWithFinishGTLenString() result(result_)
-        type(Result_t) :: result_
+        result_ = assert_equals("EPLE", remove(var_str("EXAMPLE"), 2, 4))
+    end function
 
-        result_ = assertEquals("E", char(remove(var_str("EXAMPLE"), 2, 8)))
-    end function checkRemoveStringWithFinishGTLenString
+    pure function check_remove_string_without_start() result(result_)
+        use iso_varying_string, only: remove, var_str
+        use vegetables, only: result_t, assert_equals
 
-    pure function checkRemoveStringZeroLength() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
-        result_ = assertEquals("EXAMPLE", char(remove(var_str("EXAMPLE"), 10, -2)))
-    end function checkRemoveStringZeroLength
-end module remove_test
+        result_ = assert_equals("PLE", remove(var_str("EXAMPLE"), finish = 4))
+    end function
+
+    pure function check_remove_string_with_start_lt_one() result(result_)
+        use iso_varying_string, only: remove, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("PLE", remove(var_str("EXAMPLE"), -1, 4))
+    end function
+
+    pure function check_remove_string_without_finish() result(result_)
+        use iso_varying_string, only: remove, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("E", remove(var_str("EXAMPLE"), 2))
+    end function
+
+    pure function check_remove_string_with_finish_gt_len_string() result(result_)
+        use iso_varying_string, only: remove, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("E", remove(var_str("EXAMPLE"), 2, 8))
+    end function
+
+    pure function check_remove_string_zero_length() result(result_)
+        use iso_varying_string, only: remove, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        result_ = assert_equals("EXAMPLE", remove(var_str("EXAMPLE"), 10, -2))
+    end function
+end module

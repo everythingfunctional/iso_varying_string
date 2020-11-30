@@ -1,18 +1,18 @@
 program get_iostat
-    use iso_fortran_env, only: iostat_eor, iostat_end
+    use iso_fortran_env, only: IOSTAT_EOR, IOSTAT_END
     use iso_varying_string, only: varying_string, get, put_line
 
     integer :: stat
     type(varying_string) :: string
 
     call get(string, iostat = stat)
-    if (stat /= iostat_eor) then
+    if (stat /= IOSTAT_EOR) then
         call put_line("didn't get EOR")
-        call exit(1)
+        error stop
     end if
     call get(string, iostat = stat)
-    if (stat /= iostat_end) then
+    if (stat /= IOSTAT_END) then
         call put_line("didn't get EOF")
-        call exit(1)
+        error stop
     end if
-end program get_iostat
+end program

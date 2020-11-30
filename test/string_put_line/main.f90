@@ -4,4 +4,4 @@ program string_put_line
     implicit none
 
     call put_line(var_str("hello from string_put_line"))
-end program string_put_line
+end program

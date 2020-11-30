@@ -1,5 +1,5 @@
 program round_trip
-    use iso_fortran_env, only: iostat_eor, iostat_end
+    use iso_fortran_env, only: IOSTAT_EOR, IOSTAT_END
     use iso_varying_string, only: &
             varying_string, &
             operator(//), &
@@ -36,76 +36,76 @@ program round_trip
     call get(file_unit, string)
     if (string /= "hello from simple_put") then
         call put_line("expected 'hello from simple_put' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
 
     call get(file_unit, string)
     if (string /= "hello from string_put") then
         call put_line("expected 'hello from string_put' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
 
     call get(file_unit, string)
     if (string /= "hello from simple_put_line") then
         call put_line("expected 'hello from simple_put_line' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
 
     call get(file_unit, string)
     if (string /= "hello from string_put_line") then
         call put_line("expected 'hello from string_put_line' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
 
     call get(file_unit, string, 5)
     if (string /= "hello") then
         call put_line("expected 'hello' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     call get(file_unit, string)
     if (string /= " get_maxlen") then
         call put_line("expected ' get_maxlen' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
 
     call get(file_unit, string, ", ", separator)
     if (string /= "hello") then
         call put_line("expected 'hello' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     if (separator /= ",") then
         call put_line("separator should have been ',' but was '" // separator // "'")
-        call exit(1)
+        error stop
     end if
     call get(file_unit, string, ", ", separator)
     if (string /= "get") then
         call put_line("expected 'get' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     if (separator /= " ") then
         call put_line("separator should have been ' ' but was '" // separator // "'")
-        call exit(1)
+        error stop
     end if
     call get(file_unit, string, ", ", separator)
     if (string /= "terminator") then
         call put_line("expected 'terminator' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
     if (separator /= "") then
         call put_line("separator should have been empty, but was '" // separator // "'")
-        call exit(1)
+        error stop
     end if
 
     call get(file_unit, string, iostat = stat)
-    if (stat /= iostat_eor) then
+    if (stat /= IOSTAT_EOR) then
         call put_line("didn't get EOR")
-        call exit(1)
+        error stop
     end if
     call get(file_unit, string, iostat = stat)
-    if (stat /= iostat_end) then
+    if (stat /= IOSTAT_END) then
         call put_line("didn't get EOF")
-        call exit(1)
+        error stop
     end if
 
     close(file_unit)
-end program round_trip
+end program

@@ -9,6 +9,6 @@ program simple_get
     call get(string)
     if (string /= "hello simple_get") then
         call put_line("expected 'hello simple_get' but got '" // string // "'")
-        call exit(1)
+        error stop
     end if
-end program simple_get
+end program

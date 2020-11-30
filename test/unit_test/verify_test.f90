@@ -1,111 +1,115 @@
 module verify_test
-    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
-    use iso_varying_string, only: operator(//), char, verify
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            TestItem_t, &
-            assertEquals, &
-            describe, &
-            fail, &
-            it
-
     implicit none
     private
 
     public :: test_verify
 contains
     function test_verify() result(tests)
-        type(TestItem_t) :: tests
+        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "two strings", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkVerifyStrings)
+                check_verify_strings)
         individual_tests(2) = it( &
                 "a string and a character", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkVerifyStringAndCharacter)
+                check_verify_string_and_character)
         individual_tests(3) = it( &
                 "a character and a string", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkVerifyCharacterAndString)
+                check_verify_character_and_string)
         tests = describe( &
                 "Sec. 3.4.16: VERIFY functions the same as for two characters for", &
                 individual_tests)
-    end function test_verify
+    end function
 
-    pure function checkVerifyStrings(strings) result(result_)
-        class(Input_t), intent(in) :: strings
-        type(Result_t) :: result_
+    pure function check_verify_strings(strings) result(result_)
+        use custom_generator, only: string_pair_input_t
+        use iso_varying_string, only: operator(//), char, verify
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: strings
+        type(result_t) :: result_
 
         select type (strings)
-        type is (StringPairInput_t)
+        type is (string_pair_input_t)
             result_ = &
-                assertEquals( &
+                assert_equals( &
                     verify(char(strings%first), char(strings%second)), &
                     verify(strings%first, strings%second), &
-                    char('verify("' // strings%first // '", "' // strings%second // '")')) &
-                .and.assertEquals( &
+                    'verify("' // strings%first // '", "' // strings%second // '")') &
+                .and.assert_equals( &
                     verify(char(strings%first), char(strings%second), .false.), &
                     verify(strings%first, strings%second, .false.), &
-                    char('verify("' // strings%first // '", "' // strings%second // '", .false.)')) &
-                .and.assertEquals( &
+                    'verify("' // strings%first // '", "' // strings%second // '", .false.)') &
+                .and.assert_equals( &
                     verify(char(strings%first), char(strings%second), .true.), &
                     verify(strings%first, strings%second, .true.), &
-                    char('verify("' // strings%first // '", "' // strings%second // '", .true.)'))
+                    'verify("' // strings%first // '", "' // strings%second // '", .true.)')
         class default
-            result_ = fail("Expected to get a StringPairInput_t")
+            result_ = fail("Expected to get a string_pair_input_t")
         end select
-    end function checkVerifyStrings
+    end function
 
-    pure function checkVerifyStringAndCharacter(strings) result(result_)
-        class(Input_t), intent(in) :: strings
-        type(Result_t) :: result_
+    pure function check_verify_string_and_character(strings) result(result_)
+        use custom_generator, only: string_pair_input_t
+        use iso_varying_string, only: operator(//), char, verify
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: strings
+        type(result_t) :: result_
 
         select type (strings)
-        type is (StringPairInput_t)
+        type is (string_pair_input_t)
             result_ = &
-                assertEquals( &
+                assert_equals( &
                     verify(char(strings%first), char(strings%second)), &
                     verify(strings%first, char(strings%second)), &
-                    char('verify("' // strings%first // '", "' // strings%second // '")')) &
-                .and.assertEquals( &
+                    'verify("' // strings%first // '", "' // strings%second // '")') &
+                .and.assert_equals( &
                     verify(char(strings%first), char(strings%second), .false.), &
                     verify(strings%first, char(strings%second), .false.), &
-                    char('verify("' // strings%first // '", "' // strings%second // '", .false.)')) &
-                .and.assertEquals( &
+                    'verify("' // strings%first // '", "' // strings%second // '", .false.)') &
+                .and.assert_equals( &
                     verify(char(strings%first), char(strings%second), .true.), &
                     verify(strings%first, char(strings%second), .true.), &
-                    char('verify("' // strings%first // '", "' // strings%second // '", .true.)'))
+                    'verify("' // strings%first // '", "' // strings%second // '", .true.)')
         class default
-            result_ = fail("Expected to get a StringPairInput_t")
+            result_ = fail("Expected to get a string_pair_input_t")
         end select
-    end function checkVerifyStringAndCharacter
+    end function
 
-    pure function checkVerifyCharacterAndString(strings) result(result_)
-        class(Input_t), intent(in) :: strings
-        type(Result_t) :: result_
+    pure function check_verify_character_and_string(strings) result(result_)
+        use custom_generator, only: string_pair_input_t
+        use iso_varying_string, only: operator(//), char, verify
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: strings
+        type(result_t) :: result_
 
         select type (strings)
-        type is (StringPairInput_t)
+        type is (string_pair_input_t)
             result_ = &
-                assertEquals( &
+                assert_equals( &
                     verify(char(strings%first), char(strings%second)), &
                     verify(char(strings%first), strings%second), &
-                    char('verify("' // strings%first // '", "' // strings%second // '")')) &
-                .and.assertEquals( &
+                    'verify("' // strings%first // '", "' // strings%second // '")') &
+                .and.assert_equals( &
                     verify(char(strings%first), char(strings%second), .false.), &
                     verify(char(strings%first), strings%second, .false.), &
-                    char('verify("' // strings%first // '", "' // strings%second // '", .false.)')) &
-                .and.assertEquals( &
+                    'verify("' // strings%first // '", "' // strings%second // '", .false.)') &
+                .and.assert_equals( &
                     verify(char(strings%first), char(strings%second), .true.), &
                     verify(char(strings%first), strings%second, .true.), &
-                    char('verify("' // strings%first // '", "' // strings%second // '", .true.)'))
+                    'verify("' // strings%first // '", "' // strings%second // '", .true.)')
         class default
-            result_ = fail("Expected to get a StringPairInput_t")
+            result_ = fail("Expected to get a string_pair_input_t")
         end select
-    end function checkVerifyCharacterAndString
-end module verify_test
+    end function
+end module

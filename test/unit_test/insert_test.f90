@@ -1,7 +1,4 @@
 module insert_test
-    use iso_varying_string, only: char, insert, var_str
-    use Vegetables_m, only: Result_t, TestItem_t, assertEquals, describe, it
-
     implicit none
     private
 
@@ -12,210 +9,254 @@ module insert_test
             test_insert_string_into_string
 contains
     function test_insert_character_into_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string with the characters of substring inserted into the" &
                 // " copy of string before the character at the position start.", &
-                checkInsertCharacterIntoCharacter)
+                check_insert_character_into_character)
         individual_tests(2) = it( &
                 "If start is greater than LEN(string), then substring is appended to the copy of string", &
-                checkInsertCharacterIntoCharacterAtEnd)
+                check_insert_character_into_character_at_end)
         individual_tests(3) = it( &
                 "If start is less than one, then substring is prepended to the copy of string", &
-                checkInsertCharacterIntoCharacterAtBeginning)
+                check_insert_character_into_character_at_beginning)
         tests = describe("Sec. 3.7.2: INSERT character into character", individual_tests)
-    end function test_insert_character_into_character
+    end function
 
     function test_insert_character_into_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string with the characters of substring inserted into the" &
                 // " copy of string before the character at the position start.", &
-                checkInsertCharacterIntoString)
+                check_insert_character_into_string)
         individual_tests(2) = it( &
                 "If start is greater than LEN(string), then substring is appended to the copy of string", &
-                checkInsertCharacterIntoStringAtEnd)
+                check_insert_character_into_string_at_end)
         individual_tests(3) = it( &
                 "If start is less than one, then substring is prepended to the copy of string", &
-                checkInsertCharacterIntoStringAtBeginning)
+                check_insert_character_into_string_at_beginning)
         tests = describe("Sec. 3.7.2: INSERT character into string", individual_tests)
-    end function test_insert_character_into_string
+    end function
 
     function test_insert_string_into_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string with the characters of substring inserted into the" &
                 // " copy of string before the character at the position start.", &
-                checkInsertStringIntoCharacter)
+                check_insert_string_into_character)
         individual_tests(2) = it( &
                 "If start is greater than LEN(string), then substring is appended to the copy of string", &
-                checkInsertStringIntoCharacterAtEnd)
+                check_insert_string_into_character_at_end)
         individual_tests(3) = it( &
                 "If start is less than one, then substring is prepended to the copy of string", &
-                checkInsertStringIntoCharacterAtBeginning)
+                check_insert_string_into_character_at_beginning)
         tests = describe("Sec. 3.7.2: INSERT string into character", individual_tests)
-    end function test_insert_string_into_character
+    end function
 
     function test_insert_string_into_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string with the characters of substring inserted into the" &
                 // " copy of string before the character at the position start.", &
-                checkInsertStringIntoString)
+                check_insert_string_into_string)
         individual_tests(2) = it( &
                 "If start is greater than LEN(string), then substring is appended to the copy of string", &
-                checkInsertStringIntoStringAtEnd)
+                check_insert_string_into_string_at_end)
         individual_tests(3) = it( &
                 "If start is less than one, then substring is prepended to the copy of string", &
-                checkInsertStringIntoStringAtBeginning)
+                check_insert_string_into_string_at_beginning)
         tests = describe("Sec. 3.7.2: INSERT string into string", individual_tests)
-    end function test_insert_string_into_string
+    end function
 
-    pure function checkInsertCharacterIntoCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_character_into_character() result(result_)
+        use iso_varying_string, only: insert
+        use vegetables, only: result_t, assert_equals
 
-        character(len=*), parameter :: string = "STRING"
-        character(len=*), parameter :: substring = "SUBSTRING"
-        character(len=*), parameter :: expected = "STRSUBSTRINGING"
-        integer, parameter :: start = 4
-
-        result_ = assertEquals(expected, char(insert(string, start, substring)))
-    end function checkInsertCharacterIntoCharacter
-
-    pure function checkInsertCharacterIntoCharacterAtEnd() result(result_)
-        type(Result_t) :: result_
-
-        character(len=*), parameter :: string = "STRING"
-        character(len=*), parameter :: substring = "SUBSTRING"
-        character(len=*), parameter :: expected = "STRINGSUBSTRING"
-        integer, parameter :: start = 7
-
-        result_ = assertEquals(expected, char(insert(string, start, substring)))
-    end function checkInsertCharacterIntoCharacterAtEnd
-
-    pure function checkInsertCharacterIntoCharacterAtBeginning() result(result_)
-        type(Result_t) :: result_
-
-        character(len=*), parameter :: string = "STRING"
-        character(len=*), parameter :: substring = "SUBSTRING"
-        character(len=*), parameter :: expected = "SUBSTRINGSTRING"
-        integer, parameter :: start = -1
-
-        result_ = assertEquals(expected, char(insert(string, start, substring)))
-    end function checkInsertCharacterIntoCharacterAtBeginning
-
-    pure function checkInsertCharacterIntoString() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "STRSUBSTRINGING"
         integer, parameter :: start = 4
 
-        result_ = assertEquals(expected, char(insert(var_str(string), start, substring)))
-    end function checkInsertCharacterIntoString
+        result_ = assert_equals(expected, insert(string, start, substring))
+    end function
 
-    pure function checkInsertCharacterIntoStringAtEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_character_into_character_at_end() result(result_)
+        use iso_varying_string, only: insert
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "STRINGSUBSTRING"
         integer, parameter :: start = 7
 
-        result_ = assertEquals(expected, char(insert(var_str(string), start, substring)))
-    end function checkInsertCharacterIntoStringAtEnd
+        result_ = assert_equals(expected, insert(string, start, substring))
+    end function
 
-    pure function checkInsertCharacterIntoStringAtBeginning() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_character_into_character_at_beginning() result(result_)
+        use iso_varying_string, only: insert
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "SUBSTRINGSTRING"
         integer, parameter :: start = -1
 
-        result_ = assertEquals(expected, char(insert(var_str(string), start, substring)))
-    end function checkInsertCharacterIntoStringAtBeginning
+        result_ = assert_equals(expected, insert(string, start, substring))
+    end function
 
-    pure function checkInsertStringIntoCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_character_into_string() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "STRSUBSTRINGING"
         integer, parameter :: start = 4
 
-        result_ = assertEquals(expected, char(insert(string, start, var_str(substring))))
-    end function checkInsertStringIntoCharacter
+        result_ = assert_equals(expected, insert(var_str(string), start, substring))
+    end function
 
-    pure function checkInsertStringIntoCharacterAtEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_character_into_string_at_end() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "STRINGSUBSTRING"
         integer, parameter :: start = 7
 
-        result_ = assertEquals(expected, char(insert(string, start, var_str(substring))))
-    end function checkInsertStringIntoCharacterAtEnd
+        result_ = assert_equals(expected, insert(var_str(string), start, substring))
+    end function
 
-    pure function checkInsertStringIntoCharacterAtBeginning() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_character_into_string_at_beginning() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "SUBSTRINGSTRING"
         integer, parameter :: start = -1
 
-        result_ = assertEquals(expected, char(insert(string, start, var_str(substring))))
-    end function checkInsertStringIntoCharacterAtBeginning
+        result_ = assert_equals(expected, insert(var_str(string), start, substring))
+    end function
 
-    pure function checkInsertStringIntoString() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_string_into_character() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "STRSUBSTRINGING"
         integer, parameter :: start = 4
 
-        result_ = assertEquals(expected, char(insert(var_str(string), start, var_str(substring))))
-    end function checkInsertStringIntoString
+        result_ = assert_equals(expected, insert(string, start, var_str(substring)))
+    end function
 
-    pure function checkInsertStringIntoStringAtEnd() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_string_into_character_at_end() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "STRINGSUBSTRING"
         integer, parameter :: start = 7
 
-        result_ = assertEquals(expected, char(insert(var_str(string), start, var_str(substring))))
-    end function checkInsertStringIntoStringAtEnd
+        result_ = assert_equals(expected, insert(string, start, var_str(substring)))
+    end function
 
-    pure function checkInsertStringIntoStringAtBeginning() result(result_)
-        type(Result_t) :: result_
+    pure function check_insert_string_into_character_at_beginning() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         character(len=*), parameter :: string = "STRING"
         character(len=*), parameter :: substring = "SUBSTRING"
         character(len=*), parameter :: expected = "SUBSTRINGSTRING"
         integer, parameter :: start = -1
 
-        result_ = assertEquals(expected, char(insert(var_str(string), start, var_str(substring))))
-    end function checkInsertStringIntoStringAtBeginning
-end module insert_test
+        result_ = assert_equals(expected, insert(string, start, var_str(substring)))
+    end function
+
+    pure function check_insert_string_into_string() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: string = "STRING"
+        character(len=*), parameter :: substring = "SUBSTRING"
+        character(len=*), parameter :: expected = "STRSUBSTRINGING"
+        integer, parameter :: start = 4
+
+        result_ = assert_equals(expected, insert(var_str(string), start, var_str(substring)))
+    end function
+
+    pure function check_insert_string_into_string_at_end() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: string = "STRING"
+        character(len=*), parameter :: substring = "SUBSTRING"
+        character(len=*), parameter :: expected = "STRINGSUBSTRING"
+        integer, parameter :: start = 7
+
+        result_ = assert_equals(expected, insert(var_str(string), start, var_str(substring)))
+    end function
+
+    pure function check_insert_string_into_string_at_beginning() result(result_)
+        use iso_varying_string, only: insert, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: string = "STRING"
+        character(len=*), parameter :: substring = "SUBSTRING"
+        character(len=*), parameter :: expected = "SUBSTRINGSTRING"
+        integer, parameter :: start = -1
+
+        result_ = assert_equals(expected, insert(var_str(string), start, var_str(substring)))
+    end function
+end module

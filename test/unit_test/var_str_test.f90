@@ -1,46 +1,40 @@
 module var_str_test
-    use iso_varying_string, only: char, var_str
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            StringInput_t, &
-            TestItem_t, &
-            assertEquals, &
-            describe, &
-            fail, &
-            it, &
-            ASCII_STRING_GENERATOR
-
     implicit none
     private
 
     public :: test_var_str
 contains
     function test_var_str() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it, ASCII_STRING_GENERATOR
 
-        type(TestItem_t) :: individual_tests(1)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(1)
 
         individual_tests(1) = it( &
                 "Converts an intrinsic fixed-length character value into the" &
                 // " equivalent varying-length string value.", &
                 ASCII_STRING_GENERATOR, &
-                checkVarStr)
+                check_var_str)
         tests = describe("Sec. 3.5.1: VAR_STR", individual_tests)
-    end function test_var_str
+    end function
 
-    pure function checkVarStr(string) result(result_)
-        class(Input_t), intent(in) :: string
-        type(Result_t) :: result_
+    pure function check_var_str(string) result(result_)
+        use iso_varying_string, only: char, var_str
+        use vegetables, only: &
+                input_t, result_t, string_input_t, assert_equals, fail
+
+        class(input_t), intent(in) :: string
+        type(result_t) :: result_
 
         select type (string)
-        type is (StringInput_t)
-            result_ = assertEquals( &
+        type is (string_input_t)
+            result_ = assert_equals( &
                     string%value_, &
                     var_str(char(string%value_)), &
                     "The result value is the same string of characters as the argument.")
         class default
-            result_ = fail("Expected to get a StringInput_t")
+            result_ = fail("Expected to get a string_input_t")
         end select
-    end function checkVarStr
-end module var_str_test
+    end function
+end module

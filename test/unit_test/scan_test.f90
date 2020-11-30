@@ -1,111 +1,115 @@
 module scan_test
-    use custom_generator, only: StringPairInput_t, ASCII_STRING_PAIR_GENERATOR
-    use iso_varying_string, only: operator(//), char, scan
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            TestItem_t, &
-            assertEquals, &
-            describe, &
-            fail, &
-            it
-
     implicit none
     private
 
     public :: test_scan
 contains
     function test_scan() result(tests)
-        type(TestItem_t) :: tests
+        use custom_generator, only: ASCII_STRING_PAIR_GENERATOR
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(3)
 
         individual_tests(1) = it( &
                 "two strings", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkScanStrings)
+                check_scan_strings)
         individual_tests(2) = it( &
                 "a string and a character", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkScanStringAndCharacter)
+                check_scan_string_and_character)
         individual_tests(3) = it( &
                 "a character and a string", &
                 ASCII_STRING_PAIR_GENERATOR, &
-                checkScanCharacterAndString)
+                check_scan_character_and_string)
         tests = describe( &
                 "Sec. 3.4.14: SCAN functions the same as for two characters for", &
                 individual_tests)
-    end function test_scan
+    end function
 
-    pure function checkScanStrings(strings) result(result_)
-        class(Input_t), intent(in) :: strings
-        type(Result_t) :: result_
+    pure function check_scan_strings(strings) result(result_)
+        use custom_generator, only: string_pair_input_t
+        use iso_varying_string, only: operator(//), char, scan
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: strings
+        type(result_t) :: result_
 
         select type (strings)
-        type is (StringPairInput_t)
+        type is (string_pair_input_t)
             result_ = &
-                assertEquals( &
+                assert_equals( &
                     scan(char(strings%first), char(strings%second)), &
                     scan(strings%first, strings%second), &
-                    char('scan("' // strings%first // '", "' // strings%second // '")')) &
-                .and.assertEquals( &
+                    'scan("' // strings%first // '", "' // strings%second // '")') &
+                .and.assert_equals( &
                     scan(char(strings%first), char(strings%second), .false.), &
                     scan(strings%first, strings%second, .false.), &
-                    char('scan("' // strings%first // '", "' // strings%second // '", .false.)')) &
-                .and.assertEquals( &
+                    'scan("' // strings%first // '", "' // strings%second // '", .false.)') &
+                .and.assert_equals( &
                     scan(char(strings%first), char(strings%second), .true.), &
                     scan(strings%first, strings%second, .true.), &
-                    char('scan("' // strings%first // '", "' // strings%second // '", .true.)'))
+                    'scan("' // strings%first // '", "' // strings%second // '", .true.)')
         class default
-            result_ = fail("Expected to get a StringPairInput_t")
+            result_ = fail("Expected to get a string_pair_input_t")
         end select
-    end function checkScanStrings
+    end function
 
-    pure function checkScanStringAndCharacter(strings) result(result_)
-        class(Input_t), intent(in) :: strings
-        type(Result_t) :: result_
+    pure function check_scan_string_and_character(strings) result(result_)
+        use custom_generator, only: string_pair_input_t
+        use iso_varying_string, only: operator(//), char, scan
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: strings
+        type(result_t) :: result_
 
         select type (strings)
-        type is (StringPairInput_t)
+        type is (string_pair_input_t)
             result_ = &
-                assertEquals( &
+                assert_equals( &
                     scan(char(strings%first), char(strings%second)), &
                     scan(strings%first, char(strings%second)), &
-                    char('scan("' // strings%first // '", "' // strings%second // '")')) &
-                .and.assertEquals( &
+                    'scan("' // strings%first // '", "' // strings%second // '")') &
+                .and.assert_equals( &
                     scan(char(strings%first), char(strings%second), .false.), &
                     scan(strings%first, char(strings%second), .false.), &
-                    char('scan("' // strings%first // '", "' // strings%second // '", .false.)')) &
-                .and.assertEquals( &
+                    'scan("' // strings%first // '", "' // strings%second // '", .false.)') &
+                .and.assert_equals( &
                     scan(char(strings%first), char(strings%second), .true.), &
                     scan(strings%first, char(strings%second), .true.), &
-                    char('scan("' // strings%first // '", "' // strings%second // '", .true.)'))
+                    'scan("' // strings%first // '", "' // strings%second // '", .true.)')
         class default
-            result_ = fail("Expected to get a StringPairInput_t")
+            result_ = fail("Expected to get a string_pair_input_t")
         end select
-    end function checkScanStringAndCharacter
+    end function
 
-    pure function checkScanCharacterAndString(strings) result(result_)
-        class(Input_t), intent(in) :: strings
-        type(Result_t) :: result_
+    pure function check_scan_character_and_string(strings) result(result_)
+        use custom_generator, only: string_pair_input_t
+        use iso_varying_string, only: operator(//), char, scan
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: strings
+        type(result_t) :: result_
 
         select type (strings)
-        type is (StringPairInput_t)
+        type is (string_pair_input_t)
             result_ = &
-                assertEquals( &
+                assert_equals( &
                     scan(char(strings%first), char(strings%second)), &
                     scan(char(strings%first), strings%second), &
-                    char('scan("' // strings%first // '", "' // strings%second // '")')) &
-                .and.assertEquals( &
+                    'scan("' // strings%first // '", "' // strings%second // '")') &
+                .and.assert_equals( &
                     scan(char(strings%first), char(strings%second), .false.), &
                     scan(char(strings%first), strings%second, .false.), &
-                    char('scan("' // strings%first // '", "' // strings%second // '", .false.)')) &
-                .and.assertEquals( &
+                    'scan("' // strings%first // '", "' // strings%second // '", .false.)') &
+                .and.assert_equals( &
                     scan(char(strings%first), char(strings%second), .true.), &
                     scan(char(strings%first), strings%second, .true.), &
-                    char('scan("' // strings%first // '", "' // strings%second // '", .true.)'))
+                    'scan("' // strings%first // '", "' // strings%second // '", .true.)')
         class default
-            result_ = fail("Expected to get a StringPairInput_t")
+            result_ = fail("Expected to get a string_pair_input_t")
         end select
-    end function checkScanCharacterAndString
-end module scan_test
+    end function
+end module

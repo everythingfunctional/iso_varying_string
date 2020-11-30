@@ -1,93 +1,91 @@
 module split_character_set_test
-    use iso_varying_string, only: varying_string, assignment(=), char, split
-    use Vegetables_m, only: &
-            Result_t, TestItem_t, assertEmpty, assertEquals, describe, it
-
     implicit none
     private
 
     public :: test_split_character
 contains
     function test_split_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: back_tests(3)
-        type(TestItem_t) :: forward_separator_tests(2)
-        type(TestItem_t) :: not_back_separator_tests(2)
-        type(TestItem_t) :: back_separator_tests(2)
-        type(TestItem_t) :: forward_no_separator_set_tests(3)
-        type(TestItem_t) :: forward_separator_set_tests(3)
-        type(TestItem_t) :: not_back_no_separator_set_tests(3)
-        type(TestItem_t) :: not_back_separator_set_tests(3)
-        type(TestItem_t) :: back_no_separator_set_tests(3)
-        type(TestItem_t) :: back_separator_set_tests(3)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: back_tests(3)
+        type(test_item_t) :: forward_separator_tests(2)
+        type(test_item_t) :: not_back_separator_tests(2)
+        type(test_item_t) :: back_separator_tests(2)
+        type(test_item_t) :: forward_no_separator_set_tests(3)
+        type(test_item_t) :: forward_separator_set_tests(3)
+        type(test_item_t) :: not_back_no_separator_set_tests(3)
+        type(test_item_t) :: not_back_separator_set_tests(3)
+        type(test_item_t) :: back_no_separator_set_tests(3)
+        type(test_item_t) :: back_separator_set_tests(3)
 
         forward_no_separator_set_tests(1) = it( &
                 "The characters passed over in the search are returned in the" &
                 // " argument word, and the remainder of the string, not" &
                 // " including the sperator character is returned in the argument string", &
-                checkForwardNoSeparator)
+                check_forward_no_separator)
         forward_no_separator_set_tests(2) = it( &
                 "If no character from set is found, string is returned as zero length", &
-                checkForwardNoSeparatorNotFound)
+                check_forward_no_separator_not_found)
         forward_no_separator_set_tests(3) = it( &
                 "If set is of zero length, string is returned as zero length", &
-                checkForwardNoSeparatorEmptySet)
+                check_forward_no_separator_empty_set)
         forward_separator_set_tests(1) = it( &
                 "The characters passed over in the search are returned in the" &
                 // " argument word, and the remainder of the string, not" &
                 // " including the sperator character is returned in the argument string", &
-                checkForwardWithSeparator)
+                check_forward_with_separator)
         forward_separator_set_tests(2) = it( &
                 "If no character from set is found, separator is returned as zero length", &
-                checkForwardWithSeparatorNotFound)
+                check_forward_with_separator_not_found)
         forward_separator_set_tests(3) = it( &
                 "If set is of zero length, separator is returned as zero length", &
-                checkForwardWithSeparatorEmptySet)
+                check_forward_with_separator_empty_set)
         not_back_no_separator_set_tests(1) = it( &
                 "The characters passed over in the search are returned in the" &
                 // " argument word, and the remainder of the string, not" &
                 // " including the sperator character is returned in the argument string", &
-                checkNotBackwardNoSeparator)
+                check_not_backward_no_separator)
         not_back_no_separator_set_tests(2) = it( &
                 "If no character from set is found, string is returned as zero length", &
-                checkNotBackwardNoSeparatorNotFound)
+                check_not_backward_no_separator_not_found)
         not_back_no_separator_set_tests(3) = it( &
                 "If set is of zero length, string is returned as zero length", &
-                checkNotBackwardNoSeparatorEmptySet)
+                check_not_backward_no_separator_empty_set)
         not_back_separator_set_tests(1) = it( &
                 "The characters passed over in the search are returned in the" &
                 // " argument word, and the remainder of the string, not" &
                 // " including the sperator character is returned in the argument string", &
-                checkNotBackwardWithSeparator)
+                check_not_backward_with_separator)
         not_back_separator_set_tests(2) = it( &
                 "If no character from set is found, separator is returned as zero length", &
-                checkNotBackwardWithSeparatorNotFound)
+                check_not_backward_with_separator_not_found)
         not_back_separator_set_tests(3) = it( &
                 "If set is of zero length, separator is returned as zero length", &
-                checkNotBackwardWithSeparatorEmptySet)
+                check_not_backward_with_separator_empty_set)
         back_no_separator_set_tests(1) = it( &
                 "The characters passed over in the search are returned in the" &
                 // " argument word, and the remainder of the string, not" &
                 // " including the sperator character is returned in the argument string", &
-                checkBackwardNoSeparator)
+                check_backward_no_separator)
         back_no_separator_set_tests(2) = it( &
                 "If no character from set is found, string is returned as zero length", &
-                checkBackwardNoSeparatorNotFound)
+                check_backward_no_separator_not_found)
         back_no_separator_set_tests(3) = it( &
                 "If set is of zero length, string is returned as zero length", &
-                checkBackwardNoSeparatorEmptySet)
+                check_backward_no_separator_empty_set)
         back_separator_set_tests(1) = it( &
                 "The characters passed over in the search are returned in the" &
                 // " argument word, and the remainder of the string, not" &
                 // " including the sperator character is returned in the argument string", &
-                checkBackwardWithSeparator)
+                check_backward_with_separator)
         back_separator_set_tests(2) = it( &
                 "If no character from set is found, separator is returned as zero length", &
-                checkBackwardWithSeparatorNotFound)
+                check_backward_with_separator_not_found)
         back_separator_set_tests(3) = it( &
                 "If set is of zero length, separator is returned as zero length", &
-                checkBackwardWithSeparatorEmptySet)
+                check_backward_with_separator_empty_set)
         forward_separator_tests(1) = describe( &
                 "Without separator argument", &
                 forward_no_separator_set_tests)
@@ -124,10 +122,13 @@ contains
         tests = describe( &
                 "Sec. 3.7.5: SPLIT divides the string at the first occurence of a character that is in set (character)", &
                 back_tests)
-    end function test_split_character
+    end function
 
-    pure function checkForwardNoSeparator() result(result_)
-        type(Result_t) :: result_
+    pure function check_forward_no_separator() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -135,12 +136,15 @@ contains
         string = "split, this"
         call split(string, word, " ,")
         result_ = &
-                assertEquals("split", char(word)) &
-                .and.assertEquals(" this", char(string))
-    end function checkForwardNoSeparator
+                assert_equals("split", word) &
+                .and.assert_equals(" this", string)
+    end function
 
-    pure function checkForwardNoSeparatorNotFound() result(result_)
-        type(Result_t) :: result_
+    pure function check_forward_no_separator_not_found() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -148,12 +152,15 @@ contains
         string = "split, this"
         call split(string, word, "!")
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word))
-    end function checkForwardNoSeparatorNotFound
+                assert_empty(string) &
+                .and.assert_equals("split, this", word)
+    end function
 
-    pure function checkForwardNoSeparatorEmptySet() result(result_)
-        type(Result_t) :: result_
+    pure function check_forward_no_separator_empty_set() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -161,12 +168,15 @@ contains
         string = "split, this"
         call split(string, word, "")
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word))
-    end function checkForwardNoSeparatorEmptySet
+                assert_empty(string) &
+                .and.assert_equals("split, this", word)
+    end function
 
-    pure function checkForwardWithSeparator() result(result_)
-        type(Result_t) :: result_
+    pure function check_forward_with_separator() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -175,13 +185,16 @@ contains
         string = "split, this"
         call split(string, word, " ,", separator)
         result_ = &
-                assertEquals("split", char(word)) &
-                .and.assertEquals(" this", char(string)) &
-                .and.assertEquals(",", char(separator))
-    end function checkForwardWithSeparator
+                assert_equals("split", word) &
+                .and.assert_equals(" this", string) &
+                .and.assert_equals(",", separator)
+    end function
 
-    pure function checkForwardWithSeparatorNotFound() result(result_)
-        type(Result_t) :: result_
+    pure function check_forward_with_separator_not_found() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -190,13 +203,16 @@ contains
         string = "split, this"
         call split(string, word, "!", separator)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word)) &
-                .and.assertEmpty(char(separator))
-    end function checkForwardWithSeparatorNotFound
+                assert_empty(string) &
+                .and.assert_equals("split, this", word) &
+                .and.assert_empty(separator)
+    end function
 
-    pure function checkForwardWithSeparatorEmptySet() result(result_)
-        type(Result_t) :: result_
+    pure function check_forward_with_separator_empty_set() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -205,13 +221,16 @@ contains
         string = "split, this"
         call split(string, word, "", separator)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word)) &
-                .and.assertEmpty(char(separator))
-    end function checkForwardWithSeparatorEmptySet
+                assert_empty(string) &
+                .and.assert_equals("split, this", word) &
+                .and.assert_empty(separator)
+    end function
 
-    pure function checkNotBackwardNoSeparator() result(result_)
-        type(Result_t) :: result_
+    pure function check_not_backward_no_separator() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -219,12 +238,15 @@ contains
         string = "split, this"
         call split(string, word, " ,", back=.false.)
         result_ = &
-                assertEquals("split", char(word)) &
-                .and.assertEquals(" this", char(string))
-    end function checkNotBackwardNoSeparator
+                assert_equals("split", word) &
+                .and.assert_equals(" this", string)
+    end function
 
-    pure function checkNotBackwardNoSeparatorNotFound() result(result_)
-        type(Result_t) :: result_
+    pure function check_not_backward_no_separator_not_found() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -232,12 +254,15 @@ contains
         string = "split, this"
         call split(string, word, "!", back=.false.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word))
-    end function checkNotBackwardNoSeparatorNotFound
+                assert_empty(string) &
+                .and.assert_equals("split, this", word)
+    end function
 
-    pure function checkNotBackwardNoSeparatorEmptySet() result(result_)
-        type(Result_t) :: result_
+    pure function check_not_backward_no_separator_empty_set() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -245,12 +270,15 @@ contains
         string = "split, this"
         call split(string, word, "", back=.false.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word))
-    end function checkNotBackwardNoSeparatorEmptySet
+                assert_empty(string) &
+                .and.assert_equals("split, this", word)
+    end function
 
-    pure function checkNotBackwardWithSeparator() result(result_)
-        type(Result_t) :: result_
+    pure function check_not_backward_with_separator() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -259,13 +287,16 @@ contains
         string = "split, this"
         call split(string, word, " ,", separator, .false.)
         result_ = &
-                assertEquals("split", char(word)) &
-                .and.assertEquals(" this", char(string)) &
-                .and.assertEquals(",", char(separator))
-    end function checkNotBackwardWithSeparator
+                assert_equals("split", word) &
+                .and.assert_equals(" this", string) &
+                .and.assert_equals(",", separator)
+    end function
 
-    pure function checkNotBackwardWithSeparatorNotFound() result(result_)
-        type(Result_t) :: result_
+    pure function check_not_backward_with_separator_not_found() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -274,13 +305,16 @@ contains
         string = "split, this"
         call split(string, word, "!", separator, .false.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word)) &
-                .and.assertEmpty(char(separator))
-    end function checkNotBackwardWithSeparatorNotFound
+                assert_empty(string) &
+                .and.assert_equals("split, this", word) &
+                .and.assert_empty(separator)
+    end function
 
-    pure function checkNotBackwardWithSeparatorEmptySet() result(result_)
-        type(Result_t) :: result_
+    pure function check_not_backward_with_separator_empty_set() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -289,13 +323,16 @@ contains
         string = "split, this"
         call split(string, word, "", separator, .false.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word)) &
-                .and.assertEmpty(char(separator))
-    end function checkNotBackwardWithSeparatorEmptySet
+                assert_empty(string) &
+                .and.assert_equals("split, this", word) &
+                .and.assert_empty(separator)
+    end function
 
-    pure function checkBackwardNoSeparator() result(result_)
-        type(Result_t) :: result_
+    pure function check_backward_no_separator() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -303,12 +340,15 @@ contains
         string = "split, this"
         call split(string, word, " ,", back=.true.)
         result_ = &
-                assertEquals("this", char(word)) &
-                .and.assertEquals("split,", char(string))
-    end function checkBackwardNoSeparator
+                assert_equals("this", word) &
+                .and.assert_equals("split,", string)
+    end function
 
-    pure function checkBackwardNoSeparatorNotFound() result(result_)
-        type(Result_t) :: result_
+    pure function check_backward_no_separator_not_found() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -316,12 +356,15 @@ contains
         string = "split, this"
         call split(string, word, "!", back=.true.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word))
-    end function checkBackwardNoSeparatorNotFound
+                assert_empty(string) &
+                .and.assert_equals("split, this", word)
+    end function
 
-    pure function checkBackwardNoSeparatorEmptySet() result(result_)
-        type(Result_t) :: result_
+    pure function check_backward_no_separator_empty_set() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: string
         type(varying_string) :: word
@@ -329,12 +372,15 @@ contains
         string = "split, this"
         call split(string, word, "", back=.true.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word))
-    end function checkBackwardNoSeparatorEmptySet
+                assert_empty(string) &
+                .and.assert_equals("split, this", word)
+    end function
 
-    pure function checkBackwardWithSeparator() result(result_)
-        type(Result_t) :: result_
+    pure function check_backward_with_separator() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -343,13 +389,16 @@ contains
         string = "split, this"
         call split(string, word, " ,", separator, .true.)
         result_ = &
-                assertEquals("this", char(word)) &
-                .and.assertEquals("split,", char(string)) &
-                .and.assertEquals(" ", char(separator))
-    end function checkBackwardWithSeparator
+                assert_equals("this", word) &
+                .and.assert_equals("split,", string) &
+                .and.assert_equals(" ", separator)
+    end function
 
-    pure function checkBackwardWithSeparatorNotFound() result(result_)
-        type(Result_t) :: result_
+    pure function check_backward_with_separator_not_found() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -358,13 +407,16 @@ contains
         string = "split, this"
         call split(string, word, "!", separator, .true.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word)) &
-                .and.assertEmpty(char(separator))
-    end function checkBackwardWithSeparatorNotFound
+                assert_empty(string) &
+                .and.assert_equals("split, this", word) &
+                .and.assert_empty(separator)
+    end function
 
-    pure function checkBackwardWithSeparatorEmptySet() result(result_)
-        type(Result_t) :: result_
+    pure function check_backward_with_separator_empty_set() result(result_)
+        use iso_varying_string, only: varying_string, assignment(=), split
+        use vegetables, only: result_t, assert_empty, assert_equals
+
+        type(result_t) :: result_
 
         type(varying_string) :: separator
         type(varying_string) :: string
@@ -373,8 +425,8 @@ contains
         string = "split, this"
         call split(string, word, "", separator, .true.)
         result_ = &
-                assertEmpty(char(string)) &
-                .and.assertEquals("split, this", char(word)) &
-                .and.assertEmpty(char(separator))
-    end function checkBackwardWithSeparatorEmptySet
-end module split_character_set_test
+                assert_empty(string) &
+                .and.assert_equals("split, this", word) &
+                .and.assert_empty(separator)
+    end function
+end module

@@ -1,44 +1,38 @@
 module adjustl_test
-    use iso_varying_string, only: adjustl, char, var_str
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            StringInput_t, &
-            TestItem_t, &
-            assertEquals, &
-            describe, &
-            fail, &
-            it, &
-            ASCII_STRING_GENERATOR
-
     implicit none
     private
 
     public :: test_adjustl
 contains
     function test_adjustl() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it, ASCII_STRING_GENERATOR
 
-        type(TestItem_t) :: individual_tests(1)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(1)
 
         individual_tests = it( &
                 "works the same for characters and strings", &
                 ASCII_STRING_GENERATOR, &
-                checkAdjustl)
+                check_adjustl)
         tests = describe("Sec 3.4.1: ADJUSTL", individual_tests)
-    end function test_adjustl
+    end function
 
-    pure function checkAdjustl(string) result(result_)
-        class(Input_t), intent(in) :: string
-        type(Result_t) :: result_
+    pure function check_adjustl(string) result(result_)
+        use iso_varying_string, only: adjustl, char
+        use vegetables, only: &
+                input_t, result_t, string_input_t, assert_equals, fail
+
+        class(input_t), intent(in) :: string
+        type(result_t) :: result_
 
         select type (string)
-        type is (StringInput_t)
-            result_ = assertEquals( &
+        type is (string_input_t)
+            result_ = assert_equals( &
                     adjustl(char(string%value_)), &
                     adjustl(string%value_))
         class default
-            result_ = fail("Expected to get a StringInput_t")
+            result_ = fail("Expected to get a string_input_t")
         end select
-    end function checkAdjustl
-end module adjustl_test
+    end function
+end module

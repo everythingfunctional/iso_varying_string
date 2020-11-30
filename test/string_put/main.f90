@@ -4,4 +4,4 @@ program string_put
     implicit none
 
     call put(var_str("hello from string_put"))
-end program string_put
+end program

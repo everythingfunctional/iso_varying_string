@@ -3,6 +3,8 @@ image: registry.gitlab.com/everythingfunctional/dockerfpm
 variables:
     GIT_SUBMODULE_STRATEGY: normal
 
+# TODO: run with valgrind once gfortran memory leaks have been fixed
+# i.e. --runner "valgrind --leak-check=full --error-exitcode=1"
 test:
   script:
     - fpm test \
@@ -17,7 +19,6 @@ test:
       --flag '-fbacktrace' \
       --flag '-std=f2018' \
       --flag '-fcheck=all' \
-      --runner "valgrind --leak-check=full --error-exitcode=1" \
       --target unit_test
     - fpm test \
       --flag '-Wall' \
@@ -31,6 +32,5 @@ test:
       --flag '-fbacktrace' \
       --flag '-std=f2018' \
       --flag '-fcheck=all' \
-      --runner "valgrind --leak-check=full --error-exitcode=1" \
       --target round_trip
     - ./run_io_tests.sh

@@ -1,44 +1,40 @@
 module iachar_test
-    use custom_generator, only: CharacterInput_t, ASCII_CHARACTER_GENERATOR
-    use iso_varying_string, only: iachar, var_str
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            TestItem_t, &
-            assertEquals, &
-            describe, &
-            fail, &
-            it
-
     implicit none
     private
 
     public :: test_iachar
 contains
     function test_iachar() result(tests)
-        type(TestItem_t) :: tests
+        use custom_generator, only: ASCII_CHARACTER_GENERATOR
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(1)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(1)
 
         individual_tests(1) = it( &
                 "works the same for characters and strings", &
                 ASCII_CHARACTER_GENERATOR, &
-                checkIachar)
+                check_iachar)
         tests = describe("Sec. 3.4.4: IACHAR", individual_tests)
-    end function test_iachar
+    end function
 
-    pure function checkIachar(char_) result(result_)
-        class(Input_t), intent(in) :: char_
-        type(Result_t) :: result_
+    pure function check_iachar(char_) result(result_)
+        use custom_generator, only: character_input_t
+        use iso_varying_string, only: iachar, var_str
+        use vegetables, only: input_t, result_t, assert_equals, fail
+
+        class(input_t), intent(in) :: char_
+        type(result_t) :: result_
 
         select type (char_)
-        type is (CharacterInput_t)
-            result_ = assertEquals( &
+        type is (character_input_t)
+            result_ = assert_equals( &
                     iachar(char_%value_), &
                     iachar(var_str(char_%value_)), &
                     char_%value_)
         class default
-            result_ = fail("Expected to get a CharacterInput_t.")
+            result_ = fail("Expected to get a character_input_t.")
         end select
-    end function checkIachar
-end module iachar_test
+    end function
+end module

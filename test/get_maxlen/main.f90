@@ -10,11 +10,11 @@ program get_maxlen
     call get(hello, 5)
     if (hello /= "hello") then
         call put_line("expected 'hello' but got '" // hello // "'")
-        call exit(1)
+        error stop
     end if
     call get(remaining)
     if (remaining /= " get_maxlen") then
         call put_line("expected ' get_maxlen' but got '" // remaining // "'")
-        call exit(1)
+        error stop
     end if
-end program get_maxlen
+end program

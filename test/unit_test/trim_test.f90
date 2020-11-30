@@ -1,44 +1,38 @@
 module trim_test
-    use iso_varying_string, only: char, trim, var_str
-    use Vegetables_m, only: &
-            Input_t, &
-            Result_t, &
-            StringInput_t, &
-            TestItem_t, &
-            assertEquals, &
-            Describe, &
-            fail, &
-            It, &
-            ASCII_STRING_GENERATOR
-
     implicit none
     private
 
     public :: test_trim
 contains
     function test_trim() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it, ASCII_STRING_GENERATOR
 
-        type(TestItem_t) :: individual_tests(1)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(1)
 
         individual_tests = It( &
                 "works the same for characters and strings", &
                 ASCII_STRING_GENERATOR, &
-                checkTrim)
+                check_trim)
         tests = Describe("Sec 3.4.15: TRIM", individual_tests)
-    end function test_trim
+    end function
 
-    pure function checkTrim(string) result(result_)
-        class(Input_t), intent(in) :: string
-        type(Result_t) :: result_
+    pure function check_trim(string) result(result_)
+        use iso_varying_string, only: char, trim
+        use vegetables, only: &
+                input_t, result_t, string_input_t, assert_equals, fail
+
+        class(input_t), intent(in) :: string
+        type(result_t) :: result_
 
         select type (string)
-        type is (StringInput_t)
-            result_ = assertEquals( &
+        type is (string_input_t)
+            result_ = assert_equals( &
                     trim(char(string%value_)), &
                     trim(string%value_))
         class default
-            result_ = fail("Expected to get a StringInput_t")
+            result_ = fail("Expected to get a string_input_t")
         end select
-    end function checkTrim
-end module trim_test
+    end function
+end module

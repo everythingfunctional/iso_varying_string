@@ -1,165 +1,196 @@
 module extract_test
-    use iso_varying_string, only: char, extract, var_str
-    use Vegetables_m, only: &
-            Result_t, &
-            TestItem_t, &
-            assertEmpty, &
-            assertEquals, &
-            describe, &
-            it
-
     implicit none
     private
 
     public :: test_extract_character, test_extract_string
 contains
     function test_extract_character() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(6)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(6)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string between positions start and finish, inclusive.", &
-                checkExtractCharacter)
+                check_extract_character)
         individual_tests(2) = it( &
                 "If start is absent, the value one is used for start.", &
-                checkExtractCharacterWithoutStart)
+                check_extract_character_without_start)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkExtractCharacterWithStartLTOne)
+                check_extract_character_with_start_lt_one)
         individual_tests(4) = it( &
                 "If finish is absent, the value LEN(string) is used for finish.", &
-                checkExtractCharacterWithoutFinish)
+                check_extract_character_without_finish)
         individual_tests(5) = it( &
                 "If finish is greater than LEN(string), the value LEN(string) is used for finish.", &
-                checkExtractCharacterWithFinishGTLenString)
+                check_extract_character_with_finish_gt_len_string)
         individual_tests(6) = it( &
                 "If finish is less than start, the result is a zero-length string.", &
-                checkExtractCharacterZeroLength)
+                check_extract_character_zero_length)
         tests = describe("Sec. 3.7.1 EXTRACT character", individual_tests)
-    end function test_extract_character
+    end function
 
     function test_extract_string() result(tests)
-        type(TestItem_t) :: tests
+        use vegetables, only: test_item_t, describe, it
 
-        type(TestItem_t) :: individual_tests(6)
+        type(test_item_t) :: tests
+
+        type(test_item_t) :: individual_tests(6)
 
         individual_tests(1) = it( &
                 "The result value is a copy of the characters of the argument" &
                 // " string between positions start and finish, inclusive.", &
-                checkExtractString)
+                check_extract_string)
         individual_tests(2) = it( &
                 "If start is absent, the value one is used for start.", &
-                checkExtractStringWithoutStart)
+                check_extract_string_without_start)
         individual_tests(3) = it( &
                 "If start is less than one, the value one is used for start.", &
-                checkExtractStringWithStartLTOne)
+                check_extract_string_with_start_lt_one)
         individual_tests(4) = it( &
                 "If finish is absent, the value LEN(string) is used for finish.", &
-                checkExtractStringWithoutFinish)
+                check_extract_string_without_finish)
         individual_tests(5) = it( &
                 "If finish is greater than LEN(string), the value LEN(string) is used for finish.", &
-                checkExtractStringWithFinishGTLenString)
+                check_extract_string_with_finish_gt_len_string)
         individual_tests(6) = it( &
                 "If finish is less than start, the result is a zero-length string.", &
-                checkExtractStringZeroLength)
+                check_extract_string_zero_length)
         tests = describe("Sec. 3.7.1 EXTRACT string", individual_tests)
-    end function test_extract_string
+    end function
 
-    pure function checkExtractCharacter() result(result_)
-        type(Result_t) :: result_
+    pure function check_extract_character() result(result_)
+        use iso_varying_string, only: extract
+        use vegetables, only: result_t, assert_equals
 
-        character(len=*), parameter :: example = "EXAMPLE"
-
-        result_ = assertEquals(example(2:4), char(extract(example, 2, 4)))
-    end function checkExtractCharacter
-
-    pure function checkExtractCharacterWithoutStart() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
 
-        result_ = assertEquals(example(1:4), char(extract(example, finish = 4)))
-    end function checkExtractCharacterWithoutStart
+        result_ = assert_equals(example(2:4), extract(example, 2, 4))
+    end function
 
-    pure function checkExtractCharacterWithStartLTOne() result(result_)
-        type(Result_t) :: result_
+    pure function check_extract_character_without_start() result(result_)
+        use iso_varying_string, only: extract
+        use vegetables, only: result_t, assert_equals
 
-        character(len=*), parameter :: example = "EXAMPLE"
-
-        result_ = assertEquals(example(1:4), char(extract(example, -1, 4)))
-    end function checkExtractCharacterWithStartLTOne
-
-    pure function checkExtractCharacterWithoutFinish() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
 
-        result_ = assertEquals(example(2:), char(extract(example, 2)))
-    end function checkExtractCharacterWithoutFinish
+        result_ = assert_equals(example(1:4), extract(example, finish = 4))
+    end function
 
-    pure function checkExtractCharacterWithFinishGTLenString() result(result_)
-        type(Result_t) :: result_
+    pure function check_extract_character_with_start_lt_one() result(result_)
+        use iso_varying_string, only: extract
+        use vegetables, only: result_t, assert_equals
 
-        character(len=*), parameter :: example = "EXAMPLE"
-
-        result_ = assertEquals(example(2:), char(extract(example, 2, len(example) + 1)))
-    end function checkExtractCharacterWithFinishGTLenString
-
-    pure function checkExtractCharacterZeroLength() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
 
-        result_ = assertEmpty(char(extract(example, 10, -2)))
-    end function checkExtractCharacterZeroLength
+        result_ = assert_equals(example(1:4), extract(example, -1, 4))
+    end function
 
-    pure function checkExtractString() result(result_)
-        type(Result_t) :: result_
+    pure function check_extract_character_without_finish() result(result_)
+        use iso_varying_string, only: extract
+        use vegetables, only: result_t, assert_equals
 
-        character(len=*), parameter :: example = "EXAMPLE"
-
-        result_ = assertEquals(example(2:4), char(extract(var_str(example), 2, 4)))
-    end function checkExtractString
-
-    pure function checkExtractStringWithoutStart() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
 
-        result_ = assertEquals(example(1:4), char(extract(var_str(example), finish = 4)))
-    end function checkExtractStringWithoutStart
+        result_ = assert_equals(example(2:), extract(example, 2))
+    end function
 
-    pure function checkExtractStringWithStartLTOne() result(result_)
-        type(Result_t) :: result_
+    pure function check_extract_character_with_finish_gt_len_string() result(result_)
+        use iso_varying_string, only: extract
+        use vegetables, only: result_t, assert_equals
 
-        character(len=*), parameter :: example = "EXAMPLE"
-
-        result_ = assertEquals(example(1:4), char(extract(var_str(example), -1, 4)))
-    end function checkExtractStringWithStartLTOne
-
-    pure function checkExtractStringWithoutFinish() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
 
-        result_ = assertEquals(example(2:), char(extract(var_str(example), 2)))
-    end function checkExtractStringWithoutFinish
+        result_ = assert_equals(example(2:), extract(example, 2, len(example) + 1))
+    end function
 
-    pure function checkExtractStringWithFinishGTLenString() result(result_)
-        type(Result_t) :: result_
+    pure function check_extract_character_zero_length() result(result_)
+        use iso_varying_string, only: extract
+        use vegetables, only: result_t, assert_empty
 
-        character(len=*), parameter :: example = "EXAMPLE"
-
-        result_ = assertEquals(example(2:), char(extract(var_str(example), 2, len(example) + 1)))
-    end function checkExtractStringWithFinishGTLenString
-
-    pure function checkExtractStringZeroLength() result(result_)
-        type(Result_t) :: result_
+        type(result_t) :: result_
 
         character(len=*), parameter :: example = "EXAMPLE"
 
-        result_ = assertEmpty(char(extract(var_str(example), 10, -2)))
-    end function checkExtractStringZeroLength
-end module extract_test
+        result_ = assert_empty(extract(example, 10, -2))
+    end function
+
+    pure function check_extract_string() result(result_)
+        use iso_varying_string, only: extract, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: example = "EXAMPLE"
+
+        result_ = assert_equals(example(2:4), extract(var_str(example), 2, 4))
+    end function
+
+    pure function check_extract_string_without_start() result(result_)
+        use iso_varying_string, only: extract, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: example = "EXAMPLE"
+
+        result_ = assert_equals(example(1:4), extract(var_str(example), finish = 4))
+    end function
+
+    pure function check_extract_string_with_start_lt_one() result(result_)
+        use iso_varying_string, only: extract, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: example = "EXAMPLE"
+
+        result_ = assert_equals(example(1:4), extract(var_str(example), -1, 4))
+    end function
+
+    pure function check_extract_string_without_finish() result(result_)
+        use iso_varying_string, only: extract, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: example = "EXAMPLE"
+
+        result_ = assert_equals(example(2:), extract(var_str(example), 2))
+    end function
+
+    pure function check_extract_string_with_finish_gt_len_string() result(result_)
+        use iso_varying_string, only: extract, var_str
+        use vegetables, only: result_t, assert_equals
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: example = "EXAMPLE"
+
+        result_ = assert_equals(example(2:), extract(var_str(example), 2, len(example) + 1))
+    end function
+
+    pure function check_extract_string_zero_length() result(result_)
+        use iso_varying_string, only: extract, var_str
+        use vegetables, only: result_t, assert_empty
+
+        type(result_t) :: result_
+
+        character(len=*), parameter :: example = "EXAMPLE"
+
+        result_ = assert_empty(extract(var_str(example), 10, -2))
+    end function
+end module

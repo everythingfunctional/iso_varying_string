@@ -475,10 +475,12 @@ contains
     pure function string_to_char(string) result(chars)
         ! Sec. 3.4.3
         type(varying_string), intent(in) :: string
-        character(len=len(string%characters)) :: chars
+        character(len=:), allocatable :: chars
 
         if (allocated(string%characters)) then
-            chars = string
+            chars = string%characters
+          else
+            chars = ""
         end if
     end function
 
@@ -1424,6 +1426,7 @@ contains
         integer :: string_length
         character(len=:), allocatable :: temp
 
+        allocate(character(len=0) :: temp) ! TODO: remove once gfortran bug is fixed
         string_length = len(string)
         if (present(back)) then
             backwards = back
