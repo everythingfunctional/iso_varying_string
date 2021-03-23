@@ -5,8 +5,8 @@
 
 set -e
 
-FPM_FLAGS="--flag -Wall --flag -Wextra --flag -Wimplicit-interface --flag -Werror --flag -fPIC --flag -g3 --flag -fbounds-check --flag -fcheck-array-temporaries --flag -fbacktrace --flag -std=f2018 --flag -fcheck=all"
+compiler="${1:-gfortran}"
 
-fpm test ${FPM_FLAGS} --target unit_test
-fpm test ${FPM_FLAGS} --target round_trip
-./run_io_tests.sh
+fpm test --compiler "${compiler}" --target unit_test
+fpm test --compiler "${compiler}" --target round_trip
+./run_io_tests.sh "${1}"
