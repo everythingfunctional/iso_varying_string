@@ -40,6 +40,9 @@ module iso_varying_string
     type :: varying_string ! Sec. 3.2
         private
         character(len=1), allocatable :: characters(:)
+    contains
+        private
+        procedure, public :: co_broadcast => varying_string_co_broadcast
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -1484,5 +1487,81 @@ contains
         logical, optional, intent(in) :: back
 
         call split(string, word, char(set), separator, back)
+    end subroutine
+
+    subroutine varying_string_co_broadcast(a, source_image, stat, errmsg)
+        class(varying_string), intent(inout) :: a
+        integer, intent(in) :: source_image
+        integer, intent(out), optional :: stat
+        character(len=*), intent(inout), optional :: errmsg
+
+        character(len=*), parameter :: BROADCAST_UNDEFINED_STRING_MESSAGE = &
+                "attempted to broadcast undefined varying_string"
+        integer :: string_length
+
+        if (present(stat)) stat = 0
+        if (this_image() == source_image) then
+            if (allocated(a%characters)) then
+                string_length = size(a%characters)
+            else
+                if (present(stat)) then
+                    stat = 1
+                    if (present(errmsg)) then
+                        errmsg = BROADCAST_UNDEFINED_STRING_MESSAGE
+                    end if
+                else
+                    error stop BROADCAST_UNDEFINED_STRING_MESSAGE
+                end if
+            end if
+        end if
+
+        ! If there was an error, we need to make sure that all of the images know
+        ! about it and do not continue
+        if (present(stat)) then
+            call co_broadcast(stat, source_image)
+            if (stat /= 0) then
+                if (present(errmsg)) call co_broadcast(errmsg, source_image)
+                return
+            end if
+        end if
+
+        ! This should be unnecessary except for a gfortran bug
+        if (present(stat)) then
+            if (present(errmsg)) then
+                call co_broadcast(string_length, source_image, stat, errmsg)
+            else
+                call co_broadcast(string_length, source_image, stat)
+            end if
+        else
+            if (present(errmsg)) then
+                call co_broadcast(string_length, source_image, errmsg=errmsg)
+            else
+                call co_broadcast(string_length, source_image)
+            end if
+        end if
+
+        if (present(stat)) then
+            if (stat /= 0) return
+        end if
+
+        if (this_image() /= source_image) then
+            if (allocated(a%characters)) deallocate(a%characters)
+            allocate(a%characters(string_length))
+        end if
+
+        ! This should be unnecessary except for a gfortran bug
+        if (present(stat)) then
+            if (present(errmsg)) then
+                call co_broadcast(a%characters, source_image, stat, errmsg)
+            else
+                call co_broadcast(a%characters, source_image, stat)
+            end if
+        else
+            if (present(errmsg)) then
+                call co_broadcast(a%characters, source_image, errmsg=errmsg)
+            else
+                call co_broadcast(a%characters, source_image)
+            end if
+        end if
     end subroutine
 end module
