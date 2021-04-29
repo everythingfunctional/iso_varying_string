@@ -1,48 +1,53 @@
 module assignment_test
+    use iso_varying_string, only: varying_string, assignment(=), char, var_str
+    use vegetables, only: &
+            input_t, &
+            result_t, &
+            string_input_t, &
+            test_item_t, &
+            assert_equals, &
+            describe, &
+            fail, &
+            it, &
+            ASCII_STRING_GENERATOR
+
     implicit none
     private
-
     public :: test_assignment
 contains
     function test_assignment() result(tests)
-        use vegetables, only: test_item_t, describe, it, ASCII_STRING_GENERATOR
-
         type(test_item_t) :: tests
 
-        type(test_item_t) :: individual_tests(4)
-
-        individual_tests(1) = it( &
-                "can assign a character to a string", &
-                ASCII_STRING_GENERATOR, &
-                check_assign_character_to_string)
-        individual_tests(2) = it( &
-                "can assign a string to a string", &
-                ASCII_STRING_GENERATOR, &
-                check_assign_string_to_string)
-        individual_tests(3) = it( &
-                "can assign a string to a shorter character", &
-                check_assign_to_shorter_character)
-        individual_tests(4) = it( &
-                "can assign a string to a longer character", &
-                check_assign_to_longer_character)
-        tests = describe("Sec. 3.3.1: assignment", individual_tests)
+        tests = describe( &
+                "Sec. 3.3.1: assignment", &
+                [ it( &
+                        "can assign a character to a string", &
+                        ASCII_STRING_GENERATOR, &
+                        check_assign_character_to_string) &
+                , it( &
+                        "can assign a string to a string", &
+                        ASCII_STRING_GENERATOR, &
+                        check_assign_string_to_string) &
+                , it( &
+                        "can assign a string to a shorter character", &
+                        check_assign_to_shorter_character) &
+                , it( &
+                        "can assign a string to a longer character", &
+                        check_assign_to_longer_character) &
+                ])
     end function
 
-    pure function check_assign_character_to_string(string) result(result_)
-        use iso_varying_string, only: varying_string, assignment(=), char
-        use vegetables, only: &
-                input_t, result_t, string_input_t, assert_equals, fail
-
-        class(input_t), intent(in) :: string
+    pure function check_assign_character_to_string(input) result(result_)
+        class(input_t), intent(in) :: input
         type(result_t) :: result_
 
         type(varying_string) :: assigned
 
-        select type (string)
+        select type (input)
         type is (string_input_t)
-            assigned = char(string%value_)
+            assigned = char(input%input())
             result_ = assert_equals( &
-                    string%value_, &
+                    input%input(), &
                     assigned, &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
@@ -51,21 +56,17 @@ contains
         end select
     end function
 
-    pure function check_assign_string_to_string(string) result(result_)
-        use iso_varying_string, only: varying_string, assignment(=)
-        use vegetables, only: &
-                input_t, result_t, string_input_t, assert_equals, fail
-
-        class(input_t), intent(in) :: string
+    pure function check_assign_string_to_string(input) result(result_)
+        class(input_t), intent(in) :: input
         type(result_t) :: result_
 
         type(varying_string) :: assigned
 
-        select type (string)
+        select type (input)
         type is (string_input_t)
-            assigned = string%value_
+            assigned = input%input()
             result_ = assert_equals( &
-                    string%value_, &
+                    input%input(), &
                     assigned, &
                     "Where the variable is of type VARYING_STRING, the length" &
                     // " of the variable becomes that of the expression")
@@ -75,9 +76,6 @@ contains
     end function
 
     pure function check_assign_to_shorter_character() result(result_)
-        use iso_varying_string, only: assignment(=), var_str
-        use vegetables, only: result_t, assert_equals
-
         type(result_t) :: result_
 
         character(len=4) :: assigned
@@ -91,9 +89,6 @@ contains
     end function
 
     pure function check_assign_to_longer_character() result(result_)
-        use iso_varying_string, only: assignment(=), var_str
-        use vegetables, only: result_t, assert_equals
-
         type(result_t) :: result_
 
         character(len=10) :: assigned
