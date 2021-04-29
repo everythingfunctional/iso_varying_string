@@ -6,7 +6,7 @@ maintainer = "everythingfunctional@protonmail.com"
 copyright = "2020 Brad Richardson"
 
 [dev-dependencies]
-vegetables = { git = "https://gitlab.com/everythingfunctional/vegetables", tag = "v6.0.0" }
+vegetables = { git = "https://gitlab.com/everythingfunctional/vegetables", tag = "v7.1.0" }
 
 [[test]]
 name = "unit_test"

@@ -1,38 +1,36 @@
 module ichar_test
+    use ascii_character_generator_m, only: ASCII_CHARACTER_GENERATOR
+    use character_input_m, only: character_input_t
+    use iso_varying_string, only: ichar, var_str
+    use vegetables, only: &
+            input_t, result_t, test_item_t, assert_equals, describe, fail, it
+
     implicit none
     private
-
     public :: test_ichar
 contains
     function test_ichar() result(tests)
-        use custom_generator, only: ASCII_CHARACTER_GENERATOR
-        use vegetables, only: test_item_t, describe, it
-
         type(test_item_t) :: tests
 
-        type(test_item_t) :: individual_tests(1)
-
-        individual_tests(1) = it( &
-                "works the same for characters and strings", &
-                ASCII_CHARACTER_GENERATOR, &
-                check_ichar)
-        tests = describe("Sec. 3.4.5: ICHAR", individual_tests)
+        tests = describe( &
+                "Sec. 3.4.5: ICHAR", &
+                [ it( &
+                        "works the same for characters and strings", &
+                        ASCII_CHARACTER_GENERATOR, &
+                        check_ichar) &
+                ])
     end function
 
-    pure function check_ichar(char_) result(result_)
-        use custom_generator, only: character_input_t
-        use iso_varying_string, only: ichar, var_str
-        use vegetables, only: input_t, result_t, assert_equals, fail
-
-        class(input_t), intent(in) :: char_
+    pure function check_ichar(input) result(result_)
+        class(input_t), intent(in) :: input
         type(result_t) :: result_
 
-        select type (char_)
+        select type (input)
         type is (character_input_t)
             result_ = assert_equals( &
-                    ichar(char_%value_), &
-                    ichar(var_str(char_%value_)), &
-                    char_%value_)
+                    ichar(input%input()), &
+                    ichar(var_str(input%input())), &
+                    input%input())
         class default
             result_ = fail("Expected to get a character_input_t.")
         end select
