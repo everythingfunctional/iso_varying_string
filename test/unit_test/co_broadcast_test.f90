@@ -18,7 +18,7 @@ contains
         type(test_item_t) :: tests
 
         tests = describe( &
-                "varying_string%broadcast()", &
+                "varying_string%co_broadcast()", &
                 [ it("copies a string across images", check_broadcast) &
                 , it( &
                         "fails when broadcasting a string that has not been defined", &
