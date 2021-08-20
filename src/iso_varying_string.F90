@@ -234,6 +234,14 @@ module iso_varying_string
         module procedure split_character
         module procedure split_string
     end interface
+
+#ifdef COMPILER_LACKS_COLLECTIVE_SUBROUTINES
+    interface co_broadcast
+        module procedure co_broadcast_integer
+        module procedure co_broadcast_character
+        module procedure co_broadcast_character_array
+    end interface
+#endif
 contains
     elemental subroutine assign_character_to_string(lhs, rhs)
         ! Sec. 3.3.1
@@ -1564,4 +1572,196 @@ contains
             end if
         end if
     end subroutine
+
+#ifdef COMPILER_LACKS_COLLECTIVE_SUBROUTINES
+    subroutine co_broadcast_integer(a,source_image,stat,errmsg)
+        integer, intent(inout) :: a
+        integer, intent(in) :: source_image
+        integer, intent(out), optional ::  stat
+        character(len=*), intent(inout), optional :: errmsg
+
+        ! proper credit for the following code goes to the sourcery library
+        ! https://github.com/sourcerinstitute/sourcery
+        integer, allocatable :: message[:]
+        integer, parameter :: root_node=1, default_root_image=1
+        integer even_child_image, odd_child_image, parent_image, my_image
+        integer even_child_node , odd_child_node , parent_node , my_node, default_parent_image
+        integer, allocatable :: relatives(:)
+
+        allocate(message[*])
+
+        my_image=this_image()
+
+        if (my_image==source_image) then
+            my_node = root_node
+        else
+            my_node = merge(source_image, my_image, my_image==default_root_image)
+        end if
+
+        parent_node = my_node/2
+        default_parent_image = my_image/2
+
+        if (parent_node==root_node) then
+            parent_image = source_image
+        else if (default_parent_image==source_image) then
+            parent_image = default_root_image
+        else
+            parent_image = parent_node
+        end if
+
+        if (exists(parent_image)) then
+            sync images(parent_image)
+            message = message[parent_image]
+        else
+            message = a
+            ! define the message for broadcasting down the tree when the orphaned root image falls through this branch
+        end if
+
+        even_child_node = 2*my_node
+        even_child_image = merge(even_child_node, default_root_image, even_child_node/=source_image)
+        if ( exists(even_child_node) ) sync images(even_child_image)
+
+        odd_child_node = 2*my_node+1
+        odd_child_image = merge(odd_child_node, default_root_image, odd_child_node/=source_image)
+        if ( exists(odd_child_node) )  sync images(odd_child_image)
+
+        a = message
+
+        relatives = [parent_image,even_child_image,odd_child_image]
+        relatives = pack(relatives,exists(relatives))
+        sync images(relatives)
+
+        if (present(errmsg)) errmsg=""
+        if (present(stat)) stat=0
+    end subroutine
+
+    subroutine co_broadcast_character(a,source_image,stat,errmsg)
+        character(len=*), intent(inout) :: a
+        integer, intent(in) :: source_image
+        integer, intent(out), optional ::  stat
+        character(len=*), intent(inout), optional :: errmsg
+
+        ! proper credit for the following code goes to the sourcery library
+        ! https://github.com/sourcerinstitute/sourcery
+        character(len=:), allocatable :: message[:]
+        integer, parameter :: root_node=1, default_root_image=1
+        integer even_child_image, odd_child_image, parent_image, my_image
+        integer even_child_node , odd_child_node , parent_node , my_node, default_parent_image
+        integer, allocatable :: relatives(:)
+
+        allocate(character(len=len(a)) :: message[*])
+
+        my_image=this_image()
+
+        if (my_image==source_image) then
+            my_node = root_node
+        else
+            my_node = merge(source_image, my_image, my_image==default_root_image)
+        end if
+
+        parent_node = my_node/2
+        default_parent_image = my_image/2
+
+        if (parent_node==root_node) then
+            parent_image = source_image
+        else if (default_parent_image==source_image) then
+            parent_image = default_root_image
+        else
+            parent_image = parent_node
+        end if
+
+        if (exists(parent_image)) then
+            sync images(parent_image)
+            message = message[parent_image]
+        else
+            message = a
+            ! define the message for broadcasting down the tree when the orphaned root image falls through this branch
+        end if
+
+        even_child_node = 2*my_node
+        even_child_image = merge(even_child_node, default_root_image, even_child_node/=source_image)
+        if ( exists(even_child_node) ) sync images(even_child_image)
+
+        odd_child_node = 2*my_node+1
+        odd_child_image = merge(odd_child_node, default_root_image, odd_child_node/=source_image)
+        if ( exists(odd_child_node) )  sync images(odd_child_image)
+
+        a = message
+
+        relatives = [parent_image,even_child_image,odd_child_image]
+        relatives = pack(relatives,exists(relatives))
+        sync images(relatives)
+
+        if (present(errmsg)) errmsg=""
+        if (present(stat)) stat=0
+    end subroutine
+
+    subroutine co_broadcast_character_array(a,source_image,stat,errmsg)
+        character(len=1), intent(inout) :: a(:)
+        integer, intent(in) :: source_image
+        integer, intent(out), optional ::  stat
+        character(len=*), intent(inout), optional :: errmsg
+
+        ! proper credit for the following code goes to the sourcery library
+        ! https://github.com/sourcerinstitute/sourcery
+        character(len=1), allocatable :: message(:)[:]
+        integer, parameter :: root_node=1, default_root_image=1
+        integer even_child_image, odd_child_image, parent_image, my_image
+        integer even_child_node , odd_child_node , parent_node , my_node, default_parent_image
+        integer, allocatable :: relatives(:)
+
+        allocate(message(size(a))[*])
+
+        my_image=this_image()
+
+        if (my_image==source_image) then
+            my_node = root_node
+        else
+            my_node = merge(source_image, my_image, my_image==default_root_image)
+        end if
+
+        parent_node = my_node/2
+        default_parent_image = my_image/2
+
+        if (parent_node==root_node) then
+            parent_image = source_image
+        else if (default_parent_image==source_image) then
+            parent_image = default_root_image
+        else
+            parent_image = parent_node
+        end if
+
+        if (exists(parent_image)) then
+            sync images(parent_image)
+            message(:) = message(:)[parent_image]
+        else
+            message(:) = a(:)
+            ! define the message for broadcasting down the tree when the orphaned root image falls through this branch
+        end if
+
+        even_child_node = 2*my_node
+        even_child_image = merge(even_child_node, default_root_image, even_child_node/=source_image)
+        if ( exists(even_child_node) ) sync images(even_child_image)
+
+        odd_child_node = 2*my_node+1
+        odd_child_image = merge(odd_child_node, default_root_image, odd_child_node/=source_image)
+        if ( exists(odd_child_node) )  sync images(odd_child_image)
+
+        a(:) = message(:)
+
+        relatives = [parent_image,even_child_image,odd_child_image]
+        relatives = pack(relatives,exists(relatives))
+        sync images(relatives)
+
+        if (present(errmsg)) errmsg=""
+        if (present(stat)) stat=0
+    end subroutine
+
+    elemental function exists(image) result(image_exists)
+        !! Result true if image number is within the closed range [1,num_images()]
+        integer, intent(in) :: image
+        logical image_exists
+        image_exists = (image>0 .and. image<=num_images())
+    end function
+#endif
 end module

@@ -2,7 +2,7 @@ set(dir "${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(
   srcs
-  "${dir}/iso_varying_string.f90"
+  "${dir}/iso_varying_string.F90"
 )
 
 set(
