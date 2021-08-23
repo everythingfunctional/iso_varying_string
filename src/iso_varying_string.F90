@@ -1574,14 +1574,45 @@ contains
     end subroutine
 
 #ifdef COMPILER_LACKS_COLLECTIVE_SUBROUTINES
+! The following procedures are copies of, or derived from, procedures in the
+! sourcery library (https://github.com/sourcerinstitute/sourcery)
+! As such, their license is provided below
+!
+! BSD 3-Clause License
+!
+! Copyright (c) 2020, Sourcery Institute
+! All rights reserved.
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!
+! 1. Redistributions of source code must retain the above copyright notice, this
+!    list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+!
+! 3. Neither the name of the copyright holder nor the names of its
+!    contributors may be used to endorse or promote products derived from
+!    this software without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+! DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+! FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+! DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+! SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+! CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+! OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+! OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     subroutine co_broadcast_integer(a,source_image,stat,errmsg)
         integer, intent(inout) :: a
         integer, intent(in) :: source_image
         integer, intent(out), optional ::  stat
         character(len=*), intent(inout), optional :: errmsg
 
-        ! proper credit for the following code goes to the sourcery library
-        ! https://github.com/sourcerinstitute/sourcery
         integer, allocatable :: message[:]
         integer, parameter :: root_node=1, default_root_image=1
         integer even_child_image, odd_child_image, parent_image, my_image
@@ -1641,8 +1672,6 @@ contains
         integer, intent(out), optional ::  stat
         character(len=*), intent(inout), optional :: errmsg
 
-        ! proper credit for the following code goes to the sourcery library
-        ! https://github.com/sourcerinstitute/sourcery
         character(len=:), allocatable :: message[:]
         integer, parameter :: root_node=1, default_root_image=1
         integer even_child_image, odd_child_image, parent_image, my_image
@@ -1702,8 +1731,6 @@ contains
         integer, intent(out), optional ::  stat
         character(len=*), intent(inout), optional :: errmsg
 
-        ! proper credit for the following code goes to the sourcery library
-        ! https://github.com/sourcerinstitute/sourcery
         character(len=1), allocatable :: message(:)[:]
         integer, parameter :: root_node=1, default_root_image=1
         integer even_child_image, odd_child_image, parent_image, my_image
