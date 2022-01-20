@@ -1312,36 +1312,145 @@ contains
             every_ = .false.
         end if
 
-        replaced = recursive_replace(string)
-    contains
-        pure recursive function recursive_replace(string_) result(replaced_)
-            character(len=*), intent(in) :: string_
-            type(varying_string) :: replaced_
+        if (every_) then
+            block
+                integer :: i
+                integer :: new_length
+                character(len=:), allocatable :: new_string
+                integer :: num_targets
+                integer :: target_length, substring_length
+                integer, allocatable :: target_positions(:), substring_positions(:)
 
-            integer :: position
-
-            position = index(string_, target, back_)
-            if (position /= 0) then
-                if (every_) then
-                    if (back_) then
-                        replaced_ = &
-                                recursive_replace(string_(1:position-1)) &
-                                // substring &
-                                // string_(position+len(target):)
-                    else
-                        replaced_ = &
-                                string_(1:position-1) &
-                                // substring &
-                                // recursive_replace(string_(position+len(target):))
+                num_targets = get_num_targets(string, target, back_)
+                if (num_targets > 0) then
+                    target_length = len(target)
+                    substring_length = len(substring)
+                    new_length = &
+                            len(string) &
+                            - num_targets*target_length &
+                            + num_targets*substring_length
+                    allocate(character(len=new_length)::new_string)
+                    allocate(target_positions(num_targets))
+                    allocate(substring_positions(num_targets))
+                    call get_positions( &
+                            string, &
+                            target, &
+                            back_, &
+                            num_targets, &
+                            substring_length, &
+                            target_positions, &
+                            substring_positions)
+                    if (target_positions(1) > 1) then
+                        new_string(1 : substring_positions(1)-1) = string(1 : target_positions(1)-1)
                     end if
+                    new_string(substring_positions(1) : substring_positions(1)+substring_length-1) = substring
+                    do i = 2, num_targets
+                        new_string(substring_positions(i-1)+substring_length : substring_positions(i)-1) = &
+                                string(target_positions(i-1)+target_length:target_positions(i)-1)
+                        new_string(substring_positions(i) : substring_positions(i)+substring_length-1) = substring
+                    end do
+                    if (target_positions(num_targets) + target_length > len(string)) then
+                        new_string(substring_positions(num_targets)+substring_length:) = &
+                                string(target_positions(num_targets)+target_length:)
+                    end if
+                    replaced = new_string
                 else
-                    replaced_ = replace( &
-                            string_, position, position+len(target)-1, substring)
+                    replaced = string
                 end if
+            end block
+        else
+            block
+                integer :: position
+
+                position = index(string, target, back_)
+                if (position /= 0) then
+                    replaced = string(1:position-1) // substring // string(position+len(target):)
+                else
+                    replaced = string
+                end if
+            end block
+        end if
+    contains
+        pure function get_num_targets(string_, target_, back__) result(num_targets_)
+            character(len=*), intent(in) :: string_
+            character(len=*), intent(in) :: target_
+            logical, intent(in) :: back__
+            integer :: num_targets_
+
+            integer :: len_string
+            integer :: len_target
+            integer :: prev_start
+
+            len_string = len(string_)
+            len_target = len(target_)
+            prev_start = index(string_, target_, back__)
+            if (prev_start == 0) then
+                num_targets_ = 0
             else
-                replaced_ = string_
+                num_targets_ = 1
+                if (back__) then
+                  do
+                      if (prev_start == 1) exit
+                      prev_start = index(string_(1:prev_start-1), target_, back__)
+                      if (prev_start == 0) then
+                          exit
+                      else
+                          num_targets_ = num_targets_ + 1
+                      end if
+                  end do
+                else
+                    do
+                        if (prev_start+len_target > len_string) exit
+                        if (index(string_(prev_start+len_target:), target_) == 0) then
+                            exit
+                        else
+                            prev_start = index(string_(prev_start+len_target:), target_) + prev_start + len_target - 1
+                            num_targets_ = num_targets_ + 1
+                        end if
+                    end do
+                end if
             end if
         end function
+
+        pure subroutine get_positions( &
+              string_, &
+              target_, &
+              back__, &
+              num_targets_, &
+              len_substring, &
+              target_positions_, &
+              substring_positions_)
+          character(len=*), intent(in) :: string_
+          character(len=*), intent(in) :: target_
+          logical, intent(in) :: back__
+          integer, intent(in) :: num_targets_
+          integer, intent(in) :: len_substring
+          integer, intent(out) :: target_positions_(:), substring_positions_(:)
+
+          integer :: i, len_target
+
+          len_target = len(target_)
+          if (back__) then
+              target_positions_(num_targets_) = index(string_, target_, back__)
+              do i = num_targets_-1, 1, -1
+                  target_positions_(i) = index(string_(1:target_positions_(i+1)-1), target_, back__)
+              end do
+          else
+              target_positions_(1) = index(string_, target_)
+              do i = 2, num_targets_
+                  target_positions_(i) = &
+                          index(string_(target_positions_(i-1)+len_target:), target_) &
+                          + target_positions_(i-1) + len_target - 1
+              end do
+          end if
+          substring_positions_(1) = target_positions_(1)
+          do i = 2, num_targets_
+              substring_positions_(i) = &
+                      substring_positions_(i-1) &
+                      + (target_positions_(i) - target_positions_(i-1)) &
+                      + (len_substring - len_target)
+          end do
+        end subroutine
     end function replace_target_character_with_character_in_character
 
     elemental function replace_target_character_with_character_in_string( &
