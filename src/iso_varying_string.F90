@@ -708,11 +708,11 @@ contains
         repeated = repeat(char(string), ncopies)
     end function
 
-    function character_repeat(string, ncopies) result(repeated)
+    pure function character_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
-        character(len=*), intent(in) :: string
+        character(len=:), allocatable, intent(in) :: string
         integer, intent(in) :: ncopies
-        character(len=*) :: repeated
+        character(len=:), allocatable :: repeated
         intrinsic :: repeat
 
         repeated = repeat(string, ncopies)
