@@ -708,7 +708,7 @@ contains
         repeated = repeat(char(string), ncopies)
     end function
 
-    elemental function character_repeat(string, ncopies) result(repeated)
+    function character_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
         character(len=*), intent(in) :: string
         integer, intent(in) :: ncopies
