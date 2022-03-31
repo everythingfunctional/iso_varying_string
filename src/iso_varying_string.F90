@@ -660,11 +660,12 @@ contains
         less_than_or_equals = lle(char(string_a), string_b)
     end function
 
-    elemental function string_llt_string(string_a, string_b) result(less_than)          ! Sec 3.4.12
+    elemental function string_llt_string(string_a, string_b) result(less_than)
+        ! Sec 3.4.12
         type(varying_string), intent(in) :: string_a
         type(varying_string), intent(in) :: string_b
-        intrinsic :: llt
         logical :: less_than
+        intrinsic :: llt
 
         less_than = llt(char(string_a), char(string_b))
     end function
