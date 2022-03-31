@@ -149,12 +149,10 @@ module iso_varying_string
         module procedure string_llt_string
         module procedure character_llt_string
         module procedure string_llt_character
-        module procedure character_llt_character
     end interface llt
 
     interface repeat ! Sec. 3.4.13
         module procedure string_repeat
-        module procedure character_repeat
     end interface
 
     interface scan ! Sec. 3.4.14
@@ -662,10 +660,10 @@ contains
         less_than_or_equals = lle(char(string_a), string_b)
     end function
 
-    elemental function string_llt_string(string_a, string_b) result(less_than)
-        ! Sec 3.4.12
+    elemental function string_llt_string(string_a, string_b) result(less_than)          ! Sec 3.4.12
         type(varying_string), intent(in) :: string_a
         type(varying_string), intent(in) :: string_b
+        intrinsic :: llt
         logical :: less_than
 
         less_than = llt(char(string_a), char(string_b))
@@ -675,6 +673,7 @@ contains
         ! Sec 3.4.12
         character(len=*), intent(in) :: string_a
         type(varying_string), intent(in) :: string_b
+        intrinsic :: llt
         logical :: less_than
 
         less_than = llt(string_a, char(string_b))
@@ -684,38 +683,20 @@ contains
         ! Sec 3.4.12
         type(varying_string), intent(in) :: string_a
         character(len=*), intent(in) :: string_b
+        intrinsic :: llt
         logical :: less_than
 
         less_than = llt(char(string_a), string_b)
     end function
 
-    elemental function character_llt_character(string_a, string_b) result(less_than)
-        ! Sec 3.4.12
-        character(len=*), intent(in) :: string_a
-        character(len=*), intent(in) :: string_b
-        logical :: less_than
-        intrinsic :: llt
-
-        less_than = llt(string_a, string_b)
-    end function character_llt_character
-
     elemental function string_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
         type(varying_string), intent(in) :: string
         integer, intent(in) :: ncopies
+        intrinsic :: repeat
         type(varying_string) :: repeated
 
         repeated = repeat(char(string), ncopies)
-    end function
-
-    pure function character_repeat(string, ncopies) result(repeated)
-        ! Sec. 3.4.13
-        character(len=:), allocatable, intent(in) :: string
-        integer, intent(in) :: ncopies
-        character(len=:), allocatable :: repeated
-        intrinsic :: repeat
-
-        repeated = repeat(string, ncopies)
     end function
 
     elemental function string_scan_string(string, set, back) result(position)
