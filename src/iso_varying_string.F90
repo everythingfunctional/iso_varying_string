@@ -697,11 +697,10 @@ contains
         type(varying_string) :: repeated
         intrinsic :: repeat
         character(len=len(string)) :: tmp1
-        character(len=len(string)*ncopies) :: tmp2
+        !character(len=len(string)*ncopies) :: tmp2
 
         tmp1 = char(string) ! interface char
-        tmp2 = repeat(tmp1, ncopies) ! repeat intrinsic
-        repeated = tmp2 ! operator(=)
+        repeated = repeat(tmp1, ncopies) ! repeat intrinsic and operator(=)
     end function
 
     elemental function string_scan_string(string, set, back) result(position)
