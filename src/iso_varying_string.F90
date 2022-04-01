@@ -149,7 +149,7 @@ module iso_varying_string
         module procedure string_llt_string
         module procedure character_llt_string
         module procedure string_llt_character
-    end interface
+    end interface llt
 
     interface repeat ! Sec. 3.4.13
         module procedure string_repeat
@@ -665,6 +665,7 @@ contains
         type(varying_string), intent(in) :: string_a
         type(varying_string), intent(in) :: string_b
         logical :: less_than
+        intrinsic :: llt
 
         less_than = llt(char(string_a), char(string_b))
     end function
@@ -673,6 +674,7 @@ contains
         ! Sec 3.4.12
         character(len=*), intent(in) :: string_a
         type(varying_string), intent(in) :: string_b
+        intrinsic :: llt
         logical :: less_than
 
         less_than = llt(string_a, char(string_b))
@@ -682,18 +684,28 @@ contains
         ! Sec 3.4.12
         type(varying_string), intent(in) :: string_a
         character(len=*), intent(in) :: string_b
+        intrinsic :: llt
         logical :: less_than
 
         less_than = llt(char(string_a), string_b)
     end function
-
     elemental function string_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
         type(varying_string), intent(in) :: string
         integer, intent(in) :: ncopies
         type(varying_string) :: repeated
 
-        repeated = repeat(char(string), ncopies)
+        intrinsic :: repeat
+
+        if (allocated(string%characters)) then
+            block
+                character(len=len(string)) :: tmp_char
+                tmp_char = string
+                repeated = repeat(tmp_char, ncopies)
+            end block
+        else
+            repeated = ""
+        end if
     end function
 
     elemental function string_scan_string(string, set, back) result(position)
