@@ -696,11 +696,10 @@ contains
         integer, intent(in) :: ncopies
         type(varying_string) :: repeated
         intrinsic :: repeat
-        character(len=len(string)) :: tmp1
-        !character(len=len(string)*ncopies) :: tmp2
+        character(len=len(string)) :: tmp_char
 
-        tmp1 = char(string) ! interface char
-        repeated = repeat(tmp1, ncopies) ! repeat intrinsic and operator(=)
+        tmp_char = char(string)
+        repeated = repeat(tmp_char, ncopies)
     end function
 
     elemental function string_scan_string(string, set, back) result(position)
