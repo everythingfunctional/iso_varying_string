@@ -694,10 +694,12 @@ contains
         ! Sec. 3.4.13
         type(varying_string), intent(in) :: string
         integer, intent(in) :: ncopies
-        intrinsic :: repeat
         type(varying_string) :: repeated
+        intrinsic :: repeat
+        character(len=ncopies*len(string)) :: tmp
 
-        repeated = repeat(char(string), ncopies)
+        tmp = repeat(char(string), ncopies)
+        repeated = tmp
     end function
 
     elemental function string_scan_string(string, set, back) result(position)
