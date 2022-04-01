@@ -689,17 +689,23 @@ contains
 
         less_than = llt(char(string_a), string_b)
     end function
-
     elemental function string_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
         type(varying_string), intent(in) :: string
         integer, intent(in) :: ncopies
         type(varying_string) :: repeated
-        intrinsic :: repeat
-        character(len=len(string)) :: tmp_char
 
-        tmp_char = char(string)
-        repeated = repeat(tmp_char, ncopies)
+        intrinsic :: repeat
+
+        if (allocated(string%characters)) then
+            block
+                character(len=len(string)) :: tmp_char
+                tmp_char = string
+                repeated = repeat(tmp_char, ncopies)
+            end block
+        else
+            repeated = ""
+        end if
     end function
 
     elemental function string_scan_string(string, set, back) result(position)
