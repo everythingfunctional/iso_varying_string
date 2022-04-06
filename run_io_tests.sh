@@ -9,14 +9,14 @@ compiler="${1:-gfortran}"
 
 fpm build --compiler "${compiler}"
 
-simple_put_response=$(fpm test --compiler "${compiler}" --target simple_put)
+simple_put_response=$(fpm test --compiler "${compiler}" --target simple_put | tail -1)
 expected_simple_put_response="hello from simple_put"
 if [[ "${simple_put_response}" != "${expected_simple_put_response}" ]]; then
     echo "expected '${expected_simple_put_response}' but got '${simple_put_response}'"
     exit 1
 fi
 
-string_put_response=$(fpm test --compiler "${compiler}" --target string_put)
+string_put_response=$(fpm test --compiler "${compiler}" --target string_put | tail -1)
 expected_string_put_response="hello from string_put"
 if [[ "${string_put_response}" != "${expected_string_put_response}" ]]; then
     echo "expected '${expected_string_put_response}' but got '${string_put_response}'"
@@ -39,14 +39,14 @@ fpm test --compiler "${compiler}" --target get_terminator << EOF
 hello,get terminator
 EOF
 
-simple_put_line_response=$(fpm test --compiler "${compiler}" --target simple_put_line)
+simple_put_line_response=$(fpm test --compiler "${compiler}" --target simple_put_line | tail -1)
 expected_simple_put_line_response="hello from simple_put_line"
 if [[ "${simple_put_line_response}" != "${expected_simple_put_line_response}" ]]; then
     echo "expected '${expected_simple_put_line_response}' but got '${simple_put_line_response}'"
     exit 1
 fi
 
-string_put_line_response=$(fpm test --compiler "${compiler}" --target string_put_line)
+string_put_line_response=$(fpm test --compiler "${compiler}" --target string_put_line | tail -1)
 expected_string_put_line_response="hello from string_put_line"
 if [[ "${string_put_line_response}" != "${expected_string_put_line_response}" ]]; then
     echo "expected '${expected_string_put_line_response}' but got '${string_put_line_response}'"
