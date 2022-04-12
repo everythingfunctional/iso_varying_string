@@ -1361,7 +1361,7 @@ contains
                                 string(target_positions(i-1)+target_length:target_positions(i)-1)
                         new_string(substring_positions(i) : substring_positions(i)+substring_length-1) = substring
                     end do
-                    if (target_positions(num_targets) + target_length > len(string)) then
+                    if (target_positions(num_targets) + target_length <= len(string)) then
                         new_string(substring_positions(num_targets)+substring_length:) = &
                                 string(target_positions(num_targets)+target_length:)
                     end if

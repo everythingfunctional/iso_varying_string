@@ -33,6 +33,9 @@ contains
                         // " search direction specified until all occurrences of" &
                         // " target in the copy string are replaced.", &
                         check_replace_character_with_character_in_character_every) &
+                , it( &
+                        "Get's the expected result for various examples and edge cases", &
+                        check_replace_examples) &
                 ])
     end function
 
@@ -232,6 +235,13 @@ contains
                                 "with this", &
                                 every = .TRUE., &
                                 back = .TRUE.))
+    end function
+
+    pure function check_replace_examples() result(result_)
+        type(result_t) :: result_
+
+        result_ = &
+            assert_equals("A.", replace(".A.", ".A", "A", every=.true.))
     end function
 
     pure function check_replace_character_with_character_in_string() result(result_)
