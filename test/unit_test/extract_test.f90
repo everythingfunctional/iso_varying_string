@@ -1,6 +1,6 @@
 module extract_test
     use iso_varying_string, only: extract, var_str
-    use vegetables, only: &
+    use veggies, only: &
             result_t, test_item_t, assert_empty, assert_equals, describe, it
 
     implicit none

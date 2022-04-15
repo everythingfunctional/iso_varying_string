@@ -1,6 +1,6 @@
 module split_string_set_test
     use iso_varying_string, only: varying_string, assignment(=), split, var_str
-    use vegetables, only: &
+    use veggies, only: &
             result_t, test_item_t, assert_empty, assert_equals, describe, it
 
     implicit none

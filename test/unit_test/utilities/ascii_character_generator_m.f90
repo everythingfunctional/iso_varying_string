@@ -1,6 +1,6 @@
 module ascii_character_generator_m
     use character_input_m, only: character_input_t
-    use vegetables, only: &
+    use veggies, only: &
             generated_t, &
             generator_t, &
             input_t, &

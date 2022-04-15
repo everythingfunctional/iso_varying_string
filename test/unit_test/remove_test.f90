@@ -1,6 +1,6 @@
 module remove_test
     use iso_varying_string, only: remove, var_str
-    use vegetables, only: result_t, test_item_t, assert_equals, describe, it
+    use veggies, only: result_t, test_item_t, assert_equals, describe, it
 
     implicit none
     private

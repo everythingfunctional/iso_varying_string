@@ -2,7 +2,7 @@ module iachar_test
     use ascii_character_generator_m, only: ASCII_CHARACTER_GENERATOR
     use character_input_m, only: character_input_t
     use iso_varying_string, only: iachar, var_str
-    use vegetables, only: &
+    use veggies, only: &
             input_t, result_t, test_item_t, assert_equals, describe, fail, it
 
     implicit none

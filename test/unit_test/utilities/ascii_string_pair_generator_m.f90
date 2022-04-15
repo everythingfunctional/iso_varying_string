@@ -1,7 +1,7 @@
 module ascii_string_pair_generator_m
     use iso_varying_string, only: extract, len, var_str
     use string_pair_input_m, only: string_pair_input_t
-    use vegetables, only: &
+    use veggies, only: &
             generated_t, &
             generator_t, &
             input_t, &

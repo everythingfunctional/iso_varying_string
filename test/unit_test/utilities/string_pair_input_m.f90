@@ -1,6 +1,6 @@
 module string_pair_input_m
     use iso_varying_string, only: varying_string
-    use vegetables, only: input_t
+    use veggies, only: input_t
 
     implicit none
     private

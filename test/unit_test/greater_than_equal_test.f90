@@ -2,7 +2,7 @@ module greater_than_equal_test
     use ascii_string_pair_generator_m, only: ASCII_STRING_PAIR_GENERATOR
     use iso_varying_string, only: operator(//), operator(>=), char
     use string_pair_input_m, only: string_pair_input_t
-    use vegetables, only: &
+    use veggies, only: &
             input_t, result_t, test_item_t, assert_that, describe, fail, it
 
     implicit none
