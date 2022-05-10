@@ -1,5 +1,5 @@
 module ascii_string_pair_generator_m
-    use iso_varying_string, only: extract, len, var_str
+    use iso_varying_string, only: varying_string, extract, len, var_str
     use string_pair_input_m, only: string_pair_input_t
     use veggies, only: &
             generated_t, &
@@ -39,28 +39,30 @@ contains
         class(input_t), intent(in) :: input
         type(shrink_result_t) :: shrunk
 
+        type(varying_string) :: first, second
+
         select type (input)
         type is (string_pair_input_t)
-            associate(first => input%first(), second => input%second())
-                if (len(first) <= 1) then
-                    if (len(second) <= 1) then
-                        shrunk = simplest_value(string_pair_input_t( &
-                                var_str(""), var_str("")))
-                    else
-                        shrunk = shrunk_value(string_pair_input_t( &
-                                var_str(""), extract(second, finish=len(second)-1)))
-                    end if
+            first = input%first()
+            second = input%second()
+            if (len(first) <= 1) then
+                if (len(second) <= 1) then
+                    shrunk = simplest_value(string_pair_input_t( &
+                            var_str(""), var_str("")))
                 else
-                    if (len(second) <= 1) then
-                        shrunk = shrunk_value(string_pair_input_t( &
-                                extract(first, finish=len(first)-1), var_str("")))
-                    else
-                        shrunk = shrunk_value(string_pair_input_t( &
-                                extract(first, finish=len(first)-1), &
-                                extract(second, finish=len(second)-1)))
-                    end if
+                    shrunk = shrunk_value(string_pair_input_t( &
+                            var_str(""), extract(second, finish=len(second)-1)))
                 end if
-            end associate
+            else
+                if (len(second) <= 1) then
+                    shrunk = shrunk_value(string_pair_input_t( &
+                            extract(first, finish=len(first)-1), var_str("")))
+                else
+                    shrunk = shrunk_value(string_pair_input_t( &
+                            extract(first, finish=len(first)-1), &
+                            extract(second, finish=len(second)-1)))
+                end if
+            end if
         end select
     end function
 end module

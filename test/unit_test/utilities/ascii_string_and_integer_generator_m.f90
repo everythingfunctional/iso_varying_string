@@ -1,5 +1,5 @@
 module ascii_string_and_integer_generator_m
-    use iso_varying_string, only: extract, len, var_str
+    use iso_varying_string, only: varying_string, extract, len, var_str
     use string_and_integer_input_m, only: string_and_integer_input_t
     use veggies, only: &
             generated_t, &
@@ -41,27 +41,30 @@ contains
         class(input_t), intent(in) :: input
         type(shrink_result_t) :: shrunk
 
+        integer :: integer_
+        type(varying_string) :: string
+
         select type (input)
         type is (string_and_integer_input_t)
-            associate(string => input%string(), integer_ => input%integer_())
-                if (integer_ == 0) then
-                    if (len(string) <= 1) then
-                        shrunk = simplest_value(string_and_integer_input_t( &
-                                var_str(""), 0))
-                    else
-                        shrunk = shrunk_value(string_and_integer_input_t( &
-                                extract(string, finish=len(string)-1), 0))
-                    end if
+            integer_ = input%integer_()
+            string = input%string()
+            if (integer_ == 0) then
+                if (len(string) <= 1) then
+                    shrunk = simplest_value(string_and_integer_input_t( &
+                            var_str(""), 0))
                 else
-                    if (len(string) <= 1) then
-                        shrunk = shrunk_value(string_and_integer_input_t( &
-                                var_str(""), integer_/2))
-                    else
-                        shrunk = shrunk_value(string_and_integer_input_t( &
-                                extract(string, finish=len(string)-1), integer_/2))
-                    end if
+                    shrunk = shrunk_value(string_and_integer_input_t( &
+                            extract(string, finish=len(string)-1), 0))
                 end if
-            end associate
+            else
+                if (len(string) <= 1) then
+                    shrunk = shrunk_value(string_and_integer_input_t( &
+                            var_str(""), integer_/2))
+                else
+                    shrunk = shrunk_value(string_and_integer_input_t( &
+                            extract(string, finish=len(string)-1), integer_/2))
+                end if
+            end if
         end select
     end function
 end module

@@ -1,13 +1,13 @@
 name = "iso_varying_string"
-version = "3.0.1"
+version = "3.0.2"
 license = "MIT"
 author = "Brad Richardson"
 maintainer = "everythingfunctional@protonmail.com"
 copyright = "2020 Brad Richardson"
 
 [dev-dependencies]
-veggies = { git = "https://gitlab.com/everythingfunctional/veggies", tag = "v1.0.0" }
-strff = { git = "https://gitlab.com/everythingfunctional/strff", tag = "v3.0.0"}
+veggies = { git = "https://gitlab.com/everythingfunctional/veggies", tag = "v1.0.2" }
+strff = { git = "https://gitlab.com/everythingfunctional/strff", tag = "v3.0.4"}
 
 [[test]]
 name = "unit_test"
