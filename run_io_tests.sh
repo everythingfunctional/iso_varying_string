@@ -52,3 +52,10 @@ if [[ "${string_put_line_response}" != "${expected_string_put_line_response}" ]]
     echo "expected '${expected_string_put_line_response}' but got '${string_put_line_response}'"
     exit 1
 fi
+
+simple_print_response=$(fpm test --compiler "${compiler}" --target simple_print | tail -1)
+expected_simple_print_response=" hello from simple_print"
+if [[ "${simple_print_response}" != "${expected_simple_print_response}" ]]; then
+    echo "expected '${expected_simple_print_response}' but got '${simple_print_response}'"
+    exit 1
+fi

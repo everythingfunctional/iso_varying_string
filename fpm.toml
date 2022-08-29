@@ -58,3 +58,8 @@ main = "main.f90"
 name = "round_trip"
 source-dir = "test/round_trip"
 main = "main.f90"
+
+[[test]]
+name = "simple_print"
+source-dir = "test/simple_print"
+main = "main.f90"

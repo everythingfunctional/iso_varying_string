@@ -72,6 +72,10 @@ module iso_varying_string
         !! shall be `PRIVATE` to the module.
         private
         character(len=1), allocatable :: characters(:)
+    contains
+        private
+        procedure :: write_formatted
+        generic, public :: write(formatted) => write_formatted
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -2407,5 +2411,25 @@ contains
         logical, optional, intent(in) :: back
 
         call split(string, word, char(set), separator, back)
+    end subroutine
+
+    subroutine write_formatted(self, unit, iotype, v_list, iostat, iomsg)
+        class(varying_string), intent(in) :: self
+        integer, intent(in) :: unit
+        character(len=*), intent(in) :: iotype
+        integer, intent(in) :: v_list(:)
+        integer, intent(out) :: iostat
+        character(len=*), intent(inout) :: iomsg
+
+        select case (iotype)
+        case ("LISTDIRECTED")
+            write(unit, '(A)', iostat=iostat, iomsg=iomsg) char(self)
+        case ("NAMELIST")
+            error stop "Not implemented"
+        case ("DT")
+            error stop "Not implemented"
+        case default
+            error stop "Unknown iotype"
+        end select
     end subroutine
 end module
