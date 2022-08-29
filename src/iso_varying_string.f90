@@ -2427,7 +2427,22 @@ contains
         case ("NAMELIST")
             write(unit, '(A,",")', iostat=iostat, iomsg=iomsg) '"' // char(self) // '"'
         case ("DT")
-            error stop "Not implemented"
+            if (size(v_list) > 0) then
+                if (v_list(1) > 0) then
+                    block
+                        character(len=20) :: num_string
+                        character(len=:), allocatable :: fmt
+
+                        write(num_string, '(I0)') v_list(1)
+                        fmt = "(A" // trim(num_string) // ")"
+                        write(unit, fmt, iostat=iostat, iomsg=iomsg) char(self)
+                    end block
+                else
+                    write(unit, '(A)', iostat=iostat, iomsg=iomsg) char(self)
+                end if
+            else
+                write(unit, '(A)', iostat=iostat, iomsg=iomsg) char(self)
+            end if
         case default
             error stop "Unknown iotype"
         end select

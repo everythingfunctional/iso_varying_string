@@ -70,3 +70,14 @@ EOF
 if [[ "${namelist_write_response}" != "${expected_namelist_write_response}" ]]; then
     echo "expected '${expected_namelist_write_response}' but got '${namelist_write_response}'"
 fi
+
+dt_write_response=$(fpm test --compiler "${compiler}" --target dt_write)
+expected_dt_write_response=$(cat << EOF
+hello from dt_write
+hello from
+  hello from dt_write
+EOF
+)
+if [[ "${dt_write_response}" != "${expected_dt_write_response}" ]]; then
+    echo "expected '${expected_dt_write_response}' but got '${dt_write_response}'"
+fi
