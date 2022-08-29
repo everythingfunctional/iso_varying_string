@@ -63,3 +63,8 @@ main = "main.f90"
 name = "simple_print"
 source-dir = "test/simple_print"
 main = "main.f90"
+
+[[test]]
+name = "namelist_write"
+source-dir = "test/namelist_write"
+main = "main.f90"

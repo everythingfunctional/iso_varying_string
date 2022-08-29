@@ -59,3 +59,14 @@ if [[ "${simple_print_response}" != "${expected_simple_print_response}" ]]; then
     echo "expected '${expected_simple_print_response}' but got '${simple_print_response}'"
     exit 1
 fi
+
+namelist_write_response=$(fpm test --compiler "${compiler}" --target namelist_write)
+expected_namelist_write_response=$(cat << EOF
+&OUTPUT
+ STRING="hello from namelist_write",
+ /
+EOF
+)
+if [[ "${namelist_write_response}" != "${expected_namelist_write_response}" ]]; then
+    echo "expected '${expected_namelist_write_response}' but got '${namelist_write_response}'"
+fi

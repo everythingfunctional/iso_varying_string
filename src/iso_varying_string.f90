@@ -2425,7 +2425,7 @@ contains
         case ("LISTDIRECTED")
             write(unit, '(A)', iostat=iostat, iomsg=iomsg) char(self)
         case ("NAMELIST")
-            error stop "Not implemented"
+            write(unit, '(A,",")', iostat=iostat, iomsg=iomsg) '"' // char(self) // '"'
         case ("DT")
             error stop "Not implemented"
         case default
