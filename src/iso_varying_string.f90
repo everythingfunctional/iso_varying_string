@@ -75,9 +75,13 @@ module iso_varying_string
     contains
         private
         procedure :: write_formatted
+        procedure :: write_unformatted
         procedure :: read_formatted
+        procedure :: read_unformatted
         generic, public :: write(formatted) => write_formatted
+        generic, public :: write(unformatted) => write_unformatted
         generic, public :: read(formatted) => read_formatted
+        generic, public :: read(unformatted) => read_unformatted
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -2450,6 +2454,15 @@ contains
         end select
     end subroutine
 
+    subroutine write_unformatted(self, unit, iostat, iomsg)
+        class(varying_string), intent(in) :: self
+        integer, intent(in) :: unit
+        integer, intent(out) :: iostat
+        character(len=*), intent(inout) :: iomsg
+
+        write(unit, iostat=iostat, iomsg=iomsg) char(self)
+    end subroutine
+
     subroutine read_formatted(self, unit, iotype, v_list, iostat, iomsg)
         class(varying_string), intent(inout) :: self
         integer, intent(in) :: unit
@@ -2534,5 +2547,14 @@ contains
         class default
             error stop "Not supported for extended types"
         end select
+    end subroutine
+
+    subroutine read_unformatted(self, unit, iostat, iomsg)
+        class(varying_string), intent(inout) :: self
+        integer, intent(in) :: unit
+        integer, intent(out) :: iostat
+        character(len=*), intent(inout) :: iomsg
+
+        read(unit, *, iostat=iostat, iomsg=iomsg) self
     end subroutine
 end module
