@@ -8,5 +8,5 @@ program dt_write
     string = "hello from dt_write"
     print '(DT)', string
     print '(DT(10))', string
-    print '(DT(21),A)', string
+    print '(DT(21))', string
 end program

@@ -73,3 +73,18 @@ main = "main.f90"
 name = "dt_write"
 source-dir = "test/dt_write"
 main = "main.f90"
+
+[[test]]
+name = "simple_read"
+source-dir = "test/simple_read"
+main = "main.f90"
+
+[[test]]
+name = "namelist_read"
+source-dir = "test/namelist_read"
+main = "main.f90"
+
+[[test]]
+name = "dt_read"
+source-dir = "test/dt_read"
+main = "main.f90"

@@ -81,3 +81,21 @@ EOF
 if [[ "${dt_write_response}" != "${expected_dt_write_response}" ]]; then
     echo "expected '${expected_dt_write_response}' but got '${dt_write_response}'"
 fi
+
+fpm test --compiler "${compiler}" --target simple_read << EOF
+"hello simple_read"
+next_line
+EOF
+
+fpm test --compiler "${compiler}" --target namelist_read << EOF
+&INPUT
+ STRING="hello namelist_read"
+ /
+EOF
+
+fpm test --compiler "${compiler}" --target dt_read << EOF
+hello1 dt_read
+
+hello2 dt_read
+hello3 dt_read and
+EOF

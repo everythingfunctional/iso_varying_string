@@ -75,7 +75,9 @@ module iso_varying_string
     contains
         private
         procedure :: write_formatted
+        procedure :: read_formatted
         generic, public :: write(formatted) => write_formatted
+        generic, public :: read(formatted) => read_formatted
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -2444,7 +2446,93 @@ contains
                 write(unit, '(A)', iostat=iostat, iomsg=iomsg) char(self)
             end if
         case default
-            error stop "Unknown iotype"
+            error stop "Unknown iotype: " // iotype
+        end select
+    end subroutine
+
+    subroutine read_formatted(self, unit, iotype, v_list, iostat, iomsg)
+        class(varying_string), intent(inout) :: self
+        integer, intent(in) :: unit
+        character(len=*), intent(in) :: iotype
+        integer, intent(in) :: v_list(:)
+        integer, intent(out) :: iostat
+        character(len=*), intent(inout) :: iomsg
+
+        select type (self)
+        type is (varying_string)
+        select case (iotype)
+        case ("LISTDIRECTED", "NAMELIST")
+            block
+                character(len=1) :: next_char
+                character(len=:), allocatable :: end_chars
+                next_char = " "
+                do while (index(" ", next_char) > 0)
+                    read(unit, fmt='(A)', iostat=iostat, iomsg=iomsg) next_char
+                    if (iostat /= 0) return
+                end do
+                if (next_char == ',') then
+                    return
+                else if (next_char == '"') then
+                    end_chars = '"'
+                    self = ""
+                else if (next_char == "'") then
+                    end_chars = "'"
+                    self = ""
+                else
+                    end_chars = " ,"
+                    self = next_char
+                end if
+                do
+                    read(unit, fmt='(A)', iostat=iostat, iomsg=iomsg) next_char
+                    if (iostat /= 0) return
+                    if (index(end_chars, next_char) > 0) return
+                    self = self // next_char
+                end do
+            end block
+        case ("DT")
+            if (size(v_list) > 0) then
+                if (v_list(1) > 0) then
+                    block
+                        character(len=v_list(1)) :: to_read
+                        read(unit, '(A)', iostat=iostat, iomsg=iomsg) to_read
+                        self = to_read
+                    end block
+                else
+                    read(unit, '(DT)', iostat=iostat, iomsg=iomsg) self
+                end if
+            else
+                block
+                    character(len=100) :: buffer
+                    integer :: num_read
+                    logical :: first
+                    first = .true.
+                    do
+                        read(unit, fmt='(A)', advance='no', iostat=iostat, iomsg=iomsg, size=num_read) buffer
+                        if (is_iostat_eor(iostat) .or. is_iostat_end(iostat)) then
+                            if (first) then
+                                self = buffer(1:num_read)
+                            else
+                                self = self // buffer(1:num_read)
+                            end if
+                            return
+                        else if (iostat /= 0) then
+                            return
+                        else
+                            if (first) then
+                                self = buffer
+                                first = .false.
+                            else
+                                self = self // buffer
+                            end if
+                        end if
+                    end do
+                end block
+            end if
+        case default
+            error stop "Unknown iotype: " // iotype
+        end select
+        class default
+            error stop "Not supported for extended types"
         end select
     end subroutine
 end module
