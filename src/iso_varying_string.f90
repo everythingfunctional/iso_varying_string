@@ -1,4 +1,27 @@
 module iso_varying_string
+    !! This module defines facilities in Fortran for the manipulation of
+    !! character strings of dynamically variable length. It is in conformance
+    !! with the [ISO/IEC 1539-2: 2000](http://www.astro.wisc.edu/~townsend/resource/download/code/Fortran-ISO_VARYING_STRING.pdf)
+    !! extension to the Fortran Standard.
+    !!
+    !! Neither the internal representation of the derived type, nor the
+    !! algorithms used to implement the procedures or operators are directed
+    !! by the standard, and as such should not be relied upon by any user of
+    !! this module.
+    !!
+    !! It should be noted that this module defines facilities for dynamically
+    !! varying length strings of characters of default kind only. Similar
+    !! facilities could be defined for non-default kind characters by a
+    !! separate, if similar, module for each such character kind.
+    !!
+    !! This module has been designed, as far as is reasonable, to provide for
+    !! varying length character strings the facilities that are available for
+    !! intrinsic fixed length character strings. All the intrinsic operations
+    !! and functions that apply to fixed length character strings have extended
+    !! meanings defined by this module for varying length character strings.
+    !! Also, a small number facilities are defined that are appropriate because
+    !! of the essential differences between the intrinsic type and the varying
+    !! length derived data type.
     implicit none
     private
     public :: &
@@ -38,137 +61,717 @@ module iso_varying_string
             split
 
     type :: varying_string ! Sec. 3.2
+        !! Entities of this type shall represent values that are strings of
+        !! characters of default kind. These character strings may be of any
+        !! non-negative length and this length may vary dynamically during the
+        !! execution of a program. There shall be no arbitrary upper length
+        !! limit other than that imposed by the size of the processor and the
+        !! complexity of the programs it is able to process. The characters
+        !! representing the value of the string have positions 1,2,...,N, where
+        !! N is the length of the string. The internal structure of the type
+        !! shall be `PRIVATE` to the module.
         private
         character(len=1), allocatable :: characters(:)
     end type
 
     interface assignment(=) ! Sec. 3.3.1
+        !! An elemental assignment of the form
+        !!
+        !! ```fortran
+        !! var = expr
+        !! ```
+        !!
+        !! shall be defined with following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! **Action**. The characters that are the value of the expression
+        !! `expr` become the value of the variable `var`. There are two cases:
+        !!
+        !! * *Case(i):* Where the variable is of type `VARYING_STRING`, the
+        !!   the length of the variable becomes that of the expression.
+        !! * *Case(i):* Where the variable is of type `CHARACTER`, the rules
+        !!   of intrinsic assignment to a Fortran character variable apply.
+        !!   Namely, if the expression string is longer than the declared
+        !!   length of the character variable, only the left-most characters are
+        !!   assigned. If the character variable is longer than that of the
+        !!   string expression, it is padded on the right with blanks.
         module procedure assign_character_to_string
         module procedure assign_string_to_character
     end interface
 
     interface operator(//) ! Sec. 3.3.2
+        !! The elemental concatenation operation
+        !!
+        !! ```fortran
+        !! string_a // string_b
+        !! ```
+        !!
+        !! shall be defined with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is a new string whose characters
+        !! are the same as those produced by concatenating the operand strings
+        !! in the order given.
         module procedure concat_strings
         module procedure concat_string_and_character
         module procedure concat_character_and_string
     end interface
 
     interface operator(==) ! Sec. 3.3.3
+        !! Elemental comparison of the form
+        !!
+        !! ```fortran
+        !! string_a == string_b
+        !! ```
+        !!
+        !! shall be defined for operands with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation. Note that
+        !! the equivalent operator form, `.EQ.`, also has its meaning extended
+        !! in this manner.
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` contains
+        !! the same characters in the same sequence as `string_b` and false
+        !! otherwise. If `string_a` and `string_b` are of different lengths, the
+        !! comparison is done as if the shorter string were padded on the right
+        !! with blanks.
         module procedure string_eq_string
         module procedure character_eq_string
         module procedure string_eq_character
     end interface
 
     interface operator(/=) ! Sec. 3.3.3
+        !! Elemental comparison of the form
+        !!
+        !! ```fortran
+        !! string_a /= string_b
+        !! ```
+        !!
+        !! shall be defined for operands with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation. Note that
+        !! the equivalent operator form, `.NE.`, also has its meaning extended
+        !! in this manner.
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is false if `string_a` contains
+        !! the same characters in the same sequence as `string_b` and true
+        !! otherwise. If `string_a` and `string_b` are of different lengths, the
+        !! comparison is done as if the shorter string were padded on the right
+        !! with blanks.
         module procedure string_ne_string
         module procedure character_ne_string
         module procedure string_ne_character
     end interface
 
     interface operator(<) ! Sec. 3.3.3
+        !! Elemental comparison of the form
+        !!
+        !! ```fortran
+        !! string_a < string_b
+        !! ```
+        !!
+        !! shall be defined for operands with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation. Note that
+        !! the equivalent operator form, `.LT.`, also has its meaning extended
+        !! in this manner.
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is
+        !! lexically less than `string_b` and false otherwise. The collating
+        !! sequence used for the comparisons is that defined by the processor
+        !! for characters of default kind. If `string_a` and `string_b` are of
+        !! different lengths, the comparison is done as if the shorter string
+        !! were padded on the right with blanks.
         module procedure string_lt_string
         module procedure character_lt_string
         module procedure string_lt_character
     end interface
 
     interface operator(<=) ! Sec. 3.3.3
+        !! Elemental comparison of the form
+        !!
+        !! ```fortran
+        !! string_a <= string_b
+        !! ```
+        !!
+        !! shall be defined for operands with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation. Note that
+        !! the equivalent operator form, `.LT.`, also has its meaning extended
+        !! in this manner.
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is
+        !! lexically less than or equal to `string_b` and false otherwise. The
+        !! collating sequence used for the comparisons is that defined by the
+        !! processor for characters of default kind. If `string_a` and
+        !! `string_b` are of different lengths, the comparison is done as if the
+        !! shorter string were padded on the right with blanks.
         module procedure string_le_string
         module procedure character_le_string
         module procedure string_le_character
     end interface
 
     interface operator(>) ! Sec. 3.3.3
+        !! Elemental comparison of the form
+        !!
+        !! ```fortran
+        !! string_a > string_b
+        !! ```
+        !!
+        !! shall be defined for operands with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation. Note that
+        !! the equivalent operator form, `.LT.`, also has its meaning extended
+        !! in this manner.
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is
+        !! lexically greater than `string_b` and false otherwise. The collating
+        !! sequence used for the comparisons is that defined by the processor
+        !! for characters of default kind. If `string_a` and `string_b` are of
+        !! different lengths, the comparison is done as if the shorter string
+        !! were padded on the right with blanks.
         module procedure string_gt_string
         module procedure character_gt_string
         module procedure string_gt_character
     end interface
 
     interface operator(>=) ! Sec. 3.3.3
+        !! Elemental comparison of the form
+        !!
+        !! ```fortran
+        !! string_a >= string_b
+        !! ```
+        !!
+        !! shall be defined for operands with the following type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! The values of the operands are unchanged by the operation. Note that
+        !! the equivalent operator form, `.LT.`, also has its meaning extended
+        !! in this manner.
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is
+        !! lexically greater than or equal to `string_b` and false otherwise.
+        !! The collating sequence used for the comparisons is that defined by
+        !! the processor for characters of default kind. If `string_a` and
+        !! `string_b` are of different lengths, the comparison is done as if the
+        !! shorter string were padded on the right with blanks.
         module procedure string_ge_string
         module procedure character_ge_string
         module procedure string_ge_character
     end interface
 
     interface adjustl ! Sec. 3.4.1
+        !! **Description**. Adjusts to the left, removing any leading blanks and
+        !! inserting trailing blanks.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `string` shall be of type `VARYING_STRING`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is the same as `string`, except
+        !! that any leading blanks have been deleted and the same number of
+        !! trailing blanks inserted.
         module procedure string_adjustl
     end interface
 
     interface adjustr ! Sec. 3.4.1
+        !! **Description**. Adjusts to the right, removing any trailing blanks
+        !! and inserting leading blanks.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `string` shall be of type `VARYING_STRING`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is the same as `string`, except
+        !! that any trailing blanks have been deleted and the same number of
+        !! leading blanks inserted.
         module procedure string_adjustr
     end interface
 
     interface char ! Sec. 3.4.3
+        !! **Description.** Converts a varying string value to default `CHARACTER`.
+        !!
+        !! **Class.** Pure transformational function.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be scalar and of type `VARYING_STRING`.
+        !! * `length` (optional) shall be scalar and of type default `INTEGER`.
+        !!
+        !! **Result Characteristics.** Scalar of type default `CHARACTER`. If
+        !! `length` is absent, the result has the same length as `string`. If
+        !! `length` is present, the result has the length specified by the `length`.
+        !!
+        !! **Result Value.**
+        !!
+        !! * *Case(i):* If `length` is absent, the result is a copy of the
+        !!   characters in the argument `string`.
+        !! * *Case(ii):* If `length` is present, the result is a copy of the
+        !!   characters in the argument `string`, that may have been truncated
+        !!   or padded. If `string` is longer than `length`, the result is
+        !!   truncated on the right. If `string` is shorter than `length`, the
+        !!   result is padded on the right with blanks. If `length` is less than
+        !!   one, the result is of zero length.
         module procedure string_to_char
         module procedure string_to_char_with_length
     end interface
 
     interface iachar ! Sec. 3.4.4
+        !! **Description.** Returns the position of a character in the collating
+        !! sequence defined by the International Standard ISO 646: 1991.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `c` shall be of type `VARYING_STRING` and of length
+        !! exactly one.
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.** The result value is the position of the character
+        !! `c` in the collating sequence defined by the International Standard
+        !! ISO 646: 1991 for default characters. If the character `c` is not
+        !! defined in the standard set, the result is processor dependent but is
+        !! always equal to `IACHAR(CHAR(c))`.
         module procedure string_iachar
     end interface
 
     interface ichar ! Sec. 3.4.5
+        !! **Description.** Returns the position of a character in the processor
+        !! defined collating sequence.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `c` shall be of type `VARYING_STRING` and of length
+        !! exactly one.
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.** The result value is the position of the character
+        !! `c` in the processor defined collating sequence for default
+        !! characters. That is the result value is `ICHAR(CHAR(c))`.
         module procedure string_ichar
     end interface
 
     interface index ! Sec. 3.4.6
+        !! **Description.** Returns an integer that is the starting position of
+        !! a substring within a string.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Arguments.**
+        !!
+        !! `string` and `substring` shall be of one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! `back` (optional) shall be of type default `LOGICAL`.
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.**
+        !!
+        !! * *Case(i):* If `back` is absent or is present with the value false,
+        !!   the result is the minimum positive value of `I` such that
+        !!   `EXTRACT(string,I,I+LEN(substring)-1)==substring`, (where `EXTRACT`
+        !!   is defined in this module) or zero if there is no such value.
+        !! * *Case(ii):* If `back` is present with the value true, the result is
+        !!   the maximum value of `I` less than or equal to
+        !!   `LEN(string)-LEN(substring)+1` such that
+        !!   `EXTRACT(string,I,I+LEN(substring))==substring`, or zero if there
+        !!   is no such value.
         module procedure string_index_string
         module procedure string_index_character
         module procedure character_index_string
     end interface
 
     interface len ! Sec. 3.4.7
+        !! **Description.** Returns the length of a character string.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `string` shall be of type `VARYING_STRING`.
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.** The result value is the number of characters in
+        !! `string`.
+        !!
+        !! **Note.** This function is not elemental for `string` of type
+        !! `CHARACTER`.
         module procedure len_string
     end interface
 
     interface len_trim ! Sec. 3.4.8
+        !! **Description.** Returns the length of a string not counting any
+        !! trailing blanks.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `string` shall be of type `VARYING_STRING`.
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.** The result value is the position of the last
+        !! non-blank character in `string`. If the argument `string` contains
+        !! only blank characters or is of zero length, the result is zero.
         module procedure len_trim_string
     end interface
 
     interface lge ! Sec. 3.4.9
+        !! **Description.** Compares the lexical ordering of two strings based
+        !! on the ISO 646: 1991 collating sequence.
+        !!
+        !! **Class.** Elemental function
+        !!
+        !! **Arguments.**
+        !!
+        !! `string_a` and `string_b` shall be of one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is lexically
+        !! greater than or equal to `string_b`, and is false otherwise. The
+        !! collating sequence used to establish the ordering of characters is
+        !! that of the International Standard ISO 646: 1991. If `string_a` and
+        !! `string_b` are of different lengths, the comparison is done as if the
+        !! shorter string were padded on the right with blanks. If either
+        !! argument contains a character `c` not defined by the standard, the
+        !! result value is processor dependent and based on the collating value
+        !! for `IACHAR(c)`. Zero length strings are considered to be lexically
+        !! equal.
         module procedure string_lge_string
         module procedure character_lge_string
         module procedure string_lge_character
     end interface
 
     interface lgt ! Sec. 3.4.10
+        !! **Description.** Compares the lexical ordering of two strings based
+        !! on the ISO 646: 1991 collating sequence.
+        !!
+        !! **Class.** Elemental function
+        !!
+        !! **Arguments.**
+        !!
+        !! `string_a` and `string_b` shall be of one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is lexically
+        !! greater than `string_b`, and is false otherwise. The
+        !! collating sequence used to establish the ordering of characters is
+        !! that of the International Standard ISO 646: 1991. If `string_a` and
+        !! `string_b` are of different lengths, the comparison is done as if the
+        !! shorter string were padded on the right with blanks. If either
+        !! argument contains a character `c` not defined by the standard, the
+        !! result value is processor dependent and based on the collating value
+        !! for `IACHAR(c)`. Zero length strings are considered to be lexically
+        !! equal.
         module procedure string_lgt_string
         module procedure character_lgt_string
         module procedure string_lgt_character
     end interface
 
     interface lle ! Sec. 3.4.11
+        !! **Description.** Compares the lexical ordering of two strings based
+        !! on the ISO 646: 1991 collating sequence.
+        !!
+        !! **Class.** Elemental function
+        !!
+        !! **Arguments.**
+        !!
+        !! `string_a` and `string_b` shall be of one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is lexically
+        !! less than or equal to `string_b`, and is false otherwise. The
+        !! collating sequence used to establish the ordering of characters is
+        !! that of the International Standard ISO 646: 1991. If `string_a` and
+        !! `string_b` are of different lengths, the comparison is done as if the
+        !! shorter string were padded on the right with blanks. If either
+        !! argument contains a character `c` not defined by the standard, the
+        !! result value is processor dependent and based on the collating value
+        !! for `IACHAR(c)`. Zero length strings are considered to be lexically
+        !! equal.
         module procedure string_lle_string
         module procedure character_lle_string
         module procedure string_lle_character
     end interface
 
     interface llt ! Sec. 3.4.12
+        !! **Description.** Compares the lexical ordering of two strings based
+        !! on the ISO 646: 1991 collating sequence.
+        !!
+        !! **Class.** Elemental function
+        !!
+        !! **Arguments.**
+        !!
+        !! `string_a` and `string_b` shall be of one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! **Result Characteristics.** Of type default `LOGICAL`.
+        !!
+        !! **Result Value.** The result value is true if `string_a` is lexically
+        !! less than `string_b`, and is false otherwise. The
+        !! collating sequence used to establish the ordering of characters is
+        !! that of the International Standard ISO 646: 1991. If `string_a` and
+        !! `string_b` are of different lengths, the comparison is done as if the
+        !! shorter string were padded on the right with blanks. If either
+        !! argument contains a character `c` not defined by the standard, the
+        !! result value is processor dependent and based on the collating value
+        !! for `IACHAR(c)`. Zero length strings are considered to be lexically
+        !! equal.
         module procedure string_llt_string
         module procedure character_llt_string
         module procedure string_llt_character
     end interface llt
 
     interface repeat ! Sec. 3.4.13
+        !! **Description.** Concatenates several copies of a string.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` - shall be of type `VARYING_STRING`.
+        !! * `ncopies` - shall be of type default `INTEGER`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`
+        !!
+        !! **Result Value.** The result value is the string produced by repeated
+        !! concatenation of the argument `string`, producing a string containing
+        !! `ncopies` copies of `string`. If the value of `ncopies` is not
+        !! positive, the result is of zero length.
+        !!
+        !! **Note.** This function is not elemental for `string` of type
+        !! `CHARACTER`.
         module procedure string_repeat
     end interface
 
     interface scan ! Sec. 3.4.14
+        !! **Description.** Scans a string for any one of the characters in a
+        !! set of characters.
+        !!
+        !! **Class.** Elemental function
+        !!
+        !! **Arguments.**
+        !!
+        !! `string` and `set` shall be one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! `back` (optional) shall be of type default `LOGICAL`
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.**
+        !!
+        !! * *Case(i):* If `back` is absent or is present with the value false
+        !!   and if `string` contains at least one character that is in `set`,
+        !!   the value of the result is the position of the left-most character
+        !!   of `string` that is in `set`.
+        !! * *Case(ii):* If `back` is present with the value true and if
+        !!   `string` contains at least one character that is in `set`, the
+        !!   value of the result is the position of the right-most character of
+        !!   `string` that is in `set`.
+        !! * *Case(iii):* The value of the result is zero if no charaqcter of
+        !!   `string` is in `set` or if the length of either `string` or `set`
+        !!   is zero.
         module procedure string_scan_string
         module procedure string_scan_character
         module procedure character_scan_string
     end interface
 
     interface trim ! Sec. 3.4.15
+        !! **Description.** Removes trailing blanks from a string.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `string` shall be of type `VARYING_STRING`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is the same as `string` except
+        !! that any trailing blanks have been deleted. If the argument `string`
+        !! contains only blank characters or is of zero length, the result is a
+        !! zero-length string.
+        !!
+        !! **Note.** This function is not elemental for `string` of type
+        !! `CHARACTER`.
         module procedure trim_string
     end interface
 
     interface verify ! Sec. 3.4.16
+        !! **Description.** Verifies that a string contains only characters from
+        !! a given set by scanning for any character not in the set.
+        !!
+        !! **Class.** Elemental function
+        !!
+        !! **Arguments.**
+        !!
+        !! `string` and `set` shall be one of the type combinations:
+        !!
+        !! * `VARYING_STRING` and `VARYING_STRING`
+        !! * `VARYING_STRING` and `CHARACTER`
+        !! * `CHARACTER` and `VARYING_STRING`
+        !!
+        !! `back` (optional) shall be of type default `LOGICAL`
+        !!
+        !! **Result Characteristics.** Of type default `INTEGER`.
+        !!
+        !! **Result Value.**
+        !!
+        !! * *Case(i):* If `back` is absent or is present with the value false
+        !!   and if `string` contains at least one character that is not in
+        !!   `set`, the value of the result is the position of the left-most
+        !!   character of `string` that is not in `set`.
+        !! * *Case(ii):* If `back` is present with the value true and if
+        !!   `string` contains at least one character that is not in `set`, the
+        !!   value of the result is the position of the right-most character of
+        !!   `string` that is not in `set`.
+        !! * *Case(iii):* The value of the result is zero if each character of
+        !!   `string` is in `set` or if the length of `string` is zero.
         module procedure string_verify_string
         module procedure string_verify_character
         module procedure character_verify_string
     end interface
 
+    interface var_str
+        !! **Description.** Converts an intrinsic fixed-length character value
+        !! into the equivalent varying-length string value.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Argument.** `char` shall be of type default `CHARACTER` and may be
+        !! of any length.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is the same string of characters
+        !! as the argument.
+        module procedure var_str_char
+    end interface
+
     interface get ! Sec. 3.6.1
+        !! **Description.** Reads characters from an external file into a
+        !! string.
+        !!
+        !! **Class.** Subroutine.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be scalar and of type `VARYING_STRING`. It is an
+        !!   `INTENT(OUT)` argument.
+        !! * `maxlen` (optional) shall be scalar and of type default `INTEGER`.
+        !!   It is an `INTENT(IN)` argument.
+        !! * `unit` shall be scalar and of type default `INTEGER`. It is an
+        !!   `INTENT(IN)` argument that specifies the input unit to be used. The
+        !!   unit shall be connected to a formatted file for sequential read
+        !!   access. If the argument `unit` is omitted, the default input unit
+        !!   is used.
+        !! * `set` shall be scalar and either of type `VARYING_STRING` or of
+        !!   type `CHARACTER`. It is an `INTENT(IN)` argument.
+        !! * `separator` (optional) shall be scalar and of type
+        !!   `VARYING_STRING`. It is an `INTENT(OUT)` argument.
+        !! * `iostat` (optional) shall be scalar and of type default `INTEGER`.
+        !!   It is an `INTENT(OUT)` argument.
+        !!
+        !! **Action.** The `GET` procedure causes characters from the connected
+        !! file, starting with the next character in the current record if there
+        !! is a current record or the first character of the next record if not,
+        !! to be read and stored in the variable `string`. The end of record
+        !! always terminates the input but may be terminated before this. If
+        !! `maxlen` is present, its value indicates the maximum number of
+        !! characters that will be read. If `maxlen` is less than or equal to
+        !! zero, no characters will be read and `string` will be set to zero
+        !! length. If `maxlen` is absent, a maximum of `HUGE(1)` is used. If the
+        !! argument `set` is provided, this specifies a set of characters the
+        !! occurrence of any of which will terminate the input. This terminal
+        !! character, although read from the input file, will not be included in
+        !! the result string. The file position after the data transfer is
+        !! complete, is after the last character that was read. If the argument
+        !! `separator` is present, the actual character found which terminates
+        !! the transfer is returned in `separator`. If the transfer is
+        !! terminated other than by the occurrence of a character in `set`, a
+        !! zero length string is returned in `separator`. If the transfer is
+        !! terminated by the end of record being reached, the file is positioned
+        !! after the record just read. If present, the argument `iostat` is used
+        !! to return the status resulting from the data transfer. A zero value
+        !! is returned if a valid read operation occurs and the end-of-record is
+        !! not reached, a positive value if an error occurs, and a negative
+        !! value if an end-of-file or end-of-record condition occurs. Note, the
+        !! negative value returned for an end-of-file condition shall be
+        !! different from that returned for an end-of-record condition. If
+        !! `iostat` is absent and an error or end-of-file condition occurs, the
+        !! program execution is terminated.
         module procedure get_default_unit_to_end_of_record
         module procedure get_with_unit_to_end_of_record
         module procedure get_default_unit_to_terminator_string
@@ -178,6 +781,31 @@ module iso_varying_string
     end interface
 
     interface put ! Sec. 3.6.2
+        !! **Description.** Writes to an external file.
+        !!
+        !! **Class.** Subroutine.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be scalar and of type `VARYING_STRING` or type
+        !!   `CHARACTER`. It is an `INTENT(IN)` argument.
+        !! * `unit` shall be scalar and of type default `INTEGER`. It is an
+        !!   `INTENT(IN)` argument that specifies the output unit to be used.
+        !!   The unit shall be connected to a formatted file for sequential
+        !!   write access. If the argument `unit` is omitted, the default output
+        !!   unit is used.
+        !! * `iostat` (optional) shall be scalar and of type default `INTEGER`.
+        !!   It is an `INTENT(OUT)` argument.
+        !!
+        !! **Action.** The `PUT` procedure causes the characters of `string` to
+        !! be appended to the current record, if there is a current record, or
+        !! to the start of the next record if there is no current record. The
+        !! last character transferred becomes the last character of the current
+        !! record. If present, the argument `iostat` is used to return the
+        !! status resulting from the data transfer. A zero value is returned if
+        !! a valid write operation occurs, and a positive value if an error
+        !! occurs. If `iostat` is absent and anything other than a valid write
+        !! operation occurs, the program execution is terminated.
         module procedure put_String_Default_Unit
         module procedure put_string_with_unit
         module procedure put_characters_default_unit
@@ -185,6 +813,32 @@ module iso_varying_string
     end interface
 
     interface put_line ! Sec. 3.6.3
+        !! **Description.** Writes to an external file and ends the record.
+        !!
+        !! **Class.** Subroutine.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be scalar and of type `VARYING_STRING` or type
+        !!   `CHARACTER`. It is an `INTENT(IN)` argument.
+        !! * `unit` shall be scalar and of type default `INTEGER`. It is an
+        !!   `INTENT(IN)` argument that specifies the output unit to be used.
+        !!   The unit shall be connected to a formatted file for sequential
+        !!   write access. If the argument `unit` is omitted, the default output
+        !!   unit is used.
+        !! * `iostat` (optional) shall be scalar and of type default `INTEGER`.
+        !!   It is an `INTENT(OUT)` argument.
+        !!
+        !! **Action.** The `PUT_LINE` procedure causes the characters of
+        !! `string` to be appended to the current record, if there is a current
+        !! record, or to the start of the next record if there is no current
+        !! record. Following completion of the data transfer, the file is
+        !! position after the record just written. If present, the argument
+        !! `iostat` is used to return the status resulting from the data
+        !! transfer. A zero value is returned if a valid write operation occurs,
+        !! and a positive value if an error occurs. If `iostat` is absent and
+        !! anything other than a valid write operation occurs, the program
+        !! execution is terminated.
         module procedure put_line_string_default_unit
         module procedure put_line_string_with_unit
         module procedure put_line_characters_default_unit
@@ -192,11 +846,53 @@ module iso_varying_string
     end interface
 
     interface extract ! Sec. 3.7.1
+        !! **Description.** Extracts a specified substring from a string.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be either of type `VARYING_STRING` or type default
+        !!   `CHARACTER`.
+        !! * `start` (optional) shall be of type default `INTEGER`.
+        !! * `finish` (optional) shall be of type default `INTEGER`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is a copy of the characters of the
+        !! argument `string` between positions `start` and `finish`, inclusive.
+        !! If `start` is absent or less than one, the value one is used for
+        !! `start`. If `finish` is absent or greater than `LEN(string)`, the
+        !! value `LEN(string)` is used for `finish`. If `finish` is less than
+        !! `start`, the result is a zero-length string.
         module procedure extract_character
         module procedure extract_string
     end interface
 
     interface insert ! Sec. 3.7.2
+        !! **Description.** Inserts a substring into a string at a specified
+        !! position.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be either of type `VARYING_STRING` or type default
+        !!   `CHARACTER`.
+        !! * `start` shall be of type default `INTEGER`.
+        !! * `substring` shall be either type `VARYING_STRING` or type default
+        !!   `CHARACTER`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is a copy of the characters of the
+        !! argument `string` with the characters of `substring` inserted into
+        !! the copy of `string` before the character at the position `start`.
+        !! If `start` is greater than `LEN(string)`, the value `LEN(string)+1`
+        !! is used for `start` and substring is appended to the copy of
+        !! `string`. If `start` is less than one, the value one is used for
+        !! `start` and `substring` is inserted before the first character of
+        !! the copy of `string`.
         module procedure insert_character_into_character
         module procedure insert_character_into_string
         module procedure insert_string_into_character
@@ -204,11 +900,82 @@ module iso_varying_string
     end interface
 
     interface remove ! Sec. 3.7.3
+        !! **Description.** Removes a specified substring from a string.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be either of type `VARYING_STRING` or type default
+        !!   `CHARACTER`.
+        !! * `start` (optional) shall be of type default `INTEGER`.
+        !! * `finish` (optional) shall be of type default `INTEGER`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is a copy of the characters of
+        !! `string` with the characters between positions `start` and `finish`,
+        !! inclusive, removed. If `start` is absent or less than one, the value
+        !! one is used for `start`. If `finish` is absent or greater than
+        !! `LEN(string)`, the value `LEN(string)` is used for `finish`. If
+        !! `finish` is less than `start`, the characters of `string` are
+        !! delivered unchanged as the result.
         module procedure remove_character
         module procedure remove_string
     end interface
 
     interface replace ! Sec. 3.7.4
+        !! **Description.** Replaces a subset of the characters in a string by
+        !! a given substring. The subset may be specified either by position or
+        !! by content.
+        !!
+        !! **Class.** Elemental function.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be either of type `VARYING_STRING` or type default
+        !!   `CHARACTER`.
+        !! * `start` shall be of type default `INTEGER`.
+        !! * `finish` shall be of type default `INTEGER`.
+        !! * `target` shall be either of type `VARYING_STRING` or type default
+        !!   `CHARACTER`. It shall not be of zero length.
+        !! * `every` (optional) shall be of type default `LOGICAL`.
+        !! * `back` (optional) shall be of type default `LOGICAL`.
+        !!
+        !! **Result Characteristics.** Of type `VARYING_STRING`.
+        !!
+        !! **Result Value.** The result value is a copy of the characters in
+        !! `string` modified as per one of the cases below.
+        !!
+        !! * *Case(i):* For a reference of the form
+        !!   `REPLACE(string,start,substring)` the characters of the agrument
+        !!   `substring` are inserted into the copy of `string` beginning with
+        !!   the character at the character position `start`. The characters in
+        !!   positions from `start` to `MIN(start+LEN(substring)-1,LEN(string))`
+        !!   are deleted. If `start` is greater than `LEN(string)`, the value
+        !!   `LEN(string)+1` is used for `start` and `substring` is appended to
+        !!   the copy of `string`. If `start` is less than one, the value one
+        !!   is used for `start`.
+        !! * *Case(ii):* For a reference of the form
+        !!   `REPLACE(string,start,finish,substring)` the characters in the copy
+        !!   of `string` between positions `start` and `finish`, including those
+        !!   at `start` and `finish`, are deleted and replaced by the
+        !!   characters of `substring`. If `start` is less than one, the value
+        !!   one is used for `start`. If `finish` is greater than `LEN(string)`,
+        !!   the value `LEN(string)` is used for `finish`. If `finish` is less
+        !!   than `start`, the characters of `substring` are inserted before
+        !!   the character at `start` and no characters are deleted.
+        !! * *Case(iii):* For a reference of the form
+        !!   `REPLACE(string,target,substring,every,back)` the copy of `string`
+        !!   is searched for occurrences of `target`. The search is done in the
+        !!   `backward` direction if the argument `back` is present with the
+        !!   value true, and in the forward direction otherwise. If `target` is
+        !!   found, it is replaced by `substring`. If `every` is present with
+        !!   the value true, the search and replace is continued from the
+        !!   character following `target` in the search direction specified
+        !!   until all occurrences of `target` in the copy of string are
+        !!   replaced; otherwise only the first occurrence of `target` is
+        !!   replaced.
         module procedure replace_character_with_character_start
         module procedure replace_string_with_character_start
         module procedure replace_character_with_string_start
@@ -228,6 +995,41 @@ module iso_varying_string
     end interface
 
     interface split ! Sec. 3.7.5
+        !! **Description.** Splits a string into two substrings with the
+        !! substrings separated by the occurrence of a character from a
+        !! specified separator set.
+        !!
+        !! **Class.** Elemental subroutine.
+        !!
+        !! **Arguments.**
+        !!
+        !! * `string` shall be type `VARYING_STRING`. It is an `INTENT(INOUT)`
+        !!   argument.
+        !! * `word` shall be of type `VARYING_STRING`. It is an `INTENT(OUT)`
+        !!   argument.
+        !! * `set` shall be either of type `VARYING_STRING` or type default
+        !!   `CHARACTER`. It is an `INTENT(IN)` argument.
+        !! * `separator` (optional) shall be of type `VARYING_STRING`. It is an
+        !!   `INTENT(OUT)` argument.
+        !! * `back` (optional) shall of type default `LOGICAL`. It is an
+        !!   `INTENT(IN)` argument.
+        !!
+        !! **Action.** The effect of the procedure is to divide the `string` at
+        !! the first occurrence of a character that is in `set`. The `string` is
+        !! searched in the forward direction unless `back` is present with the
+        !! value true, in which case the search is in the backward direction.
+        !! The characters passed over in the search are returned in the argument
+        !! `word` and the remainder of the string, not including the separator
+        !! character, is returned in the argument `string`. If the argument
+        !! `separator` is present, the actual character found which separates
+        !! the `word` from the remainder of the `string` is returned in
+        !! `separator`. If no character from `set` is found or `set` is of zero
+        !! length, the whole string is returned in `word`, `string` is returned
+        !! as zero length, and `separator` (if present) is returned as zero
+        !! length. The effect of the procedure is such that, on return, either
+        !! `word//separator//string` is the same as the initial string for a
+        !! forward search, or `string//separator//word` is the same as the
+        !! initial string for a backward search.
         module procedure split_character
         module procedure split_string
     end interface
@@ -499,7 +1301,7 @@ contains
         ! Sec. 3.4.3
         type(varying_string), intent(in) :: string
         integer, intent(in) :: length
-        character(len=length) :: chars
+        character(len=max(0,length)) :: chars
 
         if (allocated(string%characters)) then
             chars = string
@@ -765,7 +1567,7 @@ contains
         position = verify(string, char(set), back)
     end function
 
-    elemental function var_str(char)
+    elemental function var_str_char(char) result(var_str)
         ! Sec. 3.5.1
         character(len=*), intent(in) :: char
         type(varying_string) :: var_str
