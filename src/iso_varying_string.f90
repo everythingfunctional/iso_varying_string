@@ -79,9 +79,15 @@ module iso_varying_string
         procedure :: read_formatted
         procedure :: read_unformatted
         generic, public :: write(formatted) => write_formatted
+            !! Enables use in formatted (list-directed, namelist and explicit
+            !! format) write and print statements
         generic, public :: write(unformatted) => write_unformatted
+            !! Enables use in unformatted write statements
         generic, public :: read(formatted) => read_formatted
+            !! Enables use in formatted (list-directed, namelist and explicit
+            !! format) read statements
         generic, public :: read(unformatted) => read_unformatted
+            !! Enable use in unformatted read statements
     end type
 
     interface assignment(=) ! Sec. 3.3.1
