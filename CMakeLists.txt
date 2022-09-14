@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(
   "iso_varying_string"
   LANGUAGES "Fortran"
-  VERSION "3.0.3"
+  VERSION "4.0.0"
 )
 
 option(INSTALL_PROJECT "Whether this project should be installed" TRUE)
