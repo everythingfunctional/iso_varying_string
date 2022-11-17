@@ -71,7 +71,7 @@ module iso_varying_string
         !! N is the length of the string. The internal structure of the type
         !! shall be `PRIVATE` to the module.
         private
-        character(len=1), allocatable :: characters(:)
+        character(len=:), allocatable :: characters
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -1039,14 +1039,7 @@ contains
         type(varying_string), intent(out) :: lhs
         character(len=*), intent(in) :: rhs
 
-        integer :: i
-        integer :: length
-
-        length = len(rhs)
-        allocate(lhs%characters(length))
-        do concurrent (i = 1 : length)
-            lhs%characters(i) = rhs(i:i)
-        end do
+        lhs%characters = rhs
     end subroutine
 
     elemental subroutine assign_string_to_character(lhs, rhs)
@@ -1058,21 +1051,15 @@ contains
         integer :: length_input
         integer :: length_output
 
-        length_output = len(lhs)
         if (allocated(rhs%characters)) then
-            length_input = size(rhs%characters)
-            do concurrent (i = 1 : min(length_input, length_output))
-                lhs(i:i) = rhs%characters(i)
-            end do
+            length_output = len(lhs)
+            length_input = len(rhs%characters)
+            lhs(1:min(length_input, length_output)) = rhs%characters(1 : min(length_input, length_output))
             if (length_input < length_output) then
-                do concurrent (i = length_input+1 : length_output)
-                    lhs(i:i) = " "
-                end do
+                lhs(length_input+1:) = ""
             end if
         else
-            do concurrent (i = 1 : length_output)
-                lhs(i:i) = " "
-            end do
+            lhs = ""
         end if
     end subroutine
 
@@ -1287,13 +1274,9 @@ contains
         character(len=:), allocatable :: chars
 
         if (allocated(string%characters)) then
-            block
-                character(len=size(string%characters)) :: tmp
-                tmp = string
-                chars = tmp
-            end block
+            allocate(chars, source = string%characters)
           else
-            chars = ""
+            allocate(character(len=0) :: chars)
         end if
     end function
 
