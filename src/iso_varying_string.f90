@@ -1847,7 +1847,7 @@ contains
         character(len=*), intent(in) :: char
         type(varying_string) :: var_str
 
-        var_str = char
+        allocate(var_str%characters, source = char)
     end function
 
     subroutine get_default_unit_to_end_of_record(string, maxlen, iostat)
