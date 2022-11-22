@@ -1060,7 +1060,19 @@ contains
         type(varying_string), intent(in) :: rhs
         type(varying_string) :: concatenated
 
-        concatenated = char(lhs) // char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                concatenated%characters = lhs%characters // rhs%characters
+            else
+                concatenated%characters = lhs%characters
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                concatenated%characters = rhs%characters
+            else
+                concatenated%characters = ""
+            end if
+        end if
     end function
 
     elemental function concat_string_and_character(lhs, rhs) result(concatenated)
@@ -1069,7 +1081,11 @@ contains
         character(len=*), intent(in) :: rhs
         type(varying_string) :: concatenated
 
-        concatenated = char(lhs) // rhs
+        if (allocated(lhs%characters)) then
+            concatenated%characters = lhs%characters // rhs
+        else
+            concatenated%characters = rhs
+        end if
     end function
 
     elemental function concat_character_and_string(lhs, rhs) result(concatenated)
@@ -1078,7 +1094,11 @@ contains
         type(varying_string), intent(in) :: rhs
         type(varying_string) :: concatenated
 
-        concatenated = lhs // char(rhs)
+        if (allocated(rhs%characters)) then
+            concatenated%characters = lhs // rhs%characters
+        else
+            concatenated%characters = lhs
+        end if
     end function
 
     elemental function string_eq_string(lhs, rhs) result(equals)
