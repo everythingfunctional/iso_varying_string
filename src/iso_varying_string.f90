@@ -1785,7 +1785,11 @@ contains
         type(varying_string), intent(in) :: string
         type(varying_string) :: trimmed
 
-        trimmed = trim(char(string))
+        if (allocated(string%characters)) then
+            allocate(trimmed%characters, source = trim(string%characters))
+        else
+            allocate(character(len=0) :: trimmed%characters)
+        end if
     end function
 
     elemental function string_verify_string(string, set, back) result(position)
