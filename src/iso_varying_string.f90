@@ -71,7 +71,7 @@ module iso_varying_string
         !! N is the length of the string. The internal structure of the type
         !! shall be `PRIVATE` to the module.
         private
-        character(len=1), allocatable :: characters(:)
+        character(len=:), allocatable :: characters
     end type
 
     interface assignment(=) ! Sec. 3.3.1
@@ -1039,14 +1039,7 @@ contains
         type(varying_string), intent(out) :: lhs
         character(len=*), intent(in) :: rhs
 
-        integer :: i
-        integer :: length
-
-        length = len(rhs)
-        allocate(lhs%characters(length))
-        do concurrent (i = 1 : length)
-            lhs%characters(i) = rhs(i:i)
-        end do
+        allocate(lhs%characters, source = rhs)
     end subroutine
 
     elemental subroutine assign_string_to_character(lhs, rhs)
@@ -1054,25 +1047,10 @@ contains
         character(len=*), intent(out) :: lhs
         type(varying_string), intent(in) :: rhs
 
-        integer :: i
-        integer :: length_input
-        integer :: length_output
-
-        length_output = len(lhs)
         if (allocated(rhs%characters)) then
-            length_input = size(rhs%characters)
-            do concurrent (i = 1 : min(length_input, length_output))
-                lhs(i:i) = rhs%characters(i)
-            end do
-            if (length_input < length_output) then
-                do concurrent (i = length_input+1 : length_output)
-                    lhs(i:i) = " "
-                end do
-            end if
+            lhs = rhs%characters
         else
-            do concurrent (i = 1 : length_output)
-                lhs(i:i) = " "
-            end do
+            lhs = ""
         end if
     end subroutine
 
@@ -1082,7 +1060,19 @@ contains
         type(varying_string), intent(in) :: rhs
         type(varying_string) :: concatenated
 
-        concatenated = char(lhs) // char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                allocate(concatenated%characters, source = lhs%characters // rhs%characters)
+            else
+                allocate(concatenated%characters, source = lhs%characters)
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                allocate(concatenated%characters, source = rhs%characters)
+            else
+                allocate(character(len=0) :: concatenated%characters)
+            end if
+        end if
     end function
 
     elemental function concat_string_and_character(lhs, rhs) result(concatenated)
@@ -1091,7 +1081,11 @@ contains
         character(len=*), intent(in) :: rhs
         type(varying_string) :: concatenated
 
-        concatenated = char(lhs) // rhs
+        if (allocated(lhs%characters)) then
+            allocate(concatenated%characters, source = lhs%characters // rhs)
+        else
+            allocate(concatenated%characters, source = rhs)
+        end if
     end function
 
     elemental function concat_character_and_string(lhs, rhs) result(concatenated)
@@ -1100,7 +1094,11 @@ contains
         type(varying_string), intent(in) :: rhs
         type(varying_string) :: concatenated
 
-        concatenated = lhs // char(rhs)
+        if (allocated(rhs%characters)) then
+            allocate(concatenated%characters, source = lhs // rhs%characters)
+        else
+            allocate(concatenated%characters, source = lhs)
+        end if
     end function
 
     elemental function string_eq_string(lhs, rhs) result(equals)
@@ -1109,7 +1107,19 @@ contains
         type(varying_string), intent(in) :: rhs
         logical :: equals
 
-        equals = char(lhs) == char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                equals = lhs%characters == rhs%characters
+            else
+                equals = lhs%characters == ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                equals = "" == rhs%characters
+            else
+                equals = .true.
+            end if
+        end if
     end function
 
     elemental function character_eq_string(lhs, rhs) result(equals)
@@ -1118,7 +1128,11 @@ contains
         type(varying_string), intent(in) :: rhs
         logical :: equals
 
-        equals = lhs == char(rhs)
+        if (allocated(rhs%characters)) then
+            equals = lhs == rhs%characters
+        else
+            equals = lhs == ""
+        end if
     end function
 
     elemental function string_eq_character(lhs, rhs) result(equals)
@@ -1127,142 +1141,246 @@ contains
         character(len=*), intent(in) :: rhs
         logical :: equals
 
-        equals = char(lhs) == rhs
+        if (allocated(lhs%characters)) then
+            equals = lhs%characters == rhs
+        else
+            equals = "" == rhs
+        end if
     end function
 
-    elemental function string_ne_string(lhs, rhs) result(equals)
+    elemental function string_ne_string(lhs, rhs) result(not_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: not_equal
 
-        equals = char(lhs) /= char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                not_equal = lhs%characters /= rhs%characters
+            else
+                not_equal = lhs%characters /= ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                not_equal = "" /= rhs%characters
+            else
+                not_equal = .false.
+            end if
+        end if
     end function
 
-    elemental function character_ne_string(lhs, rhs) result(equals)
+    elemental function character_ne_string(lhs, rhs) result(not_equal)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: not_equal
 
-        equals = lhs /= char(rhs)
+        if (allocated(rhs%characters)) then
+            not_equal = lhs /= rhs%characters
+        else
+            not_equal = lhs /= ""
+        end if
     end function
 
-    elemental function string_ne_character(lhs, rhs) result(equals)
+    elemental function string_ne_character(lhs, rhs) result(not_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: not_equal
 
-        equals = char(lhs) /= rhs
+        if (allocated(lhs%characters)) then
+            not_equal = lhs%characters /= rhs
+        else
+            not_equal = "" /= rhs
+        end if
     end function
 
-    elemental function string_lt_string(lhs, rhs) result(equals)
+    elemental function string_lt_string(lhs, rhs) result(less_than)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: less_than
 
-        equals = char(lhs) < char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                less_than = lhs%characters < rhs%characters
+            else
+                less_than = lhs%characters < ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                less_than = "" < rhs%characters
+            else
+                less_than = .false.
+            end if
+        end if
     end function
 
-    elemental function character_lt_string(lhs, rhs) result(equals)
+    elemental function character_lt_string(lhs, rhs) result(less_than)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: less_than
 
-        equals = lhs < char(rhs)
+        if (allocated(rhs%characters)) then
+            less_than = lhs < rhs%characters
+        else
+            less_than = lhs < ""
+        end if
     end function
 
-    elemental function string_lt_character(lhs, rhs) result(equals)
+    elemental function string_lt_character(lhs, rhs) result(less_than)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: less_than
 
-        equals = char(lhs) < rhs
+        if (allocated(lhs%characters)) then
+            less_than = lhs%characters < rhs
+        else
+            less_than = "" < rhs
+        end if
     end function
 
-    elemental function string_le_string(lhs, rhs) result(equals)
+    elemental function string_le_string(lhs, rhs) result(less_than_or_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: less_than_or_equal
 
-        equals = char(lhs) <= char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                less_than_or_equal = lhs%characters <= rhs%characters
+            else
+                less_than_or_equal = lhs%characters <= ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                less_than_or_equal = "" <= rhs%characters
+            else
+                less_than_or_equal = .true.
+            end if
+        end if
     end function
 
-    elemental function character_le_string(lhs, rhs) result(equals)
+    elemental function character_le_string(lhs, rhs) result(less_than_or_equal)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: less_than_or_equal
 
-        equals = lhs <= char(rhs)
+        if (allocated(rhs%characters)) then
+            less_than_or_equal = lhs <= rhs%characters
+        else
+            less_than_or_equal = lhs <= ""
+        end if
     end function
 
-    elemental function string_le_character(lhs, rhs) result(equals)
+    elemental function string_le_character(lhs, rhs) result(less_than_or_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: less_than_or_equal
 
-        equals = char(lhs) <= rhs
+        if (allocated(lhs%characters)) then
+            less_than_or_equal = lhs%characters <= rhs
+        else
+            less_than_or_equal = "" <= rhs
+        end if
     end function
 
-    elemental function string_gt_string(lhs, rhs) result(equals)
+    elemental function string_gt_string(lhs, rhs) result(greater_than)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than
 
-        equals = char(lhs) > char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                greater_than = lhs%characters > rhs%characters
+            else
+                greater_than = lhs%characters > ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                greater_than = "" > rhs%characters
+            else
+                greater_than = .false.
+            end if
+        end if
     end function
 
-    elemental function character_gt_string(lhs, rhs) result(equals)
+    elemental function character_gt_string(lhs, rhs) result(greater_than)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than
 
-        equals = lhs > char(rhs)
+        if (allocated(rhs%characters)) then
+            greater_than = lhs > rhs%characters
+        else
+            greater_than = lhs > ""
+        end if
     end function
 
-    elemental function string_gt_character(lhs, rhs) result(equals)
+    elemental function string_gt_character(lhs, rhs) result(greater_than)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than
 
-        equals = char(lhs) > rhs
+        if (allocated(lhs%characters)) then
+            greater_than = lhs%characters > rhs
+        else
+            greater_than = "" > rhs
+        end if
     end function
 
-    elemental function string_ge_string(lhs, rhs) result(equals)
+    elemental function string_ge_string(lhs, rhs) result(greater_than_or_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than_or_equal
 
-        equals = char(lhs) >= char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                greater_than_or_equal = lhs%characters >= rhs%characters
+            else
+                greater_than_or_equal = lhs%characters >= ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                greater_than_or_equal = "" >= rhs%characters
+            else
+                greater_than_or_equal = .true.
+            end if
+        end if
     end function
 
-    elemental function character_ge_string(lhs, rhs) result(equals)
+    elemental function character_ge_string(lhs, rhs) result(greater_than_or_equal)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than_or_equal
 
-        equals = lhs >= char(rhs)
+        if (allocated(rhs%characters)) then
+            greater_than_or_equal = lhs >= rhs%characters
+        else
+            greater_than_or_equal = lhs >= ""
+        end if
     end function
 
-    elemental function string_ge_character(lhs, rhs) result(equals)
+    elemental function string_ge_character(lhs, rhs) result(greater_than_or_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than_or_equal
 
-        equals = char(lhs) >= rhs
+        if (allocated(lhs%characters)) then
+            greater_than_or_equal = lhs%characters >= rhs
+        else
+            greater_than_or_equal = "" >= rhs
+        end if
     end function
 
     elemental function string_adjustl(string) result(adjusted)
@@ -1270,7 +1388,11 @@ contains
         type(varying_string), intent(in) :: string
         type(varying_string) :: adjusted
 
-        adjusted = adjustl(char(string))
+        if (allocated(string%characters)) then
+            adjusted%characters = adjustl(string%characters)
+        else
+            allocate(character(len=0) :: adjusted%characters)
+        end if
     end function
 
     elemental function string_adjustr(string) result(adjusted)
@@ -1278,7 +1400,11 @@ contains
         type(varying_string), intent(in) :: string
         type(varying_string) :: adjusted
 
-        adjusted = adjustr(char(string))
+        if (allocated(string%characters)) then
+            allocate(adjusted%characters, source = adjustr(string%characters))
+        else
+            allocate(character(len=0) :: adjusted%characters)
+        end if
     end function
 
     pure function string_to_char(string) result(chars)
@@ -1287,13 +1413,9 @@ contains
         character(len=:), allocatable :: chars
 
         if (allocated(string%characters)) then
-            block
-                character(len=size(string%characters)) :: tmp
-                tmp = string
-                chars = tmp
-            end block
+            allocate(chars, source = string%characters)
           else
-            chars = ""
+            allocate(character(len=0) :: chars)
         end if
     end function
 
@@ -1313,7 +1435,9 @@ contains
         type(varying_string), intent(in) :: c
         integer :: string_iachar
 
-        string_iachar = iachar(char(c))
+        if (allocated(c%characters)) then
+            string_iachar = iachar(c%characters)
+        end if
     end function
 
     elemental function string_ichar(c)
@@ -1321,7 +1445,9 @@ contains
         type(varying_string), intent(in) :: c
         integer :: string_ichar
 
-        string_ichar = ichar(char(c))
+        if (allocated(c%characters)) then
+            string_ichar = ichar(c%characters)
+        end if
     end function
 
     elemental function string_index_string(string, substring, back) result(position)
@@ -1331,7 +1457,19 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = index(char(string), char(substring), back)
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                position = index(string%characters, substring%characters, back)
+            else
+                position = index(string%characters, "", back)
+            end if
+        else
+            if (allocated(substring%characters)) then
+                position = index("", substring%characters, back)
+            else
+                position = index("", "", back)
+            end if
+        end if
     end function
 
     elemental function string_index_character(string, substring, back) result(position)
@@ -1341,7 +1479,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = index(char(string), substring, back)
+        if (allocated(string%characters)) then
+            position = index(string%characters, substring, back)
+        else
+            position = index("", substring, back)
+        end if
     end function
 
     elemental function character_index_string(string, substring, back) result(position)
@@ -1351,7 +1493,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = index(string, char(substring), back)
+        if (allocated(substring%characters)) then
+            position = index(string, substring%characters, back)
+        else
+            position = index(string, "", back)
+        end if
     end function
 
     elemental function len_string(string) result(length)
@@ -1359,7 +1505,11 @@ contains
         type(varying_string), intent(in) :: string
         integer :: length
 
-        length = len(char(string))
+        if (allocated(string%characters)) then
+            length = len(string%characters)
+        else
+            length = 0
+        end if
     end function
 
     elemental function len_trim_string(string) result(length)
@@ -1367,7 +1517,11 @@ contains
         type(varying_string), intent(in) :: string
         integer :: length
 
-        length = len_trim(char(string))
+        if (allocated(string%characters)) then
+            length = len_trim(string%characters)
+        else
+            length = 0
+        end if
     end function
 
     elemental function string_lge_string(string_a, string_b) result(greater_than_or_equals)
@@ -1376,7 +1530,19 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than_or_equals
 
-        greater_than_or_equals = lge(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                greater_than_or_equals = lge(string_a%characters, string_b%characters)
+            else
+                greater_than_or_equals = lge(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                greater_than_or_equals = lge("", string_b%characters)
+            else
+                greater_than_or_equals = .true.
+            end if
+        end if
     end function
 
     elemental function character_lge_string(string_a, string_b) result(greater_than_or_equals)
@@ -1385,7 +1551,11 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than_or_equals
 
-        greater_than_or_equals = lge(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            greater_than_or_equals = lge(string_a, string_b%characters)
+        else
+            greater_than_or_equals = lge(string_a, "")
+        end if
     end function
 
     elemental function string_lge_character(string_a, string_b) result(greater_than_or_equals)
@@ -1394,7 +1564,11 @@ contains
         character(len=*), intent(in) :: string_b
         logical :: greater_than_or_equals
 
-        greater_than_or_equals = lge(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            greater_than_or_equals = lge(string_a%characters, string_b)
+        else
+            greater_than_or_equals = lge("", string_b)
+        end if
     end function
 
     elemental function string_lgt_string(string_a, string_b) result(greater_than)
@@ -1403,7 +1577,19 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than
 
-        greater_than = lgt(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                greater_than = lgt(string_a%characters, string_b%characters)
+            else
+                greater_than = lgt(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                greater_than = lgt("", string_b%characters)
+            else
+                greater_than = .false.
+            end if
+        end if
     end function
 
     elemental function character_lgt_string(string_a, string_b) result(greater_than)
@@ -1412,7 +1598,11 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than
 
-        greater_than = lgt(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            greater_than = lgt(string_a, string_b%characters)
+        else
+            greater_than = lgt(string_a, "")
+        end if
     end function
 
     elemental function string_lgt_character(string_a, string_b) result(greater_than)
@@ -1421,7 +1611,11 @@ contains
         character(len=*), intent(in) :: string_b
         logical :: greater_than
 
-        greater_than = lgt(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            greater_than = lgt(string_a%characters, string_b)
+        else
+            greater_than = lgt("", string_b)
+        end if
     end function
 
     elemental function string_lle_string(string_a, string_b) result(less_than_or_equals)
@@ -1430,7 +1624,19 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: less_than_or_equals
 
-        less_than_or_equals = lle(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                less_than_or_equals = lle(string_a%characters, string_b%characters)
+            else
+                less_than_or_equals = lle(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                less_than_or_equals = lle("", string_b%characters)
+            else
+                less_than_or_equals = .true.
+            end if
+        end if
     end function
 
     elemental function character_lle_string(string_a, string_b) result(less_than_or_equals)
@@ -1439,7 +1645,11 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: less_than_or_equals
 
-        less_than_or_equals = lle(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            less_than_or_equals = lle(string_a, string_b%characters)
+        else
+            less_than_or_equals = lle(string_a, "")
+        end if
     end function
 
     elemental function string_lle_character(string_a, string_b) result(less_than_or_equals)
@@ -1448,7 +1658,11 @@ contains
         character(len=*), intent(in) :: string_b
         logical :: less_than_or_equals
 
-        less_than_or_equals = lle(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            less_than_or_equals = lle(string_a%characters, string_b)
+        else
+            less_than_or_equals = lle("", string_b)
+        end if
     end function
 
     elemental function string_llt_string(string_a, string_b) result(less_than)
@@ -1458,7 +1672,19 @@ contains
         logical :: less_than
         intrinsic :: llt
 
-        less_than = llt(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                less_than = llt(string_a%characters, string_b%characters)
+            else
+                less_than = llt(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                less_than = llt("", string_b%characters)
+            else
+                less_than = .false.
+            end if
+        end if
     end function
 
     elemental function character_llt_string(string_a, string_b) result(less_than)
@@ -1468,7 +1694,11 @@ contains
         intrinsic :: llt
         logical :: less_than
 
-        less_than = llt(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            less_than = llt(string_a, string_b%characters)
+        else
+            less_than = llt(string_a, "")
+        end if
     end function
 
     elemental function string_llt_character(string_a, string_b) result(less_than)
@@ -1478,8 +1708,13 @@ contains
         intrinsic :: llt
         logical :: less_than
 
-        less_than = llt(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            less_than = llt(string_a%characters, string_b)
+        else
+            less_than = llt("", string_b)
+        end if
     end function
+
     elemental function string_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
         type(varying_string), intent(in) :: string
@@ -1489,13 +1724,9 @@ contains
         intrinsic :: repeat
 
         if (allocated(string%characters)) then
-            block
-                character(len=len(string)) :: tmp_char
-                tmp_char = string
-                repeated = repeat(tmp_char, ncopies)
-            end block
+            allocate(repeated%characters, source = repeat(string%characters, ncopies))
         else
-            repeated = ""
+            allocate(character(len=0) :: repeated%characters)
         end if
     end function
 
@@ -1506,7 +1737,19 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = scan(char(string), char(set), back)
+        if (allocated(string%characters)) then
+            if (allocated(set%characters)) then
+                position = scan(string%characters, set%characters, back)
+            else
+                position = scan(string%characters, "", back)
+            end if
+        else
+            if (allocated(set%characters)) then
+                position = scan("", set%characters, back)
+            else
+                position = scan("", "", back)
+            end if
+        end if
     end function
 
     elemental function string_scan_character(string, set, back) result(position)
@@ -1516,7 +1759,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = scan(char(string), set, back)
+        if (allocated(string%characters)) then
+            position = scan(string%characters, set, back)
+        else
+            position = scan("", set, back)
+        end if
     end function
 
     elemental function character_scan_string(string, set, back) result(position)
@@ -1526,7 +1773,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = scan(string, char(set), back)
+        if (allocated(set%characters)) then
+            position = scan(string, set%characters, back)
+        else
+            position = scan(string, "", back)
+        end if
     end function
 
     elemental function trim_string(string) result(trimmed)
@@ -1534,7 +1785,11 @@ contains
         type(varying_string), intent(in) :: string
         type(varying_string) :: trimmed
 
-        trimmed = trim(char(string))
+        if (allocated(string%characters)) then
+            allocate(trimmed%characters, source = trim(string%characters))
+        else
+            allocate(character(len=0) :: trimmed%characters)
+        end if
     end function
 
     elemental function string_verify_string(string, set, back) result(position)
@@ -1544,7 +1799,19 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = verify(char(string), char(set), back)
+        if (allocated(string%characters)) then
+            if (allocated(set%characters)) then
+                position = verify(string%characters, set%characters, back)
+            else
+                position = verify(string%characters, "", back)
+            end if
+        else
+            if (allocated(set%characters)) then
+                position = verify("", set%characters, back)
+            else
+                position = verify("", "", back)
+            end if
+        end if
     end function
 
     elemental function string_verify_character(string, set, back) result(position)
@@ -1554,7 +1821,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = verify(char(string), set, back)
+        if (allocated(string%characters)) then
+            position = verify(string%characters, set, back)
+        else
+            position = verify("", set, back)
+        end if
     end function
 
     elemental function character_verify_string(string, set, back) result(position)
@@ -1564,7 +1835,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = verify(string, char(set), back)
+        if (allocated(set%characters)) then
+            position = verify(string, set%characters, back)
+        else
+            position = verify(string, "", back)
+        end if
     end function
 
     elemental function var_str_char(char) result(var_str)
@@ -1572,7 +1847,7 @@ contains
         character(len=*), intent(in) :: char
         type(varying_string) :: var_str
 
-        var_str = char
+        allocate(var_str%characters, source = char)
     end function
 
     subroutine get_default_unit_to_end_of_record(string, maxlen, iostat)
@@ -1592,14 +1867,14 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
+        allocate(character(len=0) :: string%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(*, fmt='(A)', advance='NO', eor=9999, size=num_read, iostat=iostat) buffer(1:next_read_length)
                 if (iostat /= 0) return
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         else
@@ -1607,12 +1882,12 @@ contains
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(*, fmt='(A)', advance='NO', eor=9999, size=num_read) buffer(1:next_read_length)
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         end if
         return
-        9999 string = string // buffer(1:num_read)
+        9999 string%characters = string%characters // buffer(1:num_read)
     end subroutine
 
     subroutine get_with_unit_to_end_of_record(unit, string, maxlen, iostat)
@@ -1633,14 +1908,14 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
+        allocate(character(len=0) :: string%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(unit, fmt='(A)', advance='NO', eor=9999, size=num_read, iostat=iostat) buffer(1:next_read_length)
                 if (iostat /= 0) return
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         else
@@ -1648,12 +1923,12 @@ contains
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(unit, fmt='(A)', advance='NO', eor=9999, size=num_read) buffer(1:next_read_length)
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         end if
         return
-        9999 string = string // buffer(1:num_read)
+        9999 string%characters = string%characters // buffer(1:num_read)
     end subroutine
 
     subroutine get_default_unit_to_terminator_string(string, set, separator, maxlen, iostat)
@@ -1664,7 +1939,11 @@ contains
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
-        call get(string, char(set), separator, maxlen, iostat)
+        if (allocated(set%characters)) then
+            call get(string, set%characters, separator, maxlen, iostat)
+        else
+            call get(string, "", separator, maxlen, iostat)
+        end if
     end subroutine
 
     subroutine get_with_unit_to_terminator_string(unit, string, set, separator, maxlen, iostat)
@@ -1676,7 +1955,11 @@ contains
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
-        call get(unit, string, char(set), separator, maxlen, iostat)
+        if (allocated(set%characters)) then
+            call get(unit, string, set%characters, separator, maxlen, iostat)
+        else
+            call get(unit, string, "", separator, maxlen, iostat)
+        end if
     end subroutine
 
     subroutine get_default_unit_to_terminator_characters(string, set, separator, maxlen, iostat)
@@ -1695,18 +1978,18 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
-        if (present(separator)) separator = ""
+        allocate(character(len=0) :: string%characters)
+        if (present(separator)) allocate(character(len=0) :: separator%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 read(*, fmt='(A)', advance='NO', eor=9999, iostat=iostat) buffer
                 if (iostat /= 0) return
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         else
@@ -1714,10 +1997,10 @@ contains
                 if (num_to_read <= 0) exit
                 read(*, fmt='(A)', advance='NO', eor=9999) buffer
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         end if
@@ -1741,18 +2024,18 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
-        if (present(separator)) separator = ""
+        allocate(character(len=0) :: string%characters)
+        if (present(separator)) allocate(character(len=0) :: separator%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 read(unit, fmt='(A)', advance='NO', eor=9999, iostat=iostat) buffer
                 if (iostat /= 0) return
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         else
@@ -1760,10 +2043,10 @@ contains
                 if (num_to_read <= 0) exit
                 read(unit, fmt='(A)', advance='NO', eor=9999) buffer
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         end if
@@ -1775,7 +2058,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put(char(string), iostat)
+        if (allocated(string%characters)) then
+            call put(string%characters, iostat)
+        else
+            call put("", iostat)
+        end if
     end subroutine
 
     subroutine put_string_with_unit(unit, string, iostat)
@@ -1784,7 +2071,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put(unit, char(string), iostat)
+        if (allocated(string%characters)) then
+            call put(unit, string%characters, iostat)
+        else
+            call put(unit, "", iostat)
+        end if
     end subroutine
 
     subroutine put_characters_default_unit(string, iostat)
@@ -1817,7 +2108,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put_line(char(string), iostat)
+        if (allocated(string%characters)) then
+            call put_line(string%characters, iostat)
+        else
+            call put_line("", iostat)
+        end if
     end subroutine
 
     subroutine put_line_string_with_unit(unit, string, iostat)
@@ -1826,7 +2121,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put_line(unit, char(string), iostat)
+        if (allocated(string%characters)) then
+            call put_line(unit, string%characters, iostat)
+        else
+            call put_line(unit, "", iostat)
+        end if
     end subroutine
 
     subroutine put_line_characters_default_unit(string, iostat)
@@ -1875,7 +2174,7 @@ contains
             finish_ = len(string)
         end if
 
-        extracted = string(start_:finish_)
+        allocate(extracted%characters, source = string(start_:finish_))
     end function
 
     elemental function extract_string(string, start, finish) result(extracted)
@@ -1885,7 +2184,11 @@ contains
         integer, optional, intent(in) :: finish
         type(varying_string) :: extracted
 
-        extracted = extract(char(string), start, finish)
+        if (allocated(string%characters)) then
+            extracted = extract(string%characters, start, finish)
+        else
+            extracted = extract("", start, finish)
+        end if
     end function
 
     elemental function insert_character_into_character(string, start, substring) result(inserted)
@@ -1895,24 +2198,13 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: inserted
 
-        type(varying_string) :: beginning
-        type(varying_string) :: middle
-        type(varying_string) :: end_
-
         if (start <= 1) then
-            beginning = substring
-            middle = string
-            end_ = ""
+            allocate(inserted%characters, source = substring // string)
         else if (start > len(string)) then
-            beginning = string
-            middle = substring
-            end_ = ""
+            allocate(inserted%characters, source = string // substring)
         else
-            beginning = string(1:start-1)
-            middle = substring
-            end_ = string(start:)
+            allocate(inserted%characters, source = string(1:start-1) // substring // string(start:))
         end if
-        inserted = beginning // middle // end_
     end function
 
     elemental function insert_character_into_string(string, start, substring) result(inserted)
@@ -1922,7 +2214,11 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: inserted
 
-        inserted = insert(char(string), start, substring)
+        if (allocated(string%characters)) then
+            inserted = insert(string%characters, start, substring)
+        else
+            inserted = insert("", start, substring)
+        end if
     end function
 
     elemental function insert_string_into_character(string ,start, substring) result(inserted)
@@ -1932,7 +2228,11 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: inserted
 
-        inserted = insert(string, start, char(substring))
+        if (allocated(substring%characters)) then
+            inserted = insert(string, start, substring%characters)
+        else
+            inserted = insert(string, start, "")
+        end if
     end function
 
     elemental function insert_string_into_string(string ,start, substring) result(inserted)
@@ -1942,7 +2242,19 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: inserted
 
-        inserted = insert(char(string), start, char(substring))
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                inserted = insert(string%characters, start, substring%characters)
+            else
+                inserted = insert(string%characters, start, "")
+            end if
+        else
+            if (allocated(substring%characters)) then
+                inserted = insert("", start, substring%characters)
+            else
+                inserted = insert("", start, "")
+            end if
+        end if
     end function
 
     elemental function remove_character(string, start, finish) result(removed)
@@ -1954,8 +2266,6 @@ contains
 
         integer :: start_
         integer :: finish_
-        type(varying_string) :: beginning
-        type(varying_string) :: end_
 
         if (present(start)) then
             start_ = start
@@ -1969,11 +2279,9 @@ contains
         end if
 
         if (start_ > finish_) then
-            removed = string
+            allocate(removed%characters, source = string)
         else
-            beginning = string(1:start_ - 1)
-            end_ = string(finish_ + 1:len(string))
-            removed = beginning // end_
+            allocate(removed%characters, source = string(1:start_ - 1) // string(finish_ + 1:len(string)))
         end if
     end function
 
@@ -1984,7 +2292,11 @@ contains
         integer, optional, intent(in) :: finish
         type(varying_string) :: removed
 
-        removed = remove(char(string), start, finish)
+        if (allocated(string%characters)) then
+            removed = remove(string%characters, start, finish)
+        else
+            removed = remove("", start, finish)
+        end if
     end function
 
     elemental function replace_character_with_character_start( &
@@ -1995,13 +2307,13 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        integer :: start_
-
-        start_ = max(1, start)
-        replaced = insert( &
-                remove(string, start_, start_ + len(substring) - 1), &
-                start_, &
-                substring)
+        if (start > len(string)) then
+            allocate(replaced%characters, source = string // substring)
+        else if (start <= 1) then
+            allocate(replaced%characters, source = substring // string(len(substring)+1:))
+        else
+            allocate(replaced%characters, source = string(1:start-1) // substring // string(start + len(substring):))
+        end if
     end function
 
     elemental function replace_string_with_character_start( &
@@ -2012,7 +2324,11 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, substring)
+        if (allocated(string%characters)) then
+            replaced = replace(string%characters, start, substring)
+        else
+            allocate(replaced%characters, source = substring)
+        end if
     end function
 
     elemental function replace_character_with_string_start( &
@@ -2023,7 +2339,11 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(string, start, char(substring))
+        if (allocated(substring%characters)) then
+            replaced = replace(string, start, substring%characters)
+        else
+            allocate(replaced%characters, source = string)
+        end if
     end function
 
     elemental function replace_string_with_string_start( &
@@ -2034,7 +2354,19 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, char(substring))
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string%characters, start, substring%characters)
+            else
+                allocate(replaced%characters, source = string%characters)
+            end if
+        else
+            if (allocated(substring%characters)) then
+                allocate(replaced%characters, source = substring%characters)
+            else
+                allocate(character(len=0) :: replaced%characters)
+            end if
+        end if
     end function
 
     elemental function replace_character_with_character_range( &
@@ -2046,12 +2378,7 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        type(varying_string) :: beginning
-        type(varying_string) :: ending
-
-        beginning = string(1 : start-1)
-        ending = string(max(finish+1, start) : )
-        replaced = beginning // substring // ending
+        allocate(replaced%characters, source = string(1:start-1) // substring // string(max(finish+1, start):))
     end function
 
     elemental function replace_string_with_character_range( &
@@ -2063,7 +2390,11 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, finish, substring)
+        if (allocated(string%characters)) then
+            replaced = replace(string%characters, start, finish, substring)
+        else
+            allocate(replaced%characters, source = substring)
+        end if
     end function
 
     elemental function replace_character_with_string_range( &
@@ -2075,7 +2406,11 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(string, start, finish, char(substring))
+        if (allocated(substring%characters)) then
+            replaced = replace(string, start, finish, substring%characters)
+        else
+            allocate(replaced%characters, source = string(1:start-1) // string(max(finish+1, start):))
+        end if
     end function
 
     elemental function replace_string_with_string_range( &
@@ -2087,7 +2422,19 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, finish, char(substring))
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string%characters, start, finish, substring%characters)
+            else
+                allocate(replaced%characters, source = string%characters(1:start-1) // string%characters(max(finish+1, start):))
+            end if
+        else
+            if (allocated(substring%characters)) then
+                allocate(replaced%characters, source = substring%characters)
+            else
+                allocate(character(len=0) :: replaced%characters)
+            end if
+        end if
     end function
 
     elemental function replace_target_character_with_character_in_character( &
@@ -2119,7 +2466,6 @@ contains
             block
                 integer :: i
                 integer :: new_length
-                character(len=:), allocatable :: new_string
                 integer :: num_targets
                 integer :: target_length, substring_length
                 integer, allocatable :: target_positions(:), substring_positions(:)
@@ -2132,7 +2478,7 @@ contains
                             len(string) &
                             - num_targets*target_length &
                             + num_targets*substring_length
-                    allocate(character(len=new_length)::new_string)
+                    allocate(character(len=new_length)::replaced%characters)
                     allocate(target_positions(num_targets))
                     allocate(substring_positions(num_targets))
                     call get_positions( &
@@ -2144,21 +2490,20 @@ contains
                             target_positions, &
                             substring_positions)
                     if (target_positions(1) > 1) then
-                        new_string(1 : substring_positions(1)-1) = string(1 : target_positions(1)-1)
+                        replaced%characters(1 : substring_positions(1)-1) = string(1 : target_positions(1)-1)
                     end if
-                    new_string(substring_positions(1) : substring_positions(1)+substring_length-1) = substring
+                    replaced%characters(substring_positions(1) : substring_positions(1)+substring_length-1) = substring
                     do i = 2, num_targets
-                        new_string(substring_positions(i-1)+substring_length : substring_positions(i)-1) = &
+                        replaced%characters(substring_positions(i-1)+substring_length : substring_positions(i)-1) = &
                                 string(target_positions(i-1)+target_length:target_positions(i)-1)
-                        new_string(substring_positions(i) : substring_positions(i)+substring_length-1) = substring
+                                replaced%characters(substring_positions(i) : substring_positions(i)+substring_length-1) = substring
                     end do
                     if (target_positions(num_targets) + target_length <= len(string)) then
-                        new_string(substring_positions(num_targets)+substring_length:) = &
+                        replaced%characters(substring_positions(num_targets)+substring_length:) = &
                                 string(target_positions(num_targets)+target_length:)
                     end if
-                    replaced = new_string
                 else
-                    replaced = string
+                    allocate(replaced%characters, source = string)
                 end if
             end block
         else
@@ -2167,9 +2512,9 @@ contains
 
                 position = index(string, target, back_)
                 if (position /= 0) then
-                    replaced = string(1:position-1) // substring // string(position+len(target):)
+                    allocate(replaced%characters, source = string(1:position-1) // substring // string(position+len(target):))
                 else
-                    replaced = string
+                    allocate(replaced%characters, source = string)
                 end if
             end block
         end if
@@ -2266,7 +2611,11 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), target, substring, every, back)
+        if (allocated(string%characters)) then
+            replaced = replace(string%characters, target, substring, every, back)
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental function replace_target_character_with_string_in_character( &
@@ -2279,7 +2628,11 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(string, target, char(substring), every, back)
+        if (allocated(substring%characters)) then
+            replaced = replace(string, target, substring%characters, every, back)
+        else
+            replaced = replace(string, target, "", every, back)
+        end if
     end function
 
     elemental function replace_target_character_with_string_in_string( &
@@ -2292,7 +2645,15 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), target, char(substring), every, back)
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string%characters, target, substring%characters, every, back)
+            else
+                replaced = replace(string%characters, target, "", every, back)
+            end if
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental function replace_target_string_with_character_in_character( &
@@ -2305,7 +2666,11 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(string, char(target), substring, every, back)
+        if (allocated(target%characters)) then
+            replaced = replace(string, target%characters, substring, every, back)
+        else
+            allocate(replaced%characters, source = string)
+        end if
     end function
 
     elemental function replace_target_string_with_character_in_string( &
@@ -2318,7 +2683,15 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), char(target), substring, every, back)
+        if (allocated(string%characters)) then
+            if (allocated(target%characters)) then
+                replaced = replace(string%characters, target%characters, substring, every, back)
+            else
+                allocate(replaced%characters, source = string%characters)
+            end if
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental function replace_target_string_with_string_in_character( &
@@ -2331,7 +2704,15 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(string, char(target), char(substring), every, back)
+        if (allocated(target%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string, target%characters, substring%characters, every, back)
+            else
+                replaced = replace(string, target%characters, "", every, back)
+            end if
+        else
+            allocate(replaced%characters, source = string)
+        end if
     end function
 
     elemental function replace_target_string_with_string_in_string( &
@@ -2344,7 +2725,19 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), char(target), char(substring), every, back)
+        if (allocated(string%characters)) then
+            if (allocated(target%characters)) then
+                if (allocated(substring%characters)) then
+                    replaced = replace(string%characters, target%characters, substring%characters, every, back)
+                else
+                    replaced = replace(string%characters, target%characters, "", every, back)
+                end if
+            else
+                allocate(replaced%characters, source = string%characters)
+            end if
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental subroutine split_character(string, word, set, separator, back)
@@ -2360,8 +2753,8 @@ contains
         integer :: string_length
         character(len=:), allocatable :: temp
 
-        allocate(character(len=0) :: temp) ! TODO: remove once gfortran bug is fixed
-        string_length = len(string)
+        if (.not. allocated(string%characters)) return
+        string_length = len(string%characters)
         if (present(back)) then
             backwards = back
         else
@@ -2369,31 +2762,33 @@ contains
         end if
         if (backwards) then
             do i = string_length, 1, -1
-                if (index(set, extract(string, i, i)) /= 0) exit
+                if (index(set, string%characters(i:i)) /= 0) exit
             end do
             if (i < 1) then
-                word = string
-                string = ""
-                if (present(separator)) separator = ""
+                call move_alloc(string%characters, word%characters)
+                allocate(character(len=0) :: string%characters)
+                if (present(separator)) allocate(character(len=0) :: separator%characters)
             else
-                word = extract(string, i+1)
-                temp = char(extract(string, 1, i-1))
-                if (present(separator)) separator = extract(string, i, i)
-                string = temp
+                allocate(word%characters, source = string%characters(i+1:))
+                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
+                allocate(temp, source = string%characters(1:i-1))
+                deallocate(string%characters)
+                allocate(string%characters, source = temp)
             end if
         else
             do i = 1, string_length
-                if (index(set, extract(string, i, i)) /= 0) exit
+                if (index(set, string%characters(i:i)) /= 0) exit
             end do
             if (i > string_length) then
-                word = string
-                string = ""
-                if (present(separator)) separator = ""
+                call move_alloc(string%characters, word%characters)
+                allocate(character(len=0) :: string%characters)
+                if (present(separator)) allocate(character(len=0) :: separator%characters)
             else
-                word = extract(string, 1, i-1)
-                temp = char(extract(string, i+1))
-                if (present(separator)) separator = extract(string, i, i)
-                string = temp
+                allocate(word%characters, source = string%characters(1:i-1))
+                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
+                allocate(temp, source = string%characters(i+1:))
+                deallocate(string%characters)
+                allocate(string%characters, source = temp)
             end if
         end if
     end subroutine
@@ -2406,6 +2801,16 @@ contains
         type(varying_string), optional, intent(out) :: separator
         logical, optional, intent(in) :: back
 
-        call split(string, word, char(set), separator, back)
+        if (allocated(set%characters)) then
+            call split(string, word, set%characters, separator, back)
+        else
+            if (allocated(string%characters)) then
+                call move_alloc(string%characters, word%characters)
+            else
+                allocate(character(len=0) :: word%characters)
+            end if
+            allocate(character(len=0) :: string%characters)
+            if (present(separator)) allocate(character(len=0) :: separator%characters)
+        end if
     end subroutine
 end module
