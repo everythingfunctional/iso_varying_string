@@ -1530,7 +1530,19 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than_or_equals
 
-        greater_than_or_equals = lge(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                greater_than_or_equals = lge(string_a%characters, string_b%characters)
+            else
+                greater_than_or_equals = lge(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                greater_than_or_equals = lge("", string_b%characters)
+            else
+                greater_than_or_equals = .true.
+            end if
+        end if
     end function
 
     elemental function character_lge_string(string_a, string_b) result(greater_than_or_equals)
@@ -1539,7 +1551,11 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than_or_equals
 
-        greater_than_or_equals = lge(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            greater_than_or_equals = lge(string_a, string_b%characters)
+        else
+            greater_than_or_equals = lge(string_a, "")
+        end if
     end function
 
     elemental function string_lge_character(string_a, string_b) result(greater_than_or_equals)
@@ -1548,7 +1564,11 @@ contains
         character(len=*), intent(in) :: string_b
         logical :: greater_than_or_equals
 
-        greater_than_or_equals = lge(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            greater_than_or_equals = lge(string_a%characters, string_b)
+        else
+            greater_than_or_equals = lge("", string_b)
+        end if
     end function
 
     elemental function string_lgt_string(string_a, string_b) result(greater_than)
@@ -1557,7 +1577,19 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than
 
-        greater_than = lgt(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                greater_than = lgt(string_a%characters, string_b%characters)
+            else
+                greater_than = lgt(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                greater_than = lgt("", string_b%characters)
+            else
+                greater_than = .false.
+            end if
+        end if
     end function
 
     elemental function character_lgt_string(string_a, string_b) result(greater_than)
@@ -1566,7 +1598,11 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: greater_than
 
-        greater_than = lgt(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            greater_than = lgt(string_a, string_b%characters)
+        else
+            greater_than = lgt(string_a, "")
+        end if
     end function
 
     elemental function string_lgt_character(string_a, string_b) result(greater_than)
@@ -1575,7 +1611,11 @@ contains
         character(len=*), intent(in) :: string_b
         logical :: greater_than
 
-        greater_than = lgt(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            greater_than = lgt(string_a%characters, string_b)
+        else
+            greater_than = lgt("", string_b)
+        end if
     end function
 
     elemental function string_lle_string(string_a, string_b) result(less_than_or_equals)
@@ -1584,7 +1624,19 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: less_than_or_equals
 
-        less_than_or_equals = lle(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                less_than_or_equals = lle(string_a%characters, string_b%characters)
+            else
+                less_than_or_equals = lle(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                less_than_or_equals = lle("", string_b%characters)
+            else
+                less_than_or_equals = .true.
+            end if
+        end if
     end function
 
     elemental function character_lle_string(string_a, string_b) result(less_than_or_equals)
@@ -1593,7 +1645,11 @@ contains
         type(varying_string), intent(in) :: string_b
         logical :: less_than_or_equals
 
-        less_than_or_equals = lle(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            less_than_or_equals = lle(string_a, string_b%characters)
+        else
+            less_than_or_equals = lle(string_a, "")
+        end if
     end function
 
     elemental function string_lle_character(string_a, string_b) result(less_than_or_equals)
@@ -1602,7 +1658,11 @@ contains
         character(len=*), intent(in) :: string_b
         logical :: less_than_or_equals
 
-        less_than_or_equals = lle(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            less_than_or_equals = lle(string_a%characters, string_b)
+        else
+            less_than_or_equals = lle("", string_b)
+        end if
     end function
 
     elemental function string_llt_string(string_a, string_b) result(less_than)
@@ -1612,7 +1672,19 @@ contains
         logical :: less_than
         intrinsic :: llt
 
-        less_than = llt(char(string_a), char(string_b))
+        if (allocated(string_a%characters)) then
+            if (allocated(string_b%characters)) then
+                less_than = llt(string_a%characters, string_b%characters)
+            else
+                less_than = llt(string_a%characters, "")
+            end if
+        else
+            if (allocated(string_b%characters)) then
+                less_than = llt("", string_b%characters)
+            else
+                less_than = .false.
+            end if
+        end if
     end function
 
     elemental function character_llt_string(string_a, string_b) result(less_than)
@@ -1622,7 +1694,11 @@ contains
         intrinsic :: llt
         logical :: less_than
 
-        less_than = llt(string_a, char(string_b))
+        if (allocated(string_b%characters)) then
+            less_than = llt(string_a, string_b%characters)
+        else
+            less_than = llt(string_a, "")
+        end if
     end function
 
     elemental function string_llt_character(string_a, string_b) result(less_than)
@@ -1632,8 +1708,13 @@ contains
         intrinsic :: llt
         logical :: less_than
 
-        less_than = llt(char(string_a), string_b)
+        if (allocated(string_a%characters)) then
+            less_than = llt(string_a%characters, string_b)
+        else
+            less_than = llt("", string_b)
+        end if
     end function
+
     elemental function string_repeat(string, ncopies) result(repeated)
         ! Sec. 3.4.13
         type(varying_string), intent(in) :: string
