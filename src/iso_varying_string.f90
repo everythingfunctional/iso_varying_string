@@ -1047,17 +1047,8 @@ contains
         character(len=*), intent(out) :: lhs
         type(varying_string), intent(in) :: rhs
 
-        integer :: i
-        integer :: length_input
-        integer :: length_output
-
         if (allocated(rhs%characters)) then
-            length_output = len(lhs)
-            length_input = len(rhs%characters)
-            lhs(1:min(length_input, length_output)) = rhs%characters(1 : min(length_input, length_output))
-            if (length_input < length_output) then
-                lhs(length_input+1:) = ""
-            end if
+            lhs = rhs%characters
         else
             lhs = ""
         end if
