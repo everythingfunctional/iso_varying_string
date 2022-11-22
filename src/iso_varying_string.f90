@@ -2174,7 +2174,7 @@ contains
             finish_ = len(string)
         end if
 
-        extracted = string(start_:finish_)
+        allocate(extracted%characters, source = string(start_:finish_))
     end function
 
     elemental function extract_string(string, start, finish) result(extracted)
@@ -2184,7 +2184,11 @@ contains
         integer, optional, intent(in) :: finish
         type(varying_string) :: extracted
 
-        extracted = extract(char(string), start, finish)
+        if (allocated(string%characters)) then
+            extracted = extract(string%characters, start, finish)
+        else
+            extracted = extract("", start, finish)
+        end if
     end function
 
     elemental function insert_character_into_character(string, start, substring) result(inserted)
