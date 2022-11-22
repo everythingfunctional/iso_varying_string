@@ -1724,13 +1724,9 @@ contains
         intrinsic :: repeat
 
         if (allocated(string%characters)) then
-            block
-                character(len=len(string)) :: tmp_char
-                tmp_char = string
-                repeated = repeat(tmp_char, ncopies)
-            end block
+            allocate(repeated%characters, source = repeat(string%characters, ncopies))
         else
-            repeated = ""
+            allocate(character(len=0) :: repeated%characters)
         end if
     end function
 
