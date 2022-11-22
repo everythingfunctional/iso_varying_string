@@ -1107,7 +1107,19 @@ contains
         type(varying_string), intent(in) :: rhs
         logical :: equals
 
-        equals = char(lhs) == char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                equals = lhs%characters == rhs%characters
+            else
+                equals = lhs%characters == ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                equals = "" == rhs%characters
+            else
+                equals = .true.
+            end if
+        end if
     end function
 
     elemental function character_eq_string(lhs, rhs) result(equals)
@@ -1116,7 +1128,11 @@ contains
         type(varying_string), intent(in) :: rhs
         logical :: equals
 
-        equals = lhs == char(rhs)
+        if (allocated(rhs%characters)) then
+            equals = lhs == rhs%characters
+        else
+            equals = lhs == ""
+        end if
     end function
 
     elemental function string_eq_character(lhs, rhs) result(equals)
@@ -1125,7 +1141,11 @@ contains
         character(len=*), intent(in) :: rhs
         logical :: equals
 
-        equals = char(lhs) == rhs
+        if (allocated(lhs%characters)) then
+            equals = lhs%characters == rhs
+        else
+            equals = "" == rhs
+        end if
     end function
 
     elemental function string_ne_string(lhs, rhs) result(equals)
