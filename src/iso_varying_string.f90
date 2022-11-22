@@ -1289,31 +1289,51 @@ contains
         end if
     end function
 
-    elemental function string_gt_string(lhs, rhs) result(equals)
+    elemental function string_gt_string(lhs, rhs) result(greater_than)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than
 
-        equals = char(lhs) > char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                greater_than = lhs%characters > rhs%characters
+            else
+                greater_than = lhs%characters > ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                greater_than = "" > rhs%characters
+            else
+                greater_than = .false.
+            end if
+        end if
     end function
 
-    elemental function character_gt_string(lhs, rhs) result(equals)
+    elemental function character_gt_string(lhs, rhs) result(greater_than)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than
 
-        equals = lhs > char(rhs)
+        if (allocated(rhs%characters)) then
+            greater_than = lhs > rhs%characters
+        else
+            greater_than = lhs > ""
+        end if
     end function
 
-    elemental function string_gt_character(lhs, rhs) result(equals)
+    elemental function string_gt_character(lhs, rhs) result(greater_than)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: greater_than
 
-        equals = char(lhs) > rhs
+        if (allocated(lhs%characters)) then
+            greater_than = lhs%characters > rhs
+        else
+            greater_than = "" > rhs
+        end if
     end function
 
     elemental function string_ge_string(lhs, rhs) result(equals)
