@@ -1039,7 +1039,7 @@ contains
         type(varying_string), intent(out) :: lhs
         character(len=*), intent(in) :: rhs
 
-        lhs%characters = rhs
+        allocate(lhs%characters, source = rhs)
     end subroutine
 
     elemental subroutine assign_string_to_character(lhs, rhs)
@@ -1062,15 +1062,15 @@ contains
 
         if (allocated(lhs%characters)) then
             if (allocated(rhs%characters)) then
-                concatenated%characters = lhs%characters // rhs%characters
+                allocate(concatenated%characters, source = lhs%characters // rhs%characters)
             else
-                concatenated%characters = lhs%characters
+                allocate(concatenated%characters, source = lhs%characters)
             end if
         else
             if (allocated(rhs%characters)) then
-                concatenated%characters = rhs%characters
+                allocate(concatenated%characters, source = rhs%characters)
             else
-                concatenated%characters = ""
+                allocate(character(len=0) :: concatenated%characters)
             end if
         end if
     end function
@@ -1082,9 +1082,9 @@ contains
         type(varying_string) :: concatenated
 
         if (allocated(lhs%characters)) then
-            concatenated%characters = lhs%characters // rhs
+            allocate(concatenated%characters, source = lhs%characters // rhs)
         else
-            concatenated%characters = rhs
+            allocate(concatenated%characters, source = rhs)
         end if
     end function
 
@@ -1095,9 +1095,9 @@ contains
         type(varying_string) :: concatenated
 
         if (allocated(rhs%characters)) then
-            concatenated%characters = lhs // rhs%characters
+            allocate(concatenated%characters, source = lhs // rhs%characters)
         else
-            concatenated%characters = lhs
+            allocate(concatenated%characters, source = lhs)
         end if
     end function
 
@@ -1388,7 +1388,11 @@ contains
         type(varying_string), intent(in) :: string
         type(varying_string) :: adjusted
 
-        adjusted = adjustl(char(string))
+        if (allocated(string%characters)) then
+            adjusted%characters = adjustl(string%characters)
+        else
+            allocate(character(len=0) :: adjusted%characters)
+        end if
     end function
 
     elemental function string_adjustr(string) result(adjusted)
@@ -1396,7 +1400,11 @@ contains
         type(varying_string), intent(in) :: string
         type(varying_string) :: adjusted
 
-        adjusted = adjustr(char(string))
+        if (allocated(string%characters)) then
+            allocate(adjusted%characters, source = adjustr(string%characters))
+        else
+            allocate(character(len=0) :: adjusted%characters)
+        end if
     end function
 
     pure function string_to_char(string) result(chars)
