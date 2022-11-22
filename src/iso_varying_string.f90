@@ -1799,7 +1799,19 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = verify(char(string), char(set), back)
+        if (allocated(string%characters)) then
+            if (allocated(set%characters)) then
+                position = verify(string%characters, set%characters, back)
+            else
+                position = verify(string%characters, "", back)
+            end if
+        else
+            if (allocated(set%characters)) then
+                position = verify("", set%characters, back)
+            else
+                position = verify("", "", back)
+            end if
+        end if
     end function
 
     elemental function string_verify_character(string, set, back) result(position)
@@ -1809,7 +1821,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = verify(char(string), set, back)
+        if (allocated(string%characters)) then
+            position = verify(string%characters, set, back)
+        else
+            position = verify("", set, back)
+        end if
     end function
 
     elemental function character_verify_string(string, set, back) result(position)
@@ -1819,7 +1835,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = verify(string, char(set), back)
+        if (allocated(set%characters)) then
+            position = verify(string, set%characters, back)
+        else
+            position = verify(string, "", back)
+        end if
     end function
 
     elemental function var_str_char(char) result(var_str)
