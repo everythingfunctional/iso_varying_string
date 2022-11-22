@@ -2266,8 +2266,6 @@ contains
 
         integer :: start_
         integer :: finish_
-        type(varying_string) :: beginning
-        type(varying_string) :: end_
 
         if (present(start)) then
             start_ = start
@@ -2281,11 +2279,9 @@ contains
         end if
 
         if (start_ > finish_) then
-            removed = string
+            allocate(removed%characters, source = string)
         else
-            beginning = string(1:start_ - 1)
-            end_ = string(finish_ + 1:len(string))
-            removed = beginning // end_
+            allocate(removed%characters, source = string(1:start_ - 1) // string(finish_ + 1:len(string)))
         end if
     end function
 
@@ -2296,7 +2292,11 @@ contains
         integer, optional, intent(in) :: finish
         type(varying_string) :: removed
 
-        removed = remove(char(string), start, finish)
+        if (allocated(string%characters)) then
+            removed = remove(string%characters, start, finish)
+        else
+            removed = remove("", start, finish)
+        end if
     end function
 
     elemental function replace_character_with_character_start( &
