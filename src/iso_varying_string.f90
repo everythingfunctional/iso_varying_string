@@ -2307,13 +2307,13 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        integer :: start_
-
-        start_ = max(1, start)
-        replaced = insert( &
-                remove(string, start_, start_ + len(substring) - 1), &
-                start_, &
-                substring)
+        if (start > len(string)) then
+            allocate(replaced%characters, source = string // substring)
+        else if (start <= 1) then
+            allocate(replaced%characters, source = substring // string(len(substring)+1:))
+        else
+            allocate(replaced%characters, source = string(1:start-1) // substring // string(start + len(substring):))
+        end if
     end function
 
     elemental function replace_string_with_character_start( &
@@ -2324,7 +2324,11 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, substring)
+        if (allocated(string%characters)) then
+            replaced = replace(string%characters, start, substring)
+        else
+            allocate(replaced%characters, source = substring)
+        end if
     end function
 
     elemental function replace_character_with_string_start( &
@@ -2335,7 +2339,11 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(string, start, char(substring))
+        if (allocated(substring%characters)) then
+            replaced = replace(string, start, substring%characters)
+        else
+            allocate(replaced%characters, source = string)
+        end if
     end function
 
     elemental function replace_string_with_string_start( &
@@ -2346,7 +2354,19 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, char(substring))
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string%characters, start, substring%characters)
+            else
+                allocate(replaced%characters, source = string%characters)
+            end if
+        else
+            if (allocated(substring%characters)) then
+                allocate(replaced%characters, source = substring%characters)
+            else
+                allocate(character(len=0) :: replaced%characters)
+            end if
+        end if
     end function
 
     elemental function replace_character_with_character_range( &
@@ -2358,12 +2378,7 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        type(varying_string) :: beginning
-        type(varying_string) :: ending
-
-        beginning = string(1 : start-1)
-        ending = string(max(finish+1, start) : )
-        replaced = beginning // substring // ending
+        allocate(replaced%characters, source = string(1:start-1) // substring // string(max(finish+1, start):))
     end function
 
     elemental function replace_string_with_character_range( &
@@ -2375,7 +2390,11 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, finish, substring)
+        if (allocated(string%characters)) then
+            replaced = replace(string%characters, start, finish, substring)
+        else
+            allocate(replaced%characters, source = substring)
+        end if
     end function
 
     elemental function replace_character_with_string_range( &
@@ -2387,7 +2406,11 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(string, start, finish, char(substring))
+        if (allocated(substring%characters)) then
+            replaced = replace(string, start, finish, substring%characters)
+        else
+            allocate(replaced%characters, source = string(1:start-1) // string(max(finish+1, start):))
+        end if
     end function
 
     elemental function replace_string_with_string_range( &
@@ -2399,7 +2422,19 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), start, finish, char(substring))
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string%characters, start, finish, substring%characters)
+            else
+                allocate(replaced%characters, source = string%characters(1:start-1) // string%characters(max(finish+1, start):))
+            end if
+        else
+            if (allocated(substring%characters)) then
+                allocate(replaced%characters, source = substring%characters)
+            else
+                allocate(character(len=0) :: replaced%characters)
+            end if
+        end if
     end function
 
     elemental function replace_target_character_with_character_in_character( &
@@ -2431,7 +2466,6 @@ contains
             block
                 integer :: i
                 integer :: new_length
-                character(len=:), allocatable :: new_string
                 integer :: num_targets
                 integer :: target_length, substring_length
                 integer, allocatable :: target_positions(:), substring_positions(:)
@@ -2444,7 +2478,7 @@ contains
                             len(string) &
                             - num_targets*target_length &
                             + num_targets*substring_length
-                    allocate(character(len=new_length)::new_string)
+                    allocate(character(len=new_length)::replaced%characters)
                     allocate(target_positions(num_targets))
                     allocate(substring_positions(num_targets))
                     call get_positions( &
@@ -2456,21 +2490,20 @@ contains
                             target_positions, &
                             substring_positions)
                     if (target_positions(1) > 1) then
-                        new_string(1 : substring_positions(1)-1) = string(1 : target_positions(1)-1)
+                        replaced%characters(1 : substring_positions(1)-1) = string(1 : target_positions(1)-1)
                     end if
-                    new_string(substring_positions(1) : substring_positions(1)+substring_length-1) = substring
+                    replaced%characters(substring_positions(1) : substring_positions(1)+substring_length-1) = substring
                     do i = 2, num_targets
-                        new_string(substring_positions(i-1)+substring_length : substring_positions(i)-1) = &
+                        replaced%characters(substring_positions(i-1)+substring_length : substring_positions(i)-1) = &
                                 string(target_positions(i-1)+target_length:target_positions(i)-1)
-                        new_string(substring_positions(i) : substring_positions(i)+substring_length-1) = substring
+                                replaced%characters(substring_positions(i) : substring_positions(i)+substring_length-1) = substring
                     end do
                     if (target_positions(num_targets) + target_length <= len(string)) then
-                        new_string(substring_positions(num_targets)+substring_length:) = &
+                        replaced%characters(substring_positions(num_targets)+substring_length:) = &
                                 string(target_positions(num_targets)+target_length:)
                     end if
-                    replaced = new_string
                 else
-                    replaced = string
+                    allocate(replaced%characters, source = string)
                 end if
             end block
         else
@@ -2479,9 +2512,9 @@ contains
 
                 position = index(string, target, back_)
                 if (position /= 0) then
-                    replaced = string(1:position-1) // substring // string(position+len(target):)
+                    allocate(replaced%characters, source = string(1:position-1) // substring // string(position+len(target):))
                 else
-                    replaced = string
+                    allocate(replaced%characters, source = string)
                 end if
             end block
         end if
@@ -2578,7 +2611,11 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), target, substring, every, back)
+        if (allocated(string%characters)) then
+            replaced = replace(string%characters, target, substring, every, back)
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental function replace_target_character_with_string_in_character( &
@@ -2591,7 +2628,11 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(string, target, char(substring), every, back)
+        if (allocated(substring%characters)) then
+            replaced = replace(string, target, substring%characters, every, back)
+        else
+            replaced = replace(string, target, "", every, back)
+        end if
     end function
 
     elemental function replace_target_character_with_string_in_string( &
@@ -2604,7 +2645,15 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), target, char(substring), every, back)
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string%characters, target, substring%characters, every, back)
+            else
+                replaced = replace(string%characters, target, "", every, back)
+            end if
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental function replace_target_string_with_character_in_character( &
@@ -2617,7 +2666,11 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(string, char(target), substring, every, back)
+        if (allocated(target%characters)) then
+            replaced = replace(string, target%characters, substring, every, back)
+        else
+            allocate(replaced%characters, source = string)
+        end if
     end function
 
     elemental function replace_target_string_with_character_in_string( &
@@ -2630,7 +2683,15 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), char(target), substring, every, back)
+        if (allocated(string%characters)) then
+            if (allocated(target%characters)) then
+                replaced = replace(string%characters, target%characters, substring, every, back)
+            else
+                allocate(replaced%characters, source = string%characters)
+            end if
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental function replace_target_string_with_string_in_character( &
@@ -2643,7 +2704,15 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(string, char(target), char(substring), every, back)
+        if (allocated(target%characters)) then
+            if (allocated(substring%characters)) then
+                replaced = replace(string, target%characters, substring%characters, every, back)
+            else
+                replaced = replace(string, target%characters, "", every, back)
+            end if
+        else
+            allocate(replaced%characters, source = string)
+        end if
     end function
 
     elemental function replace_target_string_with_string_in_string( &
@@ -2656,7 +2725,19 @@ contains
         logical, optional, intent(in) :: back
         type(varying_string) :: replaced
 
-        replaced = replace(char(string), char(target), char(substring), every, back)
+        if (allocated(string%characters)) then
+            if (allocated(target%characters)) then
+                if (allocated(substring%characters)) then
+                    replaced = replace(string%characters, target%characters, substring%characters, every, back)
+                else
+                    replaced = replace(string%characters, target%characters, "", every, back)
+                end if
+            else
+                allocate(replaced%characters, source = string%characters)
+            end if
+        else
+            allocate(character(len=0) :: replaced%characters)
+        end if
     end function
 
     elemental subroutine split_character(string, word, set, separator, back)
