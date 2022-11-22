@@ -1435,7 +1435,9 @@ contains
         type(varying_string), intent(in) :: c
         integer :: string_iachar
 
-        string_iachar = iachar(c%characters)
+        if (allocated(c%characters)) then
+            string_iachar = iachar(c%characters)
+        end if
     end function
 
     elemental function string_ichar(c)
@@ -1443,7 +1445,9 @@ contains
         type(varying_string), intent(in) :: c
         integer :: string_ichar
 
-        string_ichar = ichar(c%characters)
+        if (allocated(c%characters)) then
+            string_ichar = ichar(c%characters)
+        end if
     end function
 
     elemental function string_index_string(string, substring, back) result(position)
@@ -1453,7 +1457,19 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = index(char(string), char(substring), back)
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                position = index(string%characters, substring%characters, back)
+            else
+                position = index(string%characters, "", back)
+            end if
+        else
+            if (allocated(substring%characters)) then
+                position = index("", substring%characters, back)
+            else
+                position = index("", "", back)
+            end if
+        end if
     end function
 
     elemental function string_index_character(string, substring, back) result(position)
@@ -1463,7 +1479,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = index(char(string), substring, back)
+        if (allocated(string%characters)) then
+            position = index(string%characters, substring, back)
+        else
+            position = index("", substring, back)
+        end if
     end function
 
     elemental function character_index_string(string, substring, back) result(position)
@@ -1473,7 +1493,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = index(string, char(substring), back)
+        if (allocated(substring%characters)) then
+            position = index(string, substring%characters, back)
+        else
+            position = index(string, "", back)
+        end if
     end function
 
     elemental function len_string(string) result(length)
