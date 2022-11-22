@@ -1737,7 +1737,19 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = scan(char(string), char(set), back)
+        if (allocated(string%characters)) then
+            if (allocated(set%characters)) then
+                position = scan(string%characters, set%characters, back)
+            else
+                position = scan(string%characters, "", back)
+            end if
+        else
+            if (allocated(set%characters)) then
+                position = scan("", set%characters, back)
+            else
+                position = scan("", "", back)
+            end if
+        end if
     end function
 
     elemental function string_scan_character(string, set, back) result(position)
@@ -1747,7 +1759,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = scan(char(string), set, back)
+        if (allocated(string%characters)) then
+            position = scan(string%characters, set, back)
+        else
+            position = scan("", set, back)
+        end if
     end function
 
     elemental function character_scan_string(string, set, back) result(position)
@@ -1757,7 +1773,11 @@ contains
         logical, optional, intent(in) :: back
         integer :: position
 
-        position = scan(string, char(set), back)
+        if (allocated(set%characters)) then
+            position = scan(string, set%characters, back)
+        else
+            position = scan(string, "", back)
+        end if
     end function
 
     elemental function trim_string(string) result(trimmed)
