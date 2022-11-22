@@ -1867,14 +1867,14 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
+        allocate(character(len=0) :: string%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(*, fmt='(A)', advance='NO', eor=9999, size=num_read, iostat=iostat) buffer(1:next_read_length)
                 if (iostat /= 0) return
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         else
@@ -1882,12 +1882,12 @@ contains
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(*, fmt='(A)', advance='NO', eor=9999, size=num_read) buffer(1:next_read_length)
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         end if
         return
-        9999 string = string // buffer(1:num_read)
+        9999 string%characters = string%characters // buffer(1:num_read)
     end subroutine
 
     subroutine get_with_unit_to_end_of_record(unit, string, maxlen, iostat)
@@ -1908,14 +1908,14 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
+        allocate(character(len=0) :: string%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(unit, fmt='(A)', advance='NO', eor=9999, size=num_read, iostat=iostat) buffer(1:next_read_length)
                 if (iostat /= 0) return
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         else
@@ -1923,12 +1923,12 @@ contains
                 if (num_to_read <= 0) exit
                 next_read_length = min(BUFFER_SIZE, num_to_read)
                 read(unit, fmt='(A)', advance='NO', eor=9999, size=num_read) buffer(1:next_read_length)
-                string = string // buffer(1:next_read_length)
+                string%characters = string%characters // buffer(1:next_read_length)
                 num_to_read = num_to_read - next_read_length
             end do
         end if
         return
-        9999 string = string // buffer(1:num_read)
+        9999 string%characters = string%characters // buffer(1:num_read)
     end subroutine
 
     subroutine get_default_unit_to_terminator_string(string, set, separator, maxlen, iostat)
@@ -1939,7 +1939,11 @@ contains
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
-        call get(string, char(set), separator, maxlen, iostat)
+        if (allocated(set%characters)) then
+            call get(string, set%characters, separator, maxlen, iostat)
+        else
+            call get(string, "", separator, maxlen, iostat)
+        end if
     end subroutine
 
     subroutine get_with_unit_to_terminator_string(unit, string, set, separator, maxlen, iostat)
@@ -1951,7 +1955,11 @@ contains
         integer, optional, intent(in) :: maxlen
         integer, optional, intent(out) :: iostat
 
-        call get(unit, string, char(set), separator, maxlen, iostat)
+        if (allocated(set%characters)) then
+            call get(unit, string, set%characters, separator, maxlen, iostat)
+        else
+            call get(unit, string, "", separator, maxlen, iostat)
+        end if
     end subroutine
 
     subroutine get_default_unit_to_terminator_characters(string, set, separator, maxlen, iostat)
@@ -1970,18 +1978,18 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
-        if (present(separator)) separator = ""
+        allocate(character(len=0) :: string%characters)
+        if (present(separator)) allocate(character(len=0) :: separator%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 read(*, fmt='(A)', advance='NO', eor=9999, iostat=iostat) buffer
                 if (iostat /= 0) return
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         else
@@ -1989,10 +1997,10 @@ contains
                 if (num_to_read <= 0) exit
                 read(*, fmt='(A)', advance='NO', eor=9999) buffer
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         end if
@@ -2016,18 +2024,18 @@ contains
         else
             num_to_read = huge(1)
         end if
-        string = ""
-        if (present(separator)) separator = ""
+        allocate(character(len=0) :: string%characters)
+        if (present(separator)) allocate(character(len=0) :: separator%characters)
         if (present(iostat)) then
             do
                 if (num_to_read <= 0) exit
                 read(unit, fmt='(A)', advance='NO', eor=9999, iostat=iostat) buffer
                 if (iostat /= 0) return
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         else
@@ -2035,10 +2043,10 @@ contains
                 if (num_to_read <= 0) exit
                 read(unit, fmt='(A)', advance='NO', eor=9999) buffer
                 if (index(set, buffer) /= 0) then
-                    if (present(separator)) separator = buffer
+                    if (present(separator)) separator%characters = buffer
                     return
                 end if
-                string = string // buffer
+                string%characters = string%characters // buffer
                 num_to_read = num_to_read - 1
             end do
         end if
