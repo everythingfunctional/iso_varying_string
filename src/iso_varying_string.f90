@@ -1505,7 +1505,11 @@ contains
         type(varying_string), intent(in) :: string
         integer :: length
 
-        length = len(char(string))
+        if (allocated(string%characters)) then
+            length = len(string%characters)
+        else
+            length = 0
+        end if
     end function
 
     elemental function len_trim_string(string) result(length)
@@ -1513,7 +1517,11 @@ contains
         type(varying_string), intent(in) :: string
         integer :: length
 
-        length = len_trim(char(string))
+        if (allocated(string%characters)) then
+            length = len_trim(string%characters)
+        else
+            length = 0
+        end if
     end function
 
     elemental function string_lge_string(string_a, string_b) result(greater_than_or_equals)
