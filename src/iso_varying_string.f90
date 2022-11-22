@@ -1435,7 +1435,7 @@ contains
         type(varying_string), intent(in) :: c
         integer :: string_iachar
 
-        string_iachar = iachar(char(c))
+        string_iachar = iachar(c%characters)
     end function
 
     elemental function string_ichar(c)
@@ -1443,7 +1443,7 @@ contains
         type(varying_string), intent(in) :: c
         integer :: string_ichar
 
-        string_ichar = ichar(char(c))
+        string_ichar = ichar(c%characters)
     end function
 
     elemental function string_index_string(string, substring, back) result(position)
