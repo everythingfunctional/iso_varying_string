@@ -2753,8 +2753,8 @@ contains
         integer :: string_length
         character(len=:), allocatable :: temp
 
-        allocate(character(len=0) :: temp) ! TODO: remove once gfortran bug is fixed
-        string_length = len(string)
+        if (.not. allocated(string%characters)) return
+        string_length = len(string%characters)
         if (present(back)) then
             backwards = back
         else
@@ -2762,31 +2762,33 @@ contains
         end if
         if (backwards) then
             do i = string_length, 1, -1
-                if (index(set, extract(string, i, i)) /= 0) exit
+                if (index(set, string%characters(i:i)) /= 0) exit
             end do
             if (i < 1) then
-                word = string
-                string = ""
-                if (present(separator)) separator = ""
+                call move_alloc(string%characters, word%characters)
+                allocate(character(len=0) :: string%characters)
+                if (present(separator)) allocate(character(len=0) :: separator%characters)
             else
-                word = extract(string, i+1)
-                temp = char(extract(string, 1, i-1))
-                if (present(separator)) separator = extract(string, i, i)
-                string = temp
+                allocate(word%characters, source = string%characters(i+1:))
+                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
+                allocate(temp, source = string%characters(1:i-1))
+                deallocate(string%characters)
+                allocate(string%characters, source = temp)
             end if
         else
             do i = 1, string_length
-                if (index(set, extract(string, i, i)) /= 0) exit
+                if (index(set, string%characters(i:i)) /= 0) exit
             end do
             if (i > string_length) then
-                word = string
-                string = ""
-                if (present(separator)) separator = ""
+                call move_alloc(string%characters, word%characters)
+                allocate(character(len=0) :: string%characters)
+                if (present(separator)) allocate(character(len=0) :: separator%characters)
             else
-                word = extract(string, 1, i-1)
-                temp = char(extract(string, i+1))
-                if (present(separator)) separator = extract(string, i, i)
-                string = temp
+                allocate(word%characters, source = string%characters(1:i-1))
+                if (present(separator)) allocate(separator%characters, source = string%characters(i:i))
+                allocate(temp, source = string%characters(i+1:))
+                deallocate(string%characters)
+                allocate(string%characters, source = temp)
             end if
         end if
     end subroutine
@@ -2799,6 +2801,16 @@ contains
         type(varying_string), optional, intent(out) :: separator
         logical, optional, intent(in) :: back
 
-        call split(string, word, char(set), separator, back)
+        if (allocated(set%characters)) then
+            call split(string, word, set%characters, separator, back)
+        else
+            if (allocated(string%characters)) then
+                call move_alloc(string%characters, word%characters)
+            else
+                allocate(character(len=0) :: word%characters)
+            end if
+            allocate(character(len=0) :: string%characters)
+            if (present(separator)) allocate(character(len=0) :: separator%characters)
+        end if
     end subroutine
 end module
