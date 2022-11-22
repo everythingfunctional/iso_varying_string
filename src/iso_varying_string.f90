@@ -2198,24 +2198,13 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: inserted
 
-        type(varying_string) :: beginning
-        type(varying_string) :: middle
-        type(varying_string) :: end_
-
         if (start <= 1) then
-            beginning = substring
-            middle = string
-            end_ = ""
+            allocate(inserted%characters, source = substring // string)
         else if (start > len(string)) then
-            beginning = string
-            middle = substring
-            end_ = ""
+            allocate(inserted%characters, source = string // substring)
         else
-            beginning = string(1:start-1)
-            middle = substring
-            end_ = string(start:)
+            allocate(inserted%characters, source = string(1:start-1) // substring // string(start:))
         end if
-        inserted = beginning // middle // end_
     end function
 
     elemental function insert_character_into_string(string, start, substring) result(inserted)
@@ -2225,7 +2214,11 @@ contains
         character(len=*), intent(in) :: substring
         type(varying_string) :: inserted
 
-        inserted = insert(char(string), start, substring)
+        if (allocated(string%characters)) then
+            inserted = insert(string%characters, start, substring)
+        else
+            inserted = insert("", start, substring)
+        end if
     end function
 
     elemental function insert_string_into_character(string ,start, substring) result(inserted)
@@ -2235,7 +2228,11 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: inserted
 
-        inserted = insert(string, start, char(substring))
+        if (allocated(substring%characters)) then
+            inserted = insert(string, start, substring%characters)
+        else
+            inserted = insert(string, start, "")
+        end if
     end function
 
     elemental function insert_string_into_string(string ,start, substring) result(inserted)
@@ -2245,7 +2242,19 @@ contains
         type(varying_string), intent(in) :: substring
         type(varying_string) :: inserted
 
-        inserted = insert(char(string), start, char(substring))
+        if (allocated(string%characters)) then
+            if (allocated(substring%characters)) then
+                inserted = insert(string%characters, start, substring%characters)
+            else
+                inserted = insert(string%characters, start, "")
+            end if
+        else
+            if (allocated(substring%characters)) then
+                inserted = insert("", start, substring%characters)
+            else
+                inserted = insert("", start, "")
+            end if
+        end if
     end function
 
     elemental function remove_character(string, start, finish) result(removed)
