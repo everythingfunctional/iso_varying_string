@@ -2058,7 +2058,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put(char(string), iostat)
+        if (allocated(string%characters)) then
+            call put(string%characters, iostat)
+        else
+            call put("", iostat)
+        end if
     end subroutine
 
     subroutine put_string_with_unit(unit, string, iostat)
@@ -2067,7 +2071,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put(unit, char(string), iostat)
+        if (allocated(string%characters)) then
+            call put(unit, string%characters, iostat)
+        else
+            call put(unit, "", iostat)
+        end if
     end subroutine
 
     subroutine put_characters_default_unit(string, iostat)
@@ -2100,7 +2108,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put_line(char(string), iostat)
+        if (allocated(string%characters)) then
+            call put_line(string%characters, iostat)
+        else
+            call put_line("", iostat)
+        end if
     end subroutine
 
     subroutine put_line_string_with_unit(unit, string, iostat)
@@ -2109,7 +2121,11 @@ contains
         type(varying_string), intent(in) :: string
         integer, optional, intent(out) :: iostat
 
-        call put_line(unit, char(string), iostat)
+        if (allocated(string%characters)) then
+            call put_line(unit, string%characters, iostat)
+        else
+            call put_line(unit, "", iostat)
+        end if
     end subroutine
 
     subroutine put_line_characters_default_unit(string, iostat)
