@@ -1148,31 +1148,51 @@ contains
         end if
     end function
 
-    elemental function string_ne_string(lhs, rhs) result(equals)
+    elemental function string_ne_string(lhs, rhs) result(not_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: not_equal
 
-        equals = char(lhs) /= char(rhs)
+        if (allocated(lhs%characters)) then
+            if (allocated(rhs%characters)) then
+                not_equal = lhs%characters /= rhs%characters
+            else
+                not_equal = lhs%characters /= ""
+            end if
+        else
+            if (allocated(rhs%characters)) then
+                not_equal = "" /= rhs%characters
+            else
+                not_equal = .false.
+            end if
+        end if
     end function
 
-    elemental function character_ne_string(lhs, rhs) result(equals)
+    elemental function character_ne_string(lhs, rhs) result(not_equal)
         ! Sec. 3.3.3
         character(len=*), intent(in) :: lhs
         type(varying_string), intent(in) :: rhs
-        logical :: equals
+        logical :: not_equal
 
-        equals = lhs /= char(rhs)
+        if (allocated(rhs%characters)) then
+            not_equal = lhs /= rhs%characters
+        else
+            not_equal = lhs /= ""
+        end if
     end function
 
-    elemental function string_ne_character(lhs, rhs) result(equals)
+    elemental function string_ne_character(lhs, rhs) result(not_equal)
         ! Sec. 3.3.3
         type(varying_string), intent(in) :: lhs
         character(len=*), intent(in) :: rhs
-        logical :: equals
+        logical :: not_equal
 
-        equals = char(lhs) /= rhs
+        if (allocated(lhs%characters)) then
+            not_equal = lhs%characters /= rhs
+        else
+            not_equal = "" /= rhs
+        end if
     end function
 
     elemental function string_lt_string(lhs, rhs) result(equals)
